@@ -78,7 +78,7 @@ class CategoryDetailView(generics.RetrieveAPIView):
 class CategoryPromocodesView(generics.ListAPIView):
     """Промокоды категории с пагинацией, поиском и сортировкой"""
     serializer_class = PromoCodeSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, PromoCodeOrderingFilter, filters.SearchFilter]
     filterset_class = PromoCodeFilter
     ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot']
     ordering = ['-is_recommended', '-is_hot', '-created_at']
@@ -212,7 +212,7 @@ class StoreDetailView(generics.RetrieveAPIView):
 class StorePromocodesView(generics.ListAPIView):
     """Промокоды магазина с пагинацией, поиском и сортировкой"""
     serializer_class = PromoCodeSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, PromoCodeOrderingFilter, filters.SearchFilter]
     filterset_class = PromoCodeFilter
     ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot']
     ordering = ['-is_recommended', '-is_hot', '-created_at']
@@ -343,7 +343,7 @@ class PromoCodeListView(generics.ListAPIView):
     """List active promo codes with filtering and ordering."""
     pagination_class = PromoCodePagination
     serializer_class = PromoCodeSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, PromoCodeOrderingFilter, filters.SearchFilter]
     filterset_class = PromoCodeFilter
     ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot']
     # ИСПРАВЛЕНО: Улучшенная сортировка для поиска - рекомендуемые и горячие первыми
