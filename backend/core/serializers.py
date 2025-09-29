@@ -4,72 +4,49 @@ from .models import Store, Category, PromoCode, Banner, StaticPage, Partner, Con
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    promocodes_count = serializers.SerializerMethodField()
-    
+    promocodes_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Category
         fields = [
-            'id', 'name', 'slug', 'description', 'icon', 
+            'id', 'name', 'slug', 'description', 'icon',
             'is_active', 'created_at', 'promocodes_count'
         ]
-        # ИСПРАВЛЕНО: Убираем поля которых может не быть в модели
         extra_kwargs = {}
-    
-    def get_promocodes_count(self, obj):
-        """Подсчитываем количество активных промокодов в категории"""
-        return obj.promocode_set.filter(
-            is_active=True,
-            expires_at__gt=timezone.now()
-        ).count()
 
 
 class StoreSerializer(serializers.ModelSerializer):
-    promocodes_count = serializers.SerializerMethodField()
-    
+    promocodes_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Store
         fields = [
             'id', 'name', 'slug', 'logo', 'rating', 'site_url',
             'description', 'is_active', 'promocodes_count', 'created_at'
         ]
-    
-    def get_promocodes_count(self, obj):
-        """
-        ИСПРАВЛЕНО: Правильный подсчет активных промокодов для популярности
-        """
-        return obj.promocodes.filter(
-            is_active=True,
-            expires_at__gt=timezone.now()
-        ).count()
 
 
 class StoreDetailSerializer(serializers.ModelSerializer):
-    promocodes_count = serializers.SerializerMethodField()
-    
+    promocodes_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Store
         fields = [
-            'id', 'name', 'slug', 'logo', 'rating', 'description', 
+            'id', 'name', 'slug', 'logo', 'rating', 'description',
             'site_url', 'is_active', 'created_at', 'promocodes_count'
         ]
-    
-    def get_promocodes_count(self, obj):
-        return obj.promocodes.filter(
-            is_active=True,
-            expires_at__gt=timezone.now()
-        ).count()
 
 
 class PromoCodeSerializer(serializers.ModelSerializer):
     store = StoreSerializer(read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
     
-    # ИСПРАВЛЕНО: Computed поля для удобства фронтенда
+    # Р ВР РЋР СџР В Р С’Р вЂ™Р вЂєР вЂўР СњР С›: Computed Р С—Р С•Р В»РЎРЏ Р Т‘Р В»РЎРЏ РЎС“Р Т‘Р С•Р В±РЎРѓРЎвЂљР Р†Р В° РЎвЂћРЎР‚Р С•Р Р…РЎвЂљР ВµР Р…Р Т‘Р В°
     has_promocode = serializers.SerializerMethodField()
     is_expired = serializers.SerializerMethodField()
     days_until_expiry = serializers.SerializerMethodField()
     
-    # ИСПРАВЛЕНО: Безопасные поля с проверкой на существование
+    # Р ВР РЋР СџР В Р С’Р вЂ™Р вЂєР вЂўР СњР С›: Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…РЎвЂ№Р Вµ Р С—Р С•Р В»РЎРЏ РЎРѓ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С•Р в„– Р Р…Р В° РЎРѓРЎС“РЎвЂ°Р ВµРЎРѓРЎвЂљР Р†Р С•Р Р†Р В°Р Р…Р С‘Р Вµ
     discount_text = serializers.SerializerMethodField()
     valid_until = serializers.SerializerMethodField()
     offer_type_display = serializers.SerializerMethodField()
@@ -77,26 +54,26 @@ class PromoCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromoCode
         fields = [
-            # БАЗОВЫЕ поля которые точно есть в модели
+            # Р вЂР С’Р вЂ”Р С›Р вЂ™Р В«Р вЂў Р С—Р С•Р В»РЎРЏ Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎвЂљР С•РЎвЂЎР Р…Р С• Р ВµРЎРѓРЎвЂљРЎРЉ Р Р† Р СР С•Р Т‘Р ВµР В»Р С‘
             'id', 'title', 'description', 'code', 'discount_value', 
             'discount_label', 'is_hot', 'is_recommended', 'expires_at', 'views', 
             'affiliate_url', 'store', 'categories', 'is_active',
             'created_at', 'updated_at',
-            # COMPUTED поля
+            # COMPUTED Р С—Р С•Р В»РЎРЏ
             'has_promocode', 'is_expired', 'days_until_expiry',
             'discount_text', 'valid_until', 'offer_type_display'
         ]
         
-        # ДОБАВЛЕНО: Безопасная обработка дополнительных полей
+        # Р вЂќР С›Р вЂР С’Р вЂ™Р вЂєР вЂўР СњР С›: Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р В°РЎРЏ Р С•Р В±РЎР‚Р В°Р В±Р С•РЎвЂљР С”Р В° Р Т‘Р С•Р С—Р С•Р В»Р Р…Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р В»Р ВµР в„–
         extra_kwargs = {}
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # ИСПРАВЛЕНО: Динамически добавляем поля если они есть в модели
+        # Р ВР РЋР СџР В Р С’Р вЂ™Р вЂєР вЂўР СњР С›: Р вЂќР С‘Р Р…Р В°Р СР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘ Р Т‘Р С•Р В±Р В°Р Р†Р В»РЎРЏР ВµР С Р С—Р С•Р В»РЎРЏ Р ВµРЎРѓР В»Р С‘ Р С•Р Р…Р С‘ Р ВµРЎРѓРЎвЂљРЎРЉ Р Р† Р СР С•Р Т‘Р ВµР В»Р С‘
         model_fields = [f.name for f in self.Meta.model._meta.get_fields()]
         
-        # Проверяем наличие дополнительных полей
+        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р Р…Р В°Р В»Р С‘РЎвЂЎР С‘Р Вµ Р Т‘Р С•Р С—Р С•Р В»Р Р…Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р В»Р ВµР в„–
         additional_fields = [
             'offer_type', 'long_description', 'steps', 
             'fine_print', 'disclaimer', 'external_link'
@@ -107,18 +84,18 @@ class PromoCodeSerializer(serializers.ModelSerializer):
                 self.fields[field_name] = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     
     def get_has_promocode(self, obj):
-        """Определяем, есть ли промокод для копирования"""
+        """Р С›Р С—РЎР‚Р ВµР Т‘Р ВµР В»РЎРЏР ВµР С, Р ВµРЎРѓРЎвЂљРЎРЉ Р В»Р С‘ Р С—РЎР‚Р С•Р СР С•Р С”Р С•Р Т‘ Р Т‘Р В»РЎРЏ Р С”Р С•Р С—Р С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ"""
         return bool(getattr(obj, 'code', None) and str(getattr(obj, 'code', '')).strip())
     
     def get_is_expired(self, obj):
-        """Проверяем, истек ли промокод"""
+        """Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С, Р С‘РЎРѓРЎвЂљР ВµР С” Р В»Р С‘ Р С—РЎР‚Р С•Р СР С•Р С”Р С•Р Т‘"""
         expires_at = getattr(obj, 'expires_at', None)
         if not expires_at:
             return False
         return expires_at <= timezone.now()
     
     def get_days_until_expiry(self, obj):
-        """Количество дней до истечения"""
+        """Р С™Р С•Р В»Р С‘РЎвЂЎР ВµРЎРѓРЎвЂљР Р†Р С• Р Т‘Р Р…Р ВµР в„– Р Т‘Р С• Р С‘РЎРѓРЎвЂљР ВµРЎвЂЎР ВµР Р…Р С‘РЎРЏ"""
         expires_at = getattr(obj, 'expires_at', None)
         if not expires_at:
             return None
@@ -129,8 +106,8 @@ class PromoCodeSerializer(serializers.ModelSerializer):
         return delta.days
     
     def get_discount_text(self, obj):
-        """Безопасное получение текста скидки"""
-        # Пробуем разные варианты названий полей
+        """Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…Р С‘Р Вµ РЎвЂљР ВµР С”РЎРѓРЎвЂљР В° РЎРѓР С”Р С‘Р Т‘Р С”Р С‘"""
+        # Р СџРЎР‚Р С•Р В±РЎС“Р ВµР С РЎР‚Р В°Р В·Р Р…РЎвЂ№Р Вµ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРЎвЂ№ Р Р…Р В°Р В·Р Р†Р В°Р Р…Р С‘Р в„– Р С—Р С•Р В»Р ВµР в„–
         discount_label = getattr(obj, 'discount_label', None)
         if discount_label:
             return discount_label
@@ -143,45 +120,52 @@ class PromoCodeSerializer(serializers.ModelSerializer):
         if discount_value:
             return f"{discount_value}%"
         
-        return "Скидка"
+        return "Р РЋР С”Р С‘Р Т‘Р С”Р В°"
     
     def get_valid_until(self, obj):
-        """Безопасное получение даты истечения"""
+        """Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…Р С‘Р Вµ Р Т‘Р В°РЎвЂљРЎвЂ№ Р С‘РЎРѓРЎвЂљР ВµРЎвЂЎР ВµР Р…Р С‘РЎРЏ"""
         expires_at = getattr(obj, 'expires_at', None)
         valid_until = getattr(obj, 'valid_until', None)
         
         return expires_at or valid_until
     
     def get_offer_type_display(self, obj):
-        """Безопасное получение типа оффера"""
-        # Проверяем есть ли метод get_offer_type_display
+        """Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…Р С‘Р Вµ РЎвЂљР С‘Р С—Р В° Р С•РЎвЂћРЎвЂћР ВµРЎР‚Р В°"""
+        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р ВµРЎРѓРЎвЂљРЎРЉ Р В»Р С‘ Р СР ВµРЎвЂљР С•Р Т‘ get_offer_type_display
         if hasattr(obj, 'get_offer_type_display'):
             try:
                 return obj.get_offer_type_display()
             except:
                 pass
         
-        # Проверяем есть ли поле offer_type
+        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р ВµРЎРѓРЎвЂљРЎРЉ Р В»Р С‘ Р С—Р С•Р В»Р Вµ offer_type
         offer_type = getattr(obj, 'offer_type', None)
         if offer_type:
             type_mapping = {
-                'coupon': 'Промокод',
-                'deal': 'Скидка', 
-                'financial': 'Финансовая услуга',
-                'cashback': 'Кэшбэк'
+                'coupon': 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘',
+                'deal': 'Р РЋР С”Р С‘Р Т‘Р С”Р В°', 
+                'financial': 'Р В¤Р С‘Р Р…Р В°Р Р…РЎРѓР С•Р Р†Р В°РЎРЏ РЎС“РЎРѓР В»РЎС“Р С–Р В°',
+                'cashback': 'Р С™РЎРЊРЎв‚¬Р В±РЎРЊР С”'
             }
-            return type_mapping.get(offer_type, 'Промокод')
+            return type_mapping.get(offer_type, 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘')
         
-        return 'Промокод'
+        return 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘'
 
 
 class BannerSerializer(serializers.ModelSerializer):
+    link = serializers.URLField(source='cta_url', read_only=True)
+
     class Meta:
         model = Banner
         fields = [
-            'id', 'title', 'subtitle', 'image', 'cta_text', 
-            'cta_url', 'is_active', 'sort_order', 'created_at'
+            'id', 'title', 'subtitle', 'image', 'cta_text',
+            'cta_url', 'link', 'is_active', 'sort_order', 'created_at'
         ]
+        extra_kwargs = {
+            'title': {'required': False, 'allow_blank': True},
+            'subtitle': {'required': False, 'allow_blank': True},
+            'cta_text': {'required': False, 'allow_blank': True},
+        }
 
 
 class PartnerSerializer(serializers.ModelSerializer):
@@ -200,35 +184,35 @@ class StaticPageSerializer(serializers.ModelSerializer):
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
-    """Сериализатор для сообщений обратной связи"""
+    """Р РЋР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂљР С•РЎР‚ Р Т‘Р В»РЎРЏ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р в„– Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С•Р в„– РЎРѓР Р†РЎРЏР В·Р С‘"""
     
-    # Поля только для чтения - заполняются автоматически
+    # Р СџР С•Р В»РЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р Т‘Р В»РЎРЏ РЎвЂЎРЎвЂљР ВµР Р…Р С‘РЎРЏ - Р В·Р В°Р С—Р С•Р В»Р Р…РЎРЏРЎР‹РЎвЂљРЎРѓРЎРЏ Р В°Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘
     created_at = serializers.DateTimeField(read_only=True)
     is_processed = serializers.BooleanField(read_only=True)
     
     class Meta:
         model = ContactMessage
         fields = [
-            'name', 'email', 'subject', 'message',           # Основные поля для ввода
-            'page', 'user_agent', 'ip_address',  # Метаданные (опциональные)
-            'created_at', 'is_processed'         # Поля только для чтения
+            'name', 'email', 'subject', 'message',           # Р С›РЎРѓР Р…Р С•Р Р†Р Р…РЎвЂ№Р Вµ Р С—Р С•Р В»РЎРЏ Р Т‘Р В»РЎРЏ Р Р†Р Р†Р С•Р Т‘Р В°
+            'page', 'user_agent', 'ip_address',  # Р СљР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ (Р С•Р С—РЎвЂ Р С‘Р С•Р Р…Р В°Р В»РЎРЉР Р…РЎвЂ№Р Вµ)
+            'created_at', 'is_processed'         # Р СџР С•Р В»РЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р Т‘Р В»РЎРЏ РЎвЂЎРЎвЂљР ВµР Р…Р С‘РЎРЏ
         ]
         
-        # Указываем, какие поля обязательны для заполнения
+        # Р Р€Р С”Р В°Р В·РЎвЂ№Р Р†Р В°Р ВµР С, Р С”Р В°Р С”Р С‘Р Вµ Р С—Р С•Р В»РЎРЏ Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№ Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ
         extra_kwargs = {
             'name': {
                 'required': True,
                 'max_length': 100,
                 'error_messages': {
-                    'required': 'Поле "Имя" обязательно для заполнения',
-                    'max_length': 'Имя не должно превышать 100 символов'
+                    'required': 'Р СџР С•Р В»Р Вµ "Р ВР СРЎРЏ" Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…Р С• Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ',
+                    'max_length': 'Р ВР СРЎРЏ Р Р…Р Вµ Р Т‘Р С•Р В»Р В¶Р Р…Р С• Р С—РЎР‚Р ВµР Р†РЎвЂ№РЎв‚¬Р В°РЎвЂљРЎРЉ 100 РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†'
                 }
             },
             'email': {
                 'required': True,
                 'error_messages': {
-                    'required': 'Поле "Email" обязательно для заполнения',
-                    'invalid': 'Введите корректный email адрес'
+                    'required': 'Р СџР С•Р В»Р Вµ "Email" Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…Р С• Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ',
+                    'invalid': 'Р вЂ™Р Р†Р ВµР Т‘Р С‘РЎвЂљР Вµ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…РЎвЂ№Р в„– email Р В°Р Т‘РЎР‚Р ВµРЎРѓ'
                 }
             },
             'subject': {
@@ -243,7 +227,7 @@ class ContactMessageSerializer(serializers.ModelSerializer):
             'message': {
                 'required': True,
                 'error_messages': {
-                    'required': 'Поле "Сообщение" обязательно для заполнения'
+                    'required': 'Р СџР С•Р В»Р Вµ "Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ" Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…Р С• Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ'
                 }
             },
             'page': {'required': False},
@@ -252,16 +236,16 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         }
     
     def validate_name(self, value):
-        """Валидация поля имени"""
+        """Р вЂ™Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘РЎРЏ Р С—Р С•Р В»РЎРЏ Р С‘Р СР ВµР Р…Р С‘"""
         if not value or not value.strip():
-            raise serializers.ValidationError("Имя не может быть пустым")
+            raise serializers.ValidationError("Р ВР СРЎРЏ Р Р…Р Вµ Р СР С•Р В¶Р ВµРЎвЂљ Р В±РЎвЂ№РЎвЂљРЎРЉ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р С")
         
-        # Убираем лишние пробелы
+        # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С Р В»Р С‘РЎв‚¬Р Р…Р С‘Р Вµ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№
         value = value.strip()
         
-        # Проверяем минимальную длину
+        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…РЎС“РЎР‹ Р Т‘Р В»Р С‘Р Р…РЎС“
         if len(value) < 2:
-            raise serializers.ValidationError("Имя должно содержать минимум 2 символа")
+            raise serializers.ValidationError("Р ВР СРЎРЏ Р Т‘Р С•Р В»Р В¶Р Р…Р С• РЎРѓР С•Р Т‘Р ВµРЎР‚Р В¶Р В°РЎвЂљРЎРЉ Р СР С‘Р Р…Р С‘Р СРЎС“Р С 2 РЎРѓР С‘Р СР Р†Р С•Р В»Р В°")
         
         return value
     
@@ -277,31 +261,31 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         return value
 
     def validate_message(self, value):
-        """Валидация поля сообщения"""
+        """Р вЂ™Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘РЎРЏ Р С—Р С•Р В»РЎРЏ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏ"""
         if not value or not value.strip():
-            raise serializers.ValidationError("Сообщение не может быть пустым")
+            raise serializers.ValidationError("Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ Р Р…Р Вµ Р СР С•Р В¶Р ВµРЎвЂљ Р В±РЎвЂ№РЎвЂљРЎРЉ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р С")
         
-        # Убираем лишние пробелы
+        # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С Р В»Р С‘РЎв‚¬Р Р…Р С‘Р Вµ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№
         value = value.strip()
         
-        # Проверяем минимальную длину
+        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…РЎС“РЎР‹ Р Т‘Р В»Р С‘Р Р…РЎС“
         if len(value) < 10:
-            raise serializers.ValidationError("Сообщение должно содержать минимум 10 символов")
+            raise serializers.ValidationError("Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ Р Т‘Р С•Р В»Р В¶Р Р…Р С• РЎРѓР С•Р Т‘Р ВµРЎР‚Р В¶Р В°РЎвЂљРЎРЉ Р СР С‘Р Р…Р С‘Р СРЎС“Р С 10 РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†")
         
-        # Проверяем максимальную длину
+        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р СР В°Р С”РЎРѓР С‘Р СР В°Р В»РЎРЉР Р…РЎС“РЎР‹ Р Т‘Р В»Р С‘Р Р…РЎС“
         if len(value) > 2000:
-            raise serializers.ValidationError("Сообщение не должно превышать 2000 символов")
+            raise serializers.ValidationError("Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ Р Р…Р Вµ Р Т‘Р С•Р В»Р В¶Р Р…Р С• Р С—РЎР‚Р ВµР Р†РЎвЂ№РЎв‚¬Р В°РЎвЂљРЎРЉ 2000 РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†")
         
         return value
     
     def validate_email(self, value):
-        """Дополнительная валидация email"""
+        """Р вЂќР С•Р С—Р С•Р В»Р Р…Р С‘РЎвЂљР ВµР В»РЎРЉР Р…Р В°РЎРЏ Р Р†Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘РЎРЏ email"""
         if not value or not value.strip():
-            raise serializers.ValidationError("Email не может быть пустым")
+            raise serializers.ValidationError("Email Р Р…Р Вµ Р СР С•Р В¶Р ВµРЎвЂљ Р В±РЎвЂ№РЎвЂљРЎРЉ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р С")
         
         value = value.strip().lower()
         
-        # Базовая проверка на спам-домены (можно расширить)
+        # Р вЂР В°Р В·Р С•Р Р†Р В°РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р В° Р Р…Р В° РЎРѓР С—Р В°Р С-Р Т‘Р С•Р СР ВµР Р…РЎвЂ№ (Р СР С•Р В¶Р Р…Р С• РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р С‘РЎвЂљРЎРЉ)
         spam_domains = [
             'tempmail.org', '10minutemail.com', 'guerrillamail.com',
             'mailinator.com', 'yopmail.com'
@@ -309,23 +293,23 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         
         domain = value.split('@')[-1] if '@' in value else ''
         if domain in spam_domains:
-            raise serializers.ValidationError("Использование временных email адресов запрещено")
+            raise serializers.ValidationError("Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Р†РЎР‚Р ВµР СР ВµР Р…Р Р…РЎвЂ№РЎвЂ¦ email Р В°Р Т‘РЎР‚Р ВµРЎРѓР С•Р Р† Р В·Р В°Р С—РЎР‚Р ВµРЎвЂ°Р ВµР Р…Р С•")
         
         return value
     
     def create(self, validated_data):
-        """Переопределяем создание объекта для добавления метаданных"""
+        """Р СџР ВµРЎР‚Р ВµР С•Р С—РЎР‚Р ВµР Т‘Р ВµР В»РЎРЏР ВµР С РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘Р Вµ Р С•Р В±РЎР‰Р ВµР С”РЎвЂљР В° Р Т‘Р В»РЎРЏ Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р СР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦"""
         
-        # Получаем request из контекста
+        # Р СџР С•Р В»РЎС“РЎвЂЎР В°Р ВµР С request Р С‘Р В· Р С”Р С•Р Р…РЎвЂљР ВµР С”РЎРѓРЎвЂљР В°
         request = self.context.get('request')
         
         if request:
-            # Автоматически заполняем метаданные из запроса
+            # Р С’Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘ Р В·Р В°Р С—Р С•Р В»Р Р…РЎРЏР ВµР С Р СР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ Р С‘Р В· Р В·Р В°Р С—РЎР‚Р С•РЎРѓР В°
             if not validated_data.get('user_agent'):
                 validated_data['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
             
             if not validated_data.get('ip_address'):
-                # Получаем IP адрес с учетом прокси
+                # Р СџР С•Р В»РЎС“РЎвЂЎР В°Р ВµР С IP Р В°Р Т‘РЎР‚Р ВµРЎРѓ РЎРѓ РЎС“РЎвЂЎР ВµРЎвЂљР С•Р С Р С—РЎР‚Р С•Р С”РЎРѓР С‘
                 x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
                 if x_forwarded_for:
                     validated_data['ip_address'] = x_forwarded_for.split(',')[0].strip()
@@ -333,21 +317,21 @@ class ContactMessageSerializer(serializers.ModelSerializer):
                     validated_data['ip_address'] = request.META.get('REMOTE_ADDR')
             
             if not validated_data.get('page'):
-                # Пытаемся получить реферер
+                # Р СџРЎвЂ№РЎвЂљР В°Р ВµР СРЎРѓРЎРЏ Р С—Р С•Р В»РЎС“РЎвЂЎР С‘РЎвЂљРЎРЉ РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р ВµРЎР‚
                 validated_data['page'] = request.META.get('HTTP_REFERER', '')
         
-        # Создаем объект
+        # Р РЋР С•Р В·Р Т‘Р В°Р ВµР С Р С•Р В±РЎР‰Р ВµР С”РЎвЂљ
         return super().create(validated_data)
     
     def to_representation(self, instance):
-        """Кастомизируем вывод данных"""
+        """Р С™Р В°РЎРѓРЎвЂљР С•Р СР С‘Р В·Р С‘РЎР‚РЎС“Р ВµР С Р Р†РЎвЂ№Р Р†Р С•Р Т‘ Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦"""
         data = super().to_representation(instance)
         
-        # Добавляем статус для фронтенда
+        # Р вЂќР С•Р В±Р В°Р Р†Р В»РЎРЏР ВµР С РЎРѓРЎвЂљР В°РЎвЂљРЎС“РЎРѓ Р Т‘Р В»РЎРЏ РЎвЂћРЎР‚Р С•Р Р…РЎвЂљР ВµР Р…Р Т‘Р В°
         data['status'] = 'success'
         data['message_status'] = 'sent'
         
-        # Убираем чувствительные данные из ответа
+        # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С РЎвЂЎРЎС“Р Р†РЎРѓРЎвЂљР Р†Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№Р Вµ Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ Р С‘Р В· Р С•РЎвЂљР Р†Р ВµРЎвЂљР В°
         data.pop('user_agent', None)
         data.pop('ip_address', None)
         
