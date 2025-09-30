@@ -12,28 +12,29 @@ interface PromoCardProps {
   promo: Promocode
 }
 
-// ===== PREMIUM DARK GLASSMORPHISM STYLES =====
+// ===== STRICT GEOMETRY + CALM COLORED STYLES =====
 
-// Унифицированные бейджи - спокойный синий для рекомендаций
-const BADGE_RECOMMENDED = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm text-blue-300 text-xs font-semibold transition-all duration-300 ease-out hover:scale-105 hover:bg-blue-500/15"
+// Унифицированные бейджи - строгая геометрия
+const BADGE_RECOMMENDED = "flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-blue-500/30 bg-blue-500/10 text-blue-200 text-xs font-semibold transition-all duration-300 ease-out hover:bg-blue-500/15"
 
-// Горячий бейдж - оранжево-красный с лёгким свечением
-const BADGE_HOT = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-orange-500/30 bg-orange-500/10 backdrop-blur-sm text-orange-300 text-xs font-semibold transition-all duration-300 ease-out hover:scale-105 hover:bg-orange-500/15"
+// Горячий бейдж - строгая геометрия
+const BADGE_HOT = "flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-orange-500/30 bg-orange-500/10 text-orange-200 text-xs font-semibold transition-all duration-300 ease-out hover:bg-orange-500/15"
 
-// Основная кнопка действия - крупная, закруглённая
-const PRIMARY_ACTION_BUTTON = "flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm text-white font-semibold text-sm transition-all duration-300 ease-out hover:scale-105 hover:bg-white/10 hover:border-white/30 focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 w-full min-h-[44px]"
+// Основные кнопки по типам офферов - спокойные цвета
+const BUTTON_PROMOCODE = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-// Кнопка в состоянии "скопировано"
-const COPIED_BUTTON = "flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl border border-green-500/30 bg-green-500/10 backdrop-blur-sm text-green-300 font-semibold text-sm transition-all duration-300 ease-out w-full min-h-[44px]"
+const BUTTON_FINANCIAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-indigo-500/30 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-// Кнопка "Открываем магазин..."
-const OPENING_BUTTON = "flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm text-blue-300 font-semibold text-sm transition-all duration-300 ease-out w-full min-h-[44px]"
+const BUTTON_DEAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-amber-500/30 bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-amber-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-// Вторичная кнопка "Подробнее" - прозрачная с border
-const SECONDARY_BUTTON = "flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-transparent backdrop-blur-sm text-white font-medium text-sm transition-all duration-300 ease-out hover:scale-105 hover:bg-white/5 hover:border-white/20 focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none w-full min-h-[40px]"
+// Кнопка в состоянии "скопировано/открываем"
+const BUTTON_LOADING = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-200 font-semibold text-sm transition-all duration-300 ease-out w-full h-11"
 
-// Блок скидки - стеклянная плашка с тонкой обводкой
-const DISCOUNT_BLOCK = "inline-flex items-center px-3 py-2 rounded-xl border border-white/30 bg-white/5 backdrop-blur-sm text-white font-bold text-base mb-4 transition-all duration-300 ease-out hover:scale-105 hover:bg-white/10 w-fit"
+// Вторичная кнопка "Подробнее"
+const SECONDARY_BUTTON = "flex items-center justify-center gap-2 px-4 rounded-lg border border-white/15 bg-transparent hover:bg-white/10 text-white/90 font-medium text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none w-full h-11"
+
+// Блок скидки - строгая геометрия
+const DISCOUNT_BLOCK = "inline-flex items-center px-3 py-2 rounded-lg border border-white/20 bg-white/5 text-white font-semibold text-base mb-4 transition-all duration-300 ease-out hover:bg-white/10 w-fit"
 
 // Hover эффект карточки - тонкий градиент
 const CARD_HOVER_EFFECT = "absolute inset-0 opacity-0 transition-opacity duration-300 ease-out pointer-events-none bg-gradient-to-br from-blue-500/3 to-purple-500/3 rounded-2xl group-hover:opacity-100"
@@ -152,31 +153,36 @@ export default function PromoCard({ promo }: PromoCardProps) {
         return {
           text: cardModel.hasCode && promo.code ? promo.code : 'Получить код',
           icon: copied ? Check : Copy,
-          disabled: isLoading || (!cardModel.hasCode || !promo.code)
+          disabled: isLoading || (!cardModel.hasCode || !promo.code),
+          className: copied || isLoading ? BUTTON_LOADING : BUTTON_PROMOCODE
         }
       case 'deal':
         return {
           text: 'Получить скидку',
           icon: Percent,
-          disabled: isLoading || !cardModel.actionUrl
+          disabled: isLoading || !cardModel.actionUrl,
+          className: isLoading ? BUTTON_LOADING : BUTTON_DEAL
         }
       case 'financial':
         return {
           text: 'Оформить',
           icon: CreditCard,
-          disabled: isLoading || !cardModel.actionUrl
+          disabled: isLoading || !cardModel.actionUrl,
+          className: isLoading ? BUTTON_LOADING : BUTTON_FINANCIAL
         }
       case 'cashback':
         return {
           text: 'Получить кэшбэк',
           icon: Gift,
-          disabled: isLoading || !cardModel.actionUrl
+          disabled: isLoading || !cardModel.actionUrl,
+          className: isLoading ? BUTTON_LOADING : BUTTON_DEAL
         }
       default:
         return {
           text: 'Перейти',
           icon: ExternalLink,
-          disabled: isLoading || !cardModel.actionUrl
+          disabled: isLoading || !cardModel.actionUrl,
+          className: isLoading ? BUTTON_LOADING : BUTTON_DEAL
         }
     }
   }, [cardModel.offerType, cardModel.hasCode, cardModel.actionUrl, promo.code, copied, isLoading])
@@ -291,23 +297,24 @@ export default function PromoCard({ promo }: PromoCardProps) {
     return `Получить ${cardModel.offerTypeStyles.label.toLowerCase()} в ${cardModel.storeName}`
   }, [cardModel.isCoupon, cardModel.isFinancial, cardModel.storeName, cardModel.offerTypeStyles.label])
 
-  // Определяем текст и стиль кнопки
-  const getButtonConfig = useMemo(() => {
+  // Определяем текст кнопки с учётом состояния
+  const getButtonText = useMemo(() => {
     if (cardModel.isCoupon) {
       if (copied) {
-        return { text: 'Скопировано, открываем магазин...', className: OPENING_BUTTON }
+        return 'Скопировано, открываем...'
       }
       if (isLoading) {
-        return { text: promo.code || 'Получить код', className: PRIMARY_ACTION_BUTTON }
+        return promo.code || 'Получить код'
       }
-      return { text: promo.code || 'Получить код', className: PRIMARY_ACTION_BUTTON }
+      // Для финансов и скидок не показываем код на кнопке
+      return promo.code || 'Получить код'
     }
 
     if (isLoading) {
-      return { text: 'Открываем...', className: OPENING_BUTTON }
+      return 'Открываем...'
     }
 
-    return { text: actionButtonConfig.text, className: PRIMARY_ACTION_BUTTON }
+    return actionButtonConfig.text
   }, [cardModel.isCoupon, copied, isLoading, promo.code, actionButtonConfig.text])
 
   return (
@@ -408,23 +415,23 @@ export default function PromoCard({ promo }: PromoCardProps) {
 
         {/* ДЕЙСТВИЯ - В НИЗУ КАРТОЧКИ */}
         <div className="space-y-3">
-          {/* Основная кнопка действия - крупная, закруглённая, зависит от типа оффера */}
+          {/* Основная кнопка действия - цвет зависит от типа оффера */}
           <button
             onClick={buttonHandler}
             disabled={actionButtonConfig.disabled || isLoading}
-            className={getButtonConfig.className}
+            className={actionButtonConfig.className}
             aria-label={buttonAriaLabel}
           >
             <ActionIcon className="w-4 h-4 flex-shrink-0 transition-transform duration-300 ease-out" />
             <span className="truncate">
-              {getButtonConfig.text}
+              {getButtonText}
             </span>
             {!cardModel.isCoupon && !isLoading && (
-              <ExternalLink className="w-4 h-4 flex-shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+              <ExternalLink className="w-4 h-4 flex-shrink-0 transition-transform duration-300 ease-out" />
             )}
           </button>
 
-          {/* Вторичная кнопка "Подробнее" - прозрачная с border */}
+          {/* Вторичная кнопка "Подробнее" */}
           <Link
             href={`/promo/${promo.id}`}
             className={SECONDARY_BUTTON}
@@ -436,7 +443,7 @@ export default function PromoCard({ promo }: PromoCardProps) {
 
           {/* Дисклеймер для финансовых услуг */}
           {cardModel.isFinancial && promo.disclaimer && (
-            <div className="text-xs text-gray-500 leading-relaxed p-2.5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm line-clamp-2">
+            <div className="text-xs text-gray-500 leading-relaxed p-2.5 rounded-lg border border-white/10 bg-white/5 line-clamp-2">
               {promo.disclaimer}
             </div>
           )}

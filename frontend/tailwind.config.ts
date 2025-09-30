@@ -12,6 +12,10 @@ const config: Config = {
     'animate-shimmer',
     'animate-spin',
     'glass-card',
+    // Геометрия - строгая
+    'rounded-lg',
+    'rounded-md',
+    'rounded-2xl',
     // Стеклянные и бордеры
     'bg-white/3',
     'bg-white/5',
@@ -26,9 +30,6 @@ const config: Config = {
     'hover:border-white/15',
     'hover:border-white/20',
     'backdrop-blur-sm',
-    'rounded-2xl',
-    'rounded-xl',
-    'rounded-full',
     // Акценты и ринги
     'ring-1',
     'hover:ring-1',
@@ -36,9 +37,26 @@ const config: Config = {
     'ring-orange-500/20',
     'hover:ring-orange-500/20',
     'ring-white/20',
+    'ring-emerald-500/20',
+    'ring-indigo-500/20',
+    'ring-amber-500/20',
     'shadow-orange-500/5',
     'hover:shadow-2xl',
     'shadow-2xl',
+    // Кнопки по типам - emerald (промокод)
+    'bg-emerald-600',
+    'hover:bg-emerald-500',
+    'bg-emerald-500/20',
+    'border-emerald-500/30',
+    'text-emerald-200',
+    // Кнопки - indigo (финансы)
+    'bg-indigo-600',
+    'hover:bg-indigo-500',
+    'border-indigo-500/30',
+    // Кнопки - amber (скидка/кэшбэк)
+    'bg-amber-600',
+    'hover:bg-amber-500',
+    'border-amber-500/30',
     // Бейджи - синие
     'bg-blue-500/10',
     'bg-blue-500/15',
@@ -65,13 +83,6 @@ const config: Config = {
     'bg-purple-500/15',
     'border-purple-500/25',
     'text-purple-300',
-    // Бейджи - амбер
-    'bg-amber-500/10',
-    'bg-amber-500/15',
-    'border-amber-500/20',
-    'border-amber-500/25',
-    'text-amber-300',
-    'text-amber-400',
     // Тексты и размеры
     'text-white/60',
     'text-white/70',
@@ -89,6 +100,13 @@ const config: Config = {
     'h-11',
     'min-h-[40px]',
     'min-h-[44px]',
+    'px-2.5',
+    'py-1',
+    'px-3',
+    'py-2',
+    'px-4',
+    'px-5',
+    'font-semibold',
     // Hover/transitions
     'hover:scale-105',
     'hover:scale-[1.02]',
