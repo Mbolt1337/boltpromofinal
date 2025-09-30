@@ -20,19 +20,19 @@ export default function ShowcaseCard({ showcase }: ShowcaseCardProps) {
       className="group block rounded-2xl border border-white/10 bg-white/5 overflow-hidden transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-purple-500/10"
     >
       {/* Banner Image */}
-      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl">
+      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl">
         <Image
           src={bannerUrl}
           alt={showcase.title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-5 space-y-3">
         {/* Title */}
         <h3 className="text-base font-semibold text-white line-clamp-1 group-hover:text-purple-300 transition-colors">
           {showcase.title}
