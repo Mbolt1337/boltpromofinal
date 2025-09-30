@@ -207,7 +207,11 @@ export default function PromoCard({ promo }: PromoCardProps) {
       // 5. Открываем партнёрскую ссылку через 1.5 сек
       setTimeout(() => {
         if (cardModel.actionUrl) {
-          window.open(cardModel.actionUrl, '_blank', 'noopener,noreferrer')
+          const link = document.createElement('a')
+          link.href = cardModel.actionUrl
+          link.target = '_blank'
+          link.rel = 'nofollow sponsored noopener noreferrer'
+          link.click()
         }
       }, 1500)
 
@@ -240,8 +244,12 @@ export default function PromoCard({ promo }: PromoCardProps) {
         console.error('Ошибка инкремента счётчика:', err)
       )
 
-      // Открываем ссылку
-      window.open(cardModel.actionUrl, '_blank', 'nofollow sponsored noopener noreferrer')
+      // Открываем ссылку с правильными rel атрибутами
+      const link = document.createElement('a')
+      link.href = cardModel.actionUrl
+      link.target = '_blank'
+      link.rel = 'nofollow sponsored noopener noreferrer'
+      link.click()
 
       // Показываем состояние "Открываем..."
       setTimeout(() => {
