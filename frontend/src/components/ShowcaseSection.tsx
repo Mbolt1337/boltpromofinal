@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { getShowcases } from '@/lib/api';
 import ShowcaseGrid from './ShowcaseGrid';
 import ShowcaseCarouselMobile from './ShowcaseCarouselMobile';
-import { ChevronRight } from 'lucide-react';
+import SectionContainer from '@/components/ui/SectionContainer';
+import SectionHeader from '@/components/ui/SectionHeader';
 
 export default async function ShowcaseSection() {
   const { results: showcases } = await getShowcases({ page_size: 8 });
@@ -12,37 +13,30 @@ export default async function ShowcaseSection() {
   }
 
   return (
-    <section className="py-16">
-      <div className="container-main">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="heading-lg text-gradient mb-4">
-            Найдите лучшие промокоды в подборках BoltPromo
-          </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Специально подобранные коллекции промокодов для разных категорий
-          </p>
-        </div>
+    <SectionContainer>
+      <SectionHeader
+        title="Найдите лучшие промокоды в подборках BoltPromo"
+        subtitle="Специально подобранные коллекции промокодов для разных категорий"
+        align="center"
+      />
 
-        {/* Desktop Grid */}
-        <div className="hidden md:block">
-          <ShowcaseGrid showcases={showcases} />
-        </div>
-
-        {/* Mobile Carousel */}
-        <ShowcaseCarouselMobile showcases={showcases} />
-
-        {/* View All Link */}
-        <div className="mt-6 text-center">
-          <Link
-            href="/showcases"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl transition-all hover:bg-white/10 hover:border-white/20 hover:gap-3"
-          >
-            <span>Перейти к подборкам</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
+      {/* Desktop Grid */}
+      <div className="hidden md:block">
+        <ShowcaseGrid showcases={showcases} />
       </div>
-    </section>
+
+      {/* Mobile Carousel */}
+      <ShowcaseCarouselMobile showcases={showcases} />
+
+      {/* View All Link */}
+      <div className="section-footer-gap flex justify-center">
+        <Link
+          href="/showcases"
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+        >
+          Перейти к подборкам →
+        </Link>
+      </div>
+    </SectionContainer>
   );
 }
