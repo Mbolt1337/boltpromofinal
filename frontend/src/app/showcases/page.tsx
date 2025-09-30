@@ -4,7 +4,8 @@ import { getShowcases } from '@/lib/api';
 import ShowcaseGrid from '@/components/ShowcaseGrid';
 import { SITE_CONFIG } from '@/lib/seo';
 import type { Metadata } from 'next';
-import { ChevronRight, Home, Mail } from 'lucide-react';
+import { ChevronRight, Mail } from 'lucide-react';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Все подборки промокодов - BoltPromo',
@@ -81,17 +82,14 @@ async function ShowcasesList({ page }: { page: number }) {
 export default function ShowcasesPage({ searchParams }: ShowcasesPageProps) {
   const currentPage = Number(searchParams.page) || 1;
 
+  const breadcrumbItems = [
+    { label: 'Главная', href: '/' },
+    { label: 'Подборки' }
+  ];
+
   return (
     <div className="container-main py-12">
-      {/* Breadcrumbs */}
-      <nav className="flex items-center gap-2 text-sm text-white/60 mb-8">
-        <Link href="/" className="hover:text-white transition-colors flex items-center gap-1">
-          <Home className="w-4 h-4" />
-          <span>Главная</span>
-        </Link>
-        <ChevronRight className="w-4 h-4" />
-        <span className="text-white">Подборки</span>
-      </nav>
+      <Breadcrumbs items={breadcrumbItems} className="mb-8" />
 
       {/* Page Header */}
       <div className="mb-12 text-center">

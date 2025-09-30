@@ -6,7 +6,8 @@ import { getShowcaseBySlug, getShowcasePromos } from '@/lib/api';
 import PromoCard from '@/components/PromoCard';
 import { SITE_CONFIG } from '@/lib/seo';
 import type { Metadata } from 'next';
-import { Tag, Home, ChevronRight } from 'lucide-react';
+import { Tag } from 'lucide-react';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 interface ShowcasePageProps {
   params: {
@@ -121,26 +122,20 @@ export default async function ShowcasePage({ params, searchParams }: ShowcasePag
     ? showcase.banner
     : `${process.env.NEXT_PUBLIC_API_URL}${showcase.banner}`;
 
+  const breadcrumbItems = [
+    { label: 'Главная', href: '/' },
+    { label: 'Подборки', href: '/showcases' },
+    { label: showcase.title }
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Banner Section */}
       <div className="container-main pt-8 pb-12">
-        {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-sm text-white/60 mb-6">
-          <Link href="/" className="hover:text-white transition-colors flex items-center gap-1">
-            <Home className="w-4 h-4" />
-            <span>Главная</span>
-          </Link>
-          <ChevronRight className="w-4 h-4" />
-          <Link href="/showcases" className="hover:text-white transition-colors">
-            Подборки
-          </Link>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-white">{showcase.title}</span>
-        </nav>
+        <Breadcrumbs items={breadcrumbItems} className="mb-6" />
 
         {/* Hero Banner with Image */}
-        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl mb-8">
+        <div className="relative w-full h-[220px] sm:h-[280px] lg:h-[320px] overflow-hidden rounded-2xl mb-8">
           <Image
             src={bannerUrl}
             alt={showcase.title}
