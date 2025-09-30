@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.utils import timezone
-from .models import Store, Category, PromoCode, Banner, StaticPage, Partner, ContactMessage
+from .models import Store, Category, PromoCode, Banner, StaticPage, Partner, ContactMessage, Showcase, ShowcaseItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -334,5 +334,31 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С РЎвЂЎРЎС“Р Р†РЎРѓРЎвЂљР Р†Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№Р Вµ Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ Р С‘Р В· Р С•РЎвЂљР Р†Р ВµРЎвЂљР В°
         data.pop('user_agent', None)
         data.pop('ip_address', None)
-        
+
         return data
+
+
+class ShowcaseListSerializer(serializers.ModelSerializer):
+    """Сериализатор для списка витрин"""
+    promos_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Showcase
+        fields = ['id', 'slug', 'title', 'description', 'banner', 'promos_count']
+
+    def get_promos_count(self, obj):
+        """Возвращает количество промокодов, даже если аннотация отсутствует"""
+        return getattr(obj, 'promos_count', obj.items.count() if hasattr(obj, 'items') else 0)
+
+
+class ShowcaseDetailSerializer(serializers.ModelSerializer):
+    """Сериализатор для детальной информации о витрине"""
+    promos_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Showcase
+        fields = ['id', 'slug', 'title', 'description', 'banner', 'promos_count', 'is_active', 'created_at', 'updated_at']
+
+    def get_promos_count(self, obj):
+        """Возвращает количество промокодов, даже если аннотация отсутствует"""
+        return getattr(obj, 'promos_count', obj.items.count() if hasattr(obj, 'items') else 0)
