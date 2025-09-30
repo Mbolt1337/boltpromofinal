@@ -309,3 +309,52 @@ class ContactMessage(models.Model):
         if len(self.message) > 100:
             return f"{self.message[:100]}..."
         return self.message
+
+
+class Showcase(models.Model):
+    """Модель витрины (подборки) промокодов"""
+    title = models.CharField(max_length=200, verbose_name='Название')
+    slug = models.SlugField(max_length=220, unique=True, verbose_name='URL')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    banner = models.ImageField(upload_to='showcases/', verbose_name='Баннер')
+    is_active = models.BooleanField(default=True, verbose_name='Активна')
+    sort_order = models.PositiveIntegerField(default=0, verbose_name='Порядок сортировки')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+
+    class Meta:
+        verbose_name = 'Витрина'
+        verbose_name_plural = 'Витрины'
+        ordering = ['sort_order', '-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('showcase-detail', kwargs={'slug': self.slug})
+
+
+class ShowcaseItem(models.Model):
+    """Связующая модель между витриной и промокодом с порядком сортировки"""
+    showcase = models.ForeignKey(
+        Showcase,
+        on_delete=models.CASCADE,
+        related_name='items',
+        verbose_name='Витрина'
+    )
+    promocode = models.ForeignKey(
+        PromoCode,
+        on_delete=models.CASCADE,
+        related_name='showcase_items',
+        verbose_name='Промокод'
+    )
+    position = models.PositiveIntegerField(default=0, verbose_name='Позиция')
+
+    class Meta:
+        verbose_name = 'Элемент витрины'
+        verbose_name_plural = 'Элементы витрины'
+        unique_together = ('showcase', 'promocode')
+        ordering = ['position', 'id']
+
+    def __str__(self):
+        return f"{self.showcase.title} - {self.promocode.title}"
