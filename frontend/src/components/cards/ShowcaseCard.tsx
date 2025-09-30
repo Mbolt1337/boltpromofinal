@@ -19,13 +19,15 @@ export default function ShowcaseCard({ showcase }: ShowcaseCardProps) {
     <Link href={`/showcases/${showcase.slug}`} className="group block">
       <BaseCard className="card-pad overflow-hidden">
         {/* Banner Image */}
-        <CardImage
-          src={bannerUrl}
-          alt={showcase.title}
-          aspect="16/9"
-          className="transition-transform duration-300 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
+        <div className="relative">
+          <CardImage
+            src={bannerUrl}
+            alt={showcase.title}
+            aspect="16/9"
+            className="transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
+        </div>
 
         {/* Content */}
         <div className="space-y-3 mt-4">
