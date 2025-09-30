@@ -9,8 +9,8 @@ from import_export.admin import ImportExportModelAdmin, ExportMixin
 from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
 from .models import (
-    Category, Store, PromoCode, Banner, Partner, 
-    StaticPage, ContactMessage
+    Category, Store, PromoCode, Banner, Partner,
+    StaticPage, ContactMessage, Showcase, ShowcaseItem
 )
 
 
@@ -517,4 +517,67 @@ class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
 # РР·РјРµРЅРµРЅРёРµ Р·Р°РіРѕР»РѕРІРєРѕРІ Р°РґРјРёРЅРєРё
 admin.site.site_header = "BoltPromo - РђРґРјРёРЅРєР°"
 admin.site.site_title = "BoltPromo Admin"
-admin.site.index_title = "РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°С‚С„РѕСЂРјРѕР№ РїСЂРѕРјРѕРєРѕРґРѕРІ"
+
+
+class ShowcaseItemInline(admin.TabularInline):
+    """Инлайн для управления промокодами в витрине"""
+    model = ShowcaseItem
+    extra = 1
+    fields = ('promocode', 'position')
+    autocomplete_fields = ['promocode']
+    ordering = ('position',)
+    verbose_name = 'Промокод в витрине'
+    verbose_name_plural = 'Промокоды в витрине'
+
+
+@admin.register(Showcase)
+class ShowcaseAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = [
+        'title', 'slug', 'banner_preview', 'promos_count_display',
+        'is_active', 'sort_order', 'created_at'
+    ]
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title', 'description', 'slug']
+    list_editable = ['is_active', 'sort_order']
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = [ShowcaseItemInline]
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('title', 'slug', 'description')
+        }),
+        ('Визуал', {
+            'fields': ('banner',)
+        }),
+        ('Настройки', {
+            'fields': ('is_active', 'sort_order')
+        }),
+    )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.annotate(promos_count=Count('items'))
+        if not request.GET.get('is_active__exact'):
+            return qs.filter(is_active=True)
+        return qs
+
+    def banner_preview(self, obj):
+        if obj.banner:
+            return format_html(
+                '<img src="{}" width="80" height="45" style="object-fit: cover; border-radius: 4px;" />',
+                obj.banner.url
+            )
+        return '—'
+    banner_preview.short_description = 'Баннер'
+
+    def promos_count_display(self, obj):
+        count = getattr(obj, 'promos_count', 0)
+        if count > 0:
+            return format_html(
+                '<span style="font-weight: bold; color: #417690;">{} промо</span>',
+                count
+            )
+        return '—'
+    promos_count_display.short_description = 'Количество'
+
+    actions = [make_active, make_inactive]
