@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Импорты моделей
-        from core.models import Banner, PromoCode, StaticPage
+        from core.models import Banner, PromoCode, StaticPage, Category, Store, Partner
 
         apply_changes = options.get('apply', False)
         dry_run = options.get('dry_run', False) or not apply_changes
@@ -69,6 +69,21 @@ class Command(BaseCommand):
                 'model': StaticPage,
                 'name': 'StaticPage',
                 'fields': ['title', 'content']
+            },
+            {
+                'model': Category,
+                'name': 'Category',
+                'fields': ['name', 'description']
+            },
+            {
+                'model': Store,
+                'name': 'Store',
+                'fields': ['name', 'description']
+            },
+            {
+                'model': Partner,
+                'name': 'Partner',
+                'fields': ['name']
             }
         ]
 
@@ -151,22 +166,29 @@ class Command(BaseCommand):
 
     def _looks_broken(self, text: str) -> bool:
         """Проверяет, выглядит ли строка битой (mojibake)."""
-        # Характерные паттерны битой кириллицы (mojibake от UTF-8 в latin-1)
-        # Используем raw strings и явные unicode escapes для безопасности
-        broken_patterns = [
-            '\xd0', '\xd1',  # Типичные байты UTF-8 кириллицы
-            'Р', 'С',  # Частые артефакты
-            'РЎ', 'Рё', 'РѕРє', 'Рј',  # Битые слова
-            'Р°', 'РџСЂРѕ', 'РЎРєРё',  # Ещё битые паттерны
+        # Более агрессивная детекция битой кириллицы
+
+        # 1. Проверка на характерные последовательности mojibake
+        mojibake_sequences = [
+            'Р', 'Рё', 'Рј', 'Р°', 'Рѕ',  # Отдельные битые буквы
+            'РЎ', 'Рџ', 'в„ў', 'вЂ',  # Битые буквы и символы
+            'РѕРє', 'РЎРє', 'РџСЂРѕ', 'Р"Р»СЏ',  # Битые слова
+            '\xd0\x9f', '\xd1\x80', '\xd0\xbe',  # Байтовые последовательности UTF-8
         ]
 
-        # Если есть хотя бы один характерный паттерн
-        for pattern in broken_patterns:
-            if pattern in text:
-                # И при этом нет нормальной кириллицы
-                if not re.search(r'[а-яА-ЯёЁ]{3,}', text):
-                    return True
-        return False
+        has_mojibake = any(seq in text for seq in mojibake_sequences)
+
+        # 2. Проверка на отсутствие нормальной кириллицы
+        has_normal_cyrillic = bool(re.search(r'[а-яА-ЯёЁ]{2,}', text))
+
+        # 3. Проверка на наличие латинских букв с диакритикой (характерно для mojibake)
+        has_latin_diacritics = bool(re.search(r'[ÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîï]', text))
+
+        # Строка битая, если:
+        # - есть последовательности mojibake И нет нормальной кириллицы
+        # ИЛИ
+        # - есть латинские буквы с диакритикой (часто в mojibake)
+        return (has_mojibake and not has_normal_cyrillic) or has_latin_diacritics
 
     def _looks_russian(self, text: str) -> bool:
         """Проверяет, содержит ли строка нормальную кириллицу."""
