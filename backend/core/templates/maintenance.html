@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Технические работы — BoltPromo</title>
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Технические работы — BoltPromo">
+    <meta property="og:description" content="{{ message }}">
+    <meta property="og:site_name" content="BoltPromo">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .maintenance-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .expected-end {
+            background: #f7f7f7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .expected-end-label {
+            font-size: 14px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .expected-end-time {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .telegram-btn {
+            display: inline-block;
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+        }
+
+        .telegram-btn:hover {
+            background: #006ba1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+        }
+
+        .telegram-icon {
+            margin-right: 8px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        @media (max-width: 600px) {
+            .maintenance-container {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .icon {
+                font-size: 60px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .message {
+                font-size: 16px;
+            }
+
+            .expected-end-time {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="maintenance-container">
+        <div class="logo">BoltPromo</div>
+
+        <div class="icon">🔧</div>
+
+        <h1>Ведутся технические работы</h1>
+
+        <p class="message">{{ message }}</p>
+
+        {% if expected_end %}
+        <div class="expected-end">
+            <div class="expected-end-label">Ожидаемое завершение работ</div>
+            <div class="expected-end-time">
+                {{ expected_end|date:"d.m.Y H:i" }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if telegram_url %}
+        <a href="{{ telegram_url }}" target="_blank" rel="noopener noreferrer" class="telegram-btn">
+            <span class="telegram-icon">📱</span>
+            Следите за новостями в Telegram
+        </a>
+        {% endif %}
+
+        <div class="footer">
+            <p>Приносим извинения за временные неудобства</p>
+        </div>
+    </div>
+</body>
+</html>

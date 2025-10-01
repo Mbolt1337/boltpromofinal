@@ -60,6 +60,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    # НОВОЕ: Maintenance mode middleware (проверяется до всех остальных)
+    'core.middleware.MaintenanceModeMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # ✅ ДОБАВЛЕНО: Кэш middleware для оптимизации
     'django.middleware.cache.UpdateCacheMiddleware',
