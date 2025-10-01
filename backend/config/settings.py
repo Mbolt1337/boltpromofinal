@@ -305,7 +305,7 @@ JAZZMIN_SETTINGS = {
         "core": [
             {
                 "name": "📊 Статистика",
-                "url": "/admin/core/stats/",
+                "url": "admin_stats_dashboard",
                 "icon": "fas fa-chart-line",
                 "permissions": ["core.view_event"]
             },

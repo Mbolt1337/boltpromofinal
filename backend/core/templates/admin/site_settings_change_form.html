@@ -11,27 +11,27 @@
 
     <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
         {% if original.allow_admin_cache_flush %}
-        <a href="{% url 'admin:flush_cache' %}"
+        <a href="{% url 'admin_flush_cache' %}"
            class="button"
            onclick="return confirm('Очистить весь кэш?');"
            style="background: #ff9800; color: white;">
             🗑️ Сбросить весь кэш
         </a>
 
-        <a href="{% url 'admin:flush_cache_pages' %}"
+        <a href="{% url 'admin_flush_cache_pages' %}"
            class="button"
            onclick="return confirm('Очистить кэш страниц?');">
             📄 Сбросить кэш страниц
         </a>
 
-        <a href="{% url 'admin:flush_cache_api' %}"
+        <a href="{% url 'admin_flush_cache_api' %}"
            class="button"
            onclick="return confirm('Очистить кэш API?');">
             🔌 Сбросить кэш API
         </a>
         {% endif %}
 
-        <a href="{% url 'admin:regenerate_sitemap' %}"
+        <a href="{% url 'admin_regenerate_sitemap' %}"
            class="button"
            onclick="return confirm('Перегенерировать sitemap.xml?');"
            style="background: #4caf50; color: white;">
@@ -39,14 +39,14 @@
         </a>
 
         {% if original.maintenance_enabled %}
-        <a href="{% url 'admin:toggle_maintenance' %}"
+        <a href="{% url 'admin_toggle_maintenance' %}"
            class="button"
            onclick="return confirm('Отключить режим техработ?');"
            style="background: #f44336; color: white;">
             ❌ Отключить техработы
         </a>
         {% else %}
-        <a href="{% url 'admin:toggle_maintenance' %}"
+        <a href="{% url 'admin_toggle_maintenance' %}"
            class="button"
            onclick="return confirm('Включить режим техработ?');"
            style="background: #2196F3; color: white;">
