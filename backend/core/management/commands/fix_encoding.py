@@ -132,7 +132,6 @@ class Command(BaseCommand):
                             }
                             changes_log.append(change_info)
 
-                            # Вывод изменения
                             self.stdout.write(
                                 self.style.WARNING(f'\n[{model_name}] ID={instance.id}, поле={field_name}')
                             )
@@ -171,8 +170,6 @@ class Command(BaseCommand):
         # 1. Проверка на характерные последовательности mojibake
         mojibake_sequences = [
             'Р', 'Рё', 'Рј', 'Р°', 'Рѕ',  # Отдельные битые буквы
-            'РЎ', 'Рџ', 'в„ў', 'вЂ',  # Битые буквы и символы
-            'РѕРє', 'РЎРє', 'РџСЂРѕ', 'Р"Р»СЏ',  # Битые слова
             '\xd0\x9f', '\xd1\x80', '\xd0\xbe',  # Байтовые последовательности UTF-8
         ]
 
@@ -184,7 +181,6 @@ class Command(BaseCommand):
         # 3. Проверка на наличие латинских букв с диакритикой (характерно для mojibake)
         has_latin_diacritics = bool(re.search(r'[ÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîï]', text))
 
-        # Строка битая, если:
         # - есть последовательности mojibake И нет нормальной кириллицы
         # ИЛИ
         # - есть латинские буквы с диакритикой (часто в mojibake)

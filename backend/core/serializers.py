@@ -56,7 +56,6 @@ class PromoCodeSerializer(serializers.ModelSerializer):
             'discount_label', 'is_hot', 'is_recommended', 'expires_at', 'views', 
             'affiliate_url', 'store', 'categories', 'is_active',
             'created_at', 'updated_at',
-            # COMPUTED Р С—Р С•Р В»РЎРЏ
             'has_promocode', 'is_expired', 'days_until_expiry',
             'discount_text', 'valid_until', 'offer_type_display'
         ]
@@ -130,11 +129,11 @@ class PromoCodeSerializer(serializers.ModelSerializer):
                 'coupon': 'Промокод',
                 'deal': 'Скидка',
                 'financial': 'Финансовая услуга',
-                'cashback': 'Р С™РЎРЊРЎв‚¬Р В±РЎРЊР С”'
+                'cashback': 'Кэшбэк'
             }
-            return type_mapping.get(offer_type, 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘')
+            return type_mapping.get(offer_type, 'Промокод')
         
-        return 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘'
+        return 'Промокод'
 
 
 class BannerSerializer(serializers.ModelSerializer):
@@ -176,9 +175,9 @@ class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
         fields = [
-            'name', 'email', 'subject', 'message',           # Р С›РЎРѓР Р…Р С•Р Р†Р Р…РЎвЂ№Р Вµ Р С—Р С•Р В»РЎРЏ Р Т‘Р В»РЎРЏ Р Р†Р Р†Р С•Р Т‘Р В°
-            'page', 'user_agent', 'ip_address',  # Р СљР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ (Р С•Р С—РЎвЂ Р С‘Р С•Р Р…Р В°Р В»РЎРЉР Р…РЎвЂ№Р Вµ)
-            'created_at', 'is_processed'         # Р СџР С•Р В»РЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р Т‘Р В»РЎРЏ РЎвЂЎРЎвЂљР ВµР Р…Р С‘РЎРЏ
+            'name', 'email', 'subject', 'message',
+            'page', 'user_agent', 'ip_address',
+            'created_at', 'is_processed'
         ]
         
         extra_kwargs = {
@@ -186,15 +185,15 @@ class ContactMessageSerializer(serializers.ModelSerializer):
                 'required': True,
                 'max_length': 100,
                 'error_messages': {
-                    'required': 'Р СџР С•Р В»Р Вµ "Р ВР СРЎРЏ" Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…Р С• Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ',
-                    'max_length': 'Р ВР СРЎРЏ Р Р…Р Вµ Р Т‘Р С•Р В»Р В¶Р Р…Р С• Р С—РЎР‚Р ВµР Р†РЎвЂ№РЎв‚¬Р В°РЎвЂљРЎРЉ 100 РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†'
+                    'required': 'This field is required',
+                    'max_length': 'Text is too long',
                 }
             },
             'email': {
                 'required': True,
                 'error_messages': {
-                    'required': 'Р СџР С•Р В»Р Вµ "Email" Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…Р С• Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ',
-                    'invalid': 'Р вЂ™Р Р†Р ВµР Т‘Р С‘РЎвЂљР Вµ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…РЎвЂ№Р в„– email Р В°Р Т‘РЎР‚Р ВµРЎРѓ'
+                    'required': 'This field is required',
+                    'invalid': 'Invalid email'
                 }
             },
             'subject': {
@@ -209,7 +208,7 @@ class ContactMessageSerializer(serializers.ModelSerializer):
             'message': {
                 'required': True,
                 'error_messages': {
-                    'required': 'Р СџР С•Р В»Р Вµ "Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ" Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…Р С• Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ'
+                    'required': 'This field is required',
                 }
             },
             'page': {'required': False},
