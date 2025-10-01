@@ -302,12 +302,20 @@ JAZZMIN_SETTINGS = {
     
     # Кастомные ссылки для приложения core
     "custom_links": {
-        "core": [{
-            "name": "Статистика", 
-            "url": "/admin/core/promocode/?is_active__exact=1", 
-            "icon": "fas fa-chart-line",
-            "permissions": ["core.view_promocode"]
-        }]
+        "core": [
+            {
+                "name": "📊 Статистика",
+                "url": "/admin/core/stats/",
+                "icon": "fas fa-chart-line",
+                "permissions": ["core.view_event"]
+            },
+            {
+                "name": "⚙️ Настройки сайта",
+                "url": "/admin/core/sitesettings/1/change/",
+                "icon": "fas fa-cog",
+                "permissions": ["core.change_sitesettings"]
+            }
+        ]
     },
 
     # Иконки для приложений/моделей

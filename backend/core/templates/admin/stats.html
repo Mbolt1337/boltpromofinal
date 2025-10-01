@@ -1,0 +1,291 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Статистика — BoltPromo{% endblock %}
+
+{% block extrastyle %}
+<style>
+    .stats-container {
+        padding: 20px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .chart-card h3 {
+        margin-top: 0;
+        color: #417690;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .chart-wrapper {
+        position: relative;
+        height: 300px;
+    }
+
+    .loading {
+        text-align: center;
+        color: #999;
+        padding: 40px;
+    }
+
+    .range-selector {
+        margin-bottom: 20px;
+    }
+
+    .range-selector select {
+        padding: 8px 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <h1>📊 Статистика BoltPromo</h1>
+
+    <div class="range-selector">
+        <label for="range">Период:</label>
+        <select id="range" onchange="loadAllCharts()">
+            <option value="7d" selected>Последние 7 дней</option>
+            <option value="14d">Последние 14 дней</option>
+            <option value="30d">Последние 30 дней</option>
+        </select>
+    </div>
+
+    <div class="stats-grid">
+        <div class="chart-card">
+            <h3>🔥 Топ-10 офферов по кликам</h3>
+            <div class="chart-wrapper">
+                <canvas id="topPromosChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>🏪 Топ-10 магазинов</h3>
+            <div class="chart-wrapper">
+                <canvas id="topStoresChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>📦 Распределение по типам</h3>
+            <div class="chart-wrapper">
+                <canvas id="typesShareChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>🎯 CTR витрин (показы/клики)</h3>
+            <div class="chart-wrapper">
+                <canvas id="showcasesCTRChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+<script>
+let charts = {};
+
+async function loadAllCharts() {
+    const range = document.getElementById('range').value;
+    await loadTopPromos(range);
+    await loadTopStores(range);
+    await loadTypesShare(range);
+    await loadShowcasesCTR(range);
+}
+
+async function loadTopPromos(range) {
+    try {
+        const response = await fetch(`/api/v1/stats/top-promos/?range=${range}`);
+        const data = await response.json();
+
+        const ctx = document.getElementById('topPromosChart');
+
+        if (charts.topPromos) {
+            charts.topPromos.destroy();
+        }
+
+        charts.topPromos = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.map(item => item.title.substring(0, 30)),
+                datasets: [{
+                    label: 'Клики',
+                    data: data.map(item => item.clicks),
+                    backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error loading top promos:', error);
+    }
+}
+
+async function loadTopStores(range) {
+    try {
+        const response = await fetch(`/api/v1/stats/top-stores/?range=${range}`);
+        const data = await response.json();
+
+        const ctx = document.getElementById('topStoresChart');
+
+        if (charts.topStores) {
+            charts.topStores.destroy();
+        }
+
+        charts.topStores = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.map(item => item.name),
+                datasets: [{
+                    label: 'Клики',
+                    data: data.map(item => item.clicks),
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error loading top stores:', error);
+    }
+}
+
+async function loadTypesShare(range) {
+    try {
+        const response = await fetch(`/api/v1/stats/types-share/?range=${range}`);
+        const data = await response.json();
+
+        const ctx = document.getElementById('typesShareChart');
+
+        if (charts.typesShare) {
+            charts.typesShare.destroy();
+        }
+
+        const typeLabels = {
+            'coupon': 'Промокод',
+            'deal': 'Скидка',
+            'financial': 'Финансы',
+            'cashback': 'Кэшбэк'
+        };
+
+        charts.typesShare = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: data.map(item => typeLabels[item.type] || item.type),
+                datasets: [{
+                    data: data.map(item => item.count),
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    } catch (error) {
+        console.error('Error loading types share:', error);
+    }
+}
+
+async function loadShowcasesCTR(range) {
+    try {
+        const response = await fetch(`/api/v1/stats/showcases-ctr/?range=${range}`);
+        const data = await response.json();
+
+        const ctx = document.getElementById('showcasesCTRChart');
+
+        if (charts.showcasesCTR) {
+            charts.showcasesCTR.destroy();
+        }
+
+        charts.showcasesCTR = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.map(item => item.title.substring(0, 20)),
+                datasets: [
+                    {
+                        label: 'Просмотры',
+                        data: data.map(item => item.views),
+                        backgroundColor: 'rgba(201, 203, 207, 0.6)',
+                        borderColor: 'rgba(201, 203, 207, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Клики',
+                        data: data.map(item => item.clicks),
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error loading showcases CTR:', error);
+    }
+}
+
+// Загружаем графики при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    loadAllCharts();
+});
+</script>
+{% endblock %}

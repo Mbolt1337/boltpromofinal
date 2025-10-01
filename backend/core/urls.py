@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from . import views_analytics
 
 # Router для ViewSet'ов
 router = DefaultRouter()
@@ -54,4 +55,13 @@ urlpatterns = [
 
     # Витрины (подборки)
     path('', include(router.urls)),
+
+    # Трекинг событий
+    path('track/', views_analytics.track_events, name='track-events'),
+
+    # Статистика для админ-дашборда
+    path('stats/top-promos/', views_analytics.stats_top_promos, name='stats-top-promos'),
+    path('stats/top-stores/', views_analytics.stats_top_stores, name='stats-top-stores'),
+    path('stats/types-share/', views_analytics.stats_types_share, name='stats-types-share'),
+    path('stats/showcases-ctr/', views_analytics.stats_showcases_ctr, name='stats-showcases-ctr'),
 ]
