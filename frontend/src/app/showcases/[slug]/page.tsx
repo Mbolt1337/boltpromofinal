@@ -10,16 +10,17 @@ import { Tag } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 interface ShowcasePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: ShowcasePageProps): Promise<Metadata> {
-  const showcase = await getShowcaseBySlug(params.slug);
+  const { slug } = await params;
+  const showcase = await getShowcaseBySlug(slug);
 
   if (!showcase) {
     return {
@@ -111,13 +112,16 @@ async function ShowcasePromos({ slug, page }: { slug: string; page: number }) {
 }
 
 export default async function ShowcasePage({ params, searchParams }: ShowcasePageProps) {
-  const showcase = await getShowcaseBySlug(params.slug);
+  const { slug } = await params;
+  const { page } = await searchParams;
+
+  const showcase = await getShowcaseBySlug(slug);
 
   if (!showcase) {
     notFound();
   }
 
-  const currentPage = Number(searchParams.page) || 1;
+  const currentPage = Number(page) || 1;
   const bannerUrl = showcase.banner.startsWith('http')
     ? showcase.banner
     : `${process.env.NEXT_PUBLIC_API_URL}${showcase.banner}`;
@@ -182,7 +186,7 @@ export default async function ShowcasePage({ params, searchParams }: ShowcasePag
             </div>
           }
         >
-          <ShowcasePromos slug={params.slug} page={currentPage} />
+          <ShowcasePromos slug={slug} page={currentPage} />
         </Suspense>
       </div>
     </div>

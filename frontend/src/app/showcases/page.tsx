@@ -24,9 +24,9 @@ export const metadata: Metadata = {
 };
 
 interface ShowcasesPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 async function ShowcasesList({ page }: { page: number }) {
@@ -79,8 +79,9 @@ async function ShowcasesList({ page }: { page: number }) {
   );
 }
 
-export default function ShowcasesPage({ searchParams }: ShowcasesPageProps) {
-  const currentPage = Number(searchParams.page) || 1;
+export default async function ShowcasesPage({ searchParams }: ShowcasesPageProps) {
+  const { page } = await searchParams;
+  const currentPage = Number(page) || 1;
 
   const breadcrumbItems = [
     { label: 'Главная', href: '/' },

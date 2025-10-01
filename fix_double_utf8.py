@@ -69,6 +69,7 @@ def main():
         backend_root / 'core' / 'admin.py',
         backend_root / 'core' / 'models.py',
         backend_root / 'core' / 'views.py',
+        backend_root / 'core' / 'admin_views.py',
     ]
 
     fixed_count = 0

@@ -6,7 +6,6 @@ import { type Promocode, incrementPromoView } from '@/lib/api'
 import Image from 'next/image'
 import Link from 'next/link'
 import Toast from './Toast'
-import CountdownTimer from './CountdownTimer'
 
 interface PromoCardProps {
   promo: Promocode
@@ -356,11 +355,13 @@ export default function PromoCard({ promo }: PromoCardProps) {
             </div>
           </div>
 
-          {/* Дата окончания - УСЛОВНЫЙ РЕНДЕРИНГ */}
+          {/* Бейдж даты окончания - УНИФИЦИРОВАННЫЙ (absolute right-3 top-3) */}
           {cardModel.validUntil && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 glass-card border-white/10 text-gray-400 text-xs ml-3 flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:bg-white/8 hover:border-white/15">
-              <Calendar className="w-3.5 h-3.5 transition-transform duration-300 ease-out" />
-              <span className="font-medium">до {cardModel.validUntil}</span>
+            <div className="absolute right-3 top-3">
+              <div className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-2.5 py-1 text-sm text-white/70">
+                <Calendar className="w-3.5 h-3.5 text-white/60" />
+                <span className="font-medium">до {cardModel.validUntil}</span>
+              </div>
             </div>
           )}
         </div>
@@ -382,11 +383,6 @@ export default function PromoCard({ promo }: PromoCardProps) {
                 <Flame className="w-3.5 h-3.5 transition-transform duration-300 ease-out" />
                 <span>Горячий</span>
               </div>
-            )}
-
-            {/* Таймер обратного отсчёта для "горячих" офферов */}
-            {cardModel.isHot && promo.expires_at && (
-              <CountdownTimer expiresAt={promo.expires_at} className="hidden sm:inline-flex" />
             )}
           </div>
         )}

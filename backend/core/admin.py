@@ -245,7 +245,7 @@ class StoreAdmin(ImportExportModelAdmin):
                 '<a href="{}" target="_blank" rel="noopener">🔗 Сайт</a>',
                 obj.site_url
             )
-        return 'вЂ"'
+        return '—'
     site_link.short_description = 'Сайт'
     
     def promocodes_count(self, obj):

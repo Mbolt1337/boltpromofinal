@@ -351,14 +351,12 @@ async function HotContent({ searchParams }: { searchParams: any }) {
         </div>
       </div>
 
-      {/* ✅ ИСПРАВЛЕНО: Сетка промокодов с правильным полем expires_at */}
+      {/* ✅ ИСПРАВЛЕНО: Сетка промокодов - HotPromoCard теперь унифицирован с PromoCard */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {result.items.map((promo) => (
-          <HotPromoCard 
-            key={promo.id} 
+          <HotPromoCard
+            key={promo.id}
             promo={promo}
-            isHot={promo.is_hot}
-            isExpiring={isExpiringSoon(promo.expires_at)}
           />
         ))}
       </div>

@@ -243,6 +243,8 @@ export default async function PromoPage({ params }: PromoPageProps) {
 
                     {/* ДЕЙСТВИЯ */}
                     <PromoActions
+                      promoId={promo.id}
+                      storeId={promo.store?.id}
                       offerType={promo.offer_type || 'coupon'}
                       code={promo.code}
                       promoAffiliateUrl={promoAffiliateUrl}

@@ -20,6 +20,7 @@ const MEDIA_QUERIES = {
 } as const
 
 const bannersCache = new Map<string, { data: Banner[], timestamp: number }>()
+const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
 function isInternalLink(url: string): boolean {
   try {
