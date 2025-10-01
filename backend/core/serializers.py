@@ -108,7 +108,7 @@ class PromoCodeSerializer(serializers.ModelSerializer):
         if discount_value:
             return f"{discount_value}%"
         
-        return "Р РЋР С”Р С‘Р Т‘Р С”Р В°"
+        return "Скидка"
     
     def get_valid_until(self, obj):
         expires_at = getattr(obj, 'expires_at', None)
