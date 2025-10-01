@@ -13,6 +13,7 @@ from .models import (
     StaticPage, ContactMessage, Showcase, ShowcaseItem,
     SiteSettings, AdminActionLog, Event, DailyAgg
 )
+from .admin_mixins import AntiMojibakeModelForm
 
 
 # =============================================================================
@@ -261,9 +262,17 @@ class StoreAdmin(ImportExportModelAdmin):
     actions = [make_active, make_inactive]
 
 
+class PromoCodeAdminForm(AntiMojibakeModelForm):
+    """Форма с защитой от кракозябр"""
+    class Meta:
+        model = PromoCode
+        fields = '__all__'
+
+
 @admin.register(PromoCode)
 class PromoCodeAdmin(ImportExportModelAdmin):
     resource_class = PromoCodeResource
+    form = PromoCodeAdminForm
     
     list_display = [
         'title_short', 'store', 'offer_type_badge', 'discount_display', 
@@ -375,8 +384,16 @@ class PromoCodeAdmin(ImportExportModelAdmin):
     actions = [make_active, make_inactive, make_hot, make_recommended]
 
 
+class BannerAdminForm(AntiMojibakeModelForm):
+    """Форма с защитой от кракозябр"""
+    class Meta:
+        model = Banner
+        fields = '__all__'
+
+
 @admin.register(Banner)
 class BannerAdmin(ExportMixin, admin.ModelAdmin):
+    form = BannerAdminForm
     list_display = ['title', 'subtitle_short', 'image_preview', 'cta_text', 'cta_link', 'is_active', 'sort_order']
     list_filter = ['is_active', 'created_at']
     search_fields = ['title', 'subtitle', 'cta_text']
@@ -438,8 +455,16 @@ class PartnerAdmin(ExportMixin, admin.ModelAdmin):
     actions = [make_active, make_inactive]
 
 
+class StaticPageAdminForm(AntiMojibakeModelForm):
+    """Форма с защитой от кракозябр"""
+    class Meta:
+        model = StaticPage
+        fields = '__all__'
+
+
 @admin.register(StaticPage)
 class StaticPageAdmin(ExportMixin, admin.ModelAdmin):
+    form = StaticPageAdminForm
     list_display = ['get_slug_display', 'title', 'content_length', 'is_active', 'updated_at']
     list_filter = ['is_active', 'slug', 'updated_at']
     search_fields = ['title', 'content']
