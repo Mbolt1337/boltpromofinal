@@ -4,8 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ExternalLink, Copy, Check } from 'lucide-react'
 import { safeExternalUrl } from '@/lib/utils'
+import { trackPromoCopy, trackPromoOpen, trackFinanceOpen, trackDealOpen } from '@/lib/analytics'
 
 interface PromoActionsProps {
+  promoId: number
+  storeId?: number
   offerType: string
   code?: string
   promoAffiliateUrl: string
@@ -28,28 +31,33 @@ const COPIED_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 
 const TOAST_NOTIFICATION = "fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top-4 duration-300"
 const TOAST_CONTENT = "glass-card border-green-500/30 bg-green-500/10 px-6 py-4 flex items-center gap-3 shadow-2xl min-w-[280px]"
 
-export default function PromoActions({ 
-  offerType, 
-  code, 
-  promoAffiliateUrl, 
-  storeUrl, 
-  title 
+export default function PromoActions({
+  promoId,
+  storeId,
+  offerType,
+  code,
+  promoAffiliateUrl,
+  storeUrl,
+  title
 }: PromoActionsProps) {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'copied'>('idle')
-  
+
   // Функция копирования кода в буфер обмена
   const copyToClipboard = async (codeText: string) => {
     try {
       setCopyStatus('copying')
       await navigator.clipboard.writeText(codeText)
       setCopyStatus('copied')
-      
+
+      // Трекаем копирование промокода
+      trackPromoCopy(promoId)
+
       // Возвращаем в исходное состояние через 2 секунды
       setTimeout(() => setCopyStatus('idle'), 2000)
     } catch (error) {
       console.error('Ошибка копирования:', error)
       setCopyStatus('idle')
-      
+
       // Fallback для старых браузеров
       const textArea = document.createElement('textarea')
       textArea.value = codeText
@@ -57,9 +65,25 @@ export default function PromoActions({
       textArea.select()
       document.execCommand('copy')
       document.body.removeChild(textArea)
-      
+
       setCopyStatus('copied')
+      trackPromoCopy(promoId)
       setTimeout(() => setCopyStatus('idle'), 2000)
+    }
+  }
+
+  // Функция трекинга клика по ссылке
+  const handleLinkClick = (linkType: 'promo' | 'finance' | 'deal') => {
+    switch (linkType) {
+      case 'promo':
+        trackPromoOpen(promoId, storeId)
+        break
+      case 'finance':
+        trackFinanceOpen(promoId, storeId)
+        break
+      case 'deal':
+        trackDealOpen(promoId, storeId)
+        break
     }
   }
 
@@ -169,6 +193,15 @@ export default function PromoActions({
             target="_blank"
             rel="noopener noreferrer"
             className={PRIMARY_ACTION_BUTTON}
+            onClick={() => {
+              if (offerType === 'financial') {
+                handleLinkClick('finance')
+              } else if (offerType === 'deal') {
+                handleLinkClick('deal')
+              } else {
+                handleLinkClick('promo')
+              }
+            }}
           >
             <span className="truncate">{actions.primaryText}</span>
             {actions.primaryIcon}
