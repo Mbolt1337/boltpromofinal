@@ -700,8 +700,24 @@ def health_check(request):
 @csrf_exempt
 @require_http_methods(["GET"])
 def robots_txt(request):
-    """Return a simple robots.txt that keeps search engines allowed."""
-    body = "User-Agent: *\nAllow: /"
+    """Return robots.txt - either custom from SiteSettings or default."""
+    from .models import SiteSettings
+
+    try:
+        settings = SiteSettings.objects.first()
+        if settings and settings.robots_txt:
+            body = settings.robots_txt
+        else:
+            # Default robots.txt
+            body = """User-Agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: {}/sitemap.xml
+""".format(request.build_absolute_uri('/'))
+    except Exception:
+        body = "User-Agent: *\nAllow: /"
+
     return HttpResponse(body, content_type='text/plain')
 
 

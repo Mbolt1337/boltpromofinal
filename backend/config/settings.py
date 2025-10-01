@@ -60,6 +60,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    # НОВОЕ: Canonical redirect (должен быть раньше остальных, после security)
+    'core.middleware.CanonicalHostMiddleware',
     # НОВОЕ: Maintenance mode middleware (проверяется до всех остальных)
     'core.middleware.MaintenanceModeMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

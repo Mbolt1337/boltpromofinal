@@ -2,9 +2,10 @@
 Кастомные middleware
 """
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponsePermanentRedirect
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.conf import settings
 from datetime import timedelta
 
 
@@ -87,3 +88,46 @@ class MaintenanceModeMiddleware:
                 response['Retry-After'] = str(delta_seconds)
 
         return response
+
+
+class CanonicalHostMiddleware:
+    """
+    Middleware для редиректа на канонический домен.
+    Работает только в продакшене (DEBUG=False).
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Только в продакшене
+        if settings.DEBUG:
+            return self.get_response(request)
+
+        from .models import SiteSettings
+
+        try:
+            site_settings = SiteSettings.objects.first()
+        except Exception:
+            return self.get_response(request)
+
+        if not site_settings or not site_settings.canonical_host:
+            return self.get_response(request)
+
+        # Получаем текущий хост из запроса
+        current_host = request.get_host().split(':')[0]  # Без порта
+        canonical_host = site_settings.canonical_host.strip().lower()
+
+        # Whitelist для локальных адресов
+        whitelist = ['127.0.0.1', 'localhost', '0.0.0.0']
+
+        if current_host in whitelist:
+            return self.get_response(request)
+
+        # Если хост не канонический — редирект 301
+        if current_host != canonical_host:
+            protocol = 'https' if request.is_secure() else 'http'
+            new_url = f"{protocol}://{canonical_host}{request.get_full_path()}"
+            return HttpResponsePermanentRedirect(new_url)
+
+        return self.get_response(request)
