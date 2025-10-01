@@ -19,42 +19,22 @@ def flush_cache_view(request, scope='all'):
         messages.error(request, 'Сброс кэша запрещен в настройках.')
         return redirect('admin:core_sitesettings_change', 1)
 
-    # Определяем паттерны для очистки
-    scope_patterns = {
-        'all': '*',
-        'pages': 'page:*',
-        'api': 'api:*',
-        'showcases': 'showcase:*',
-        'banners': 'banner:*',
-    }
-
-    pattern = scope_patterns.get(scope, '*')
-
     try:
-        if scope == 'all':
-            cache.clear()
-            cleared_msg = 'Весь кэш очищен'
-        else:
-            # Для паттернов используем delete_pattern если доступно (redis)
-            # Иначе просто очищаем всё
-            try:
-                cache.delete_pattern(pattern)
-                cleared_msg = f'Кэш "{scope}" очищен'
-            except AttributeError:
-                cache.clear()
-                cleared_msg = f'Весь кэш очищен (delete_pattern недоступен)'
+        # Запускаем Celery задачу
+        from .tasks import flush_cache
+        task = flush_cache.delay(scope)
 
         # Логируем действие
         AdminActionLog.objects.create(
             user=request.user.username,
             action=f'flush_cache_{scope}',
-            details=cleared_msg
+            details=f'Запущена задача очистки кэша: {scope} (task_id: {task.id})'
         )
 
-        messages.success(request, cleared_msg)
+        messages.success(request, f'Задача очистки кэша "{scope}" запущена.')
 
     except Exception as e:
-        messages.error(request, f'Ошибка при очистке кэша: {str(e)}')
+        messages.error(request, f'Ошибка при запуске задачи: {str(e)}')
 
     return redirect('admin:core_sitesettings_change', 1)
 
@@ -85,16 +65,21 @@ def toggle_maintenance_view(request):
 
 @staff_member_required
 def regenerate_sitemap_view(request):
-    """Регенерация sitemap (заглушка для celery-задачи)"""
-    # TODO: вызвать celery-задачу для генерации sitemap
+    """Регенерация sitemap через Celery"""
+    try:
+        from .tasks import regenerate_sitemap
+        task = regenerate_sitemap.delay()
 
-    AdminActionLog.objects.create(
-        user=request.user.username,
-        action='regenerate_sitemap',
-        details='Запущена задача генерации sitemap'
-    )
+        AdminActionLog.objects.create(
+            user=request.user.username,
+            action='regenerate_sitemap',
+            details=f'Запущена задача генерации sitemap (task_id: {task.id})'
+        )
 
-    messages.info(request, 'Задача регенерации sitemap запущена.')
+        messages.success(request, 'Задача регенерации sitemap запущена.')
+    except Exception as e:
+        messages.error(request, f'Ошибка: {str(e)}')
+
     return redirect('admin:core_sitesettings_change', 1)
 
 
