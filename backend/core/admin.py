@@ -71,8 +71,8 @@ class PromoCodeResource(resources.ModelResource):
 # =============================================================================
 
 class ActivePromocodesFilter(SimpleListFilter):
-    """Р¤РёР»СЊС‚СЂ Р°РєС‚РёРІРЅС‹С… РїСЂРѕРјРѕРєРѕРґРѕРІ (РЅРµ РёСЃС‚РµРєС€РёС…)"""
-    title = 'СЃС‚Р°С‚СѓСЃ РїСЂРѕРјРѕРєРѕРґРѕРІ'
+    """Фильтр активных промокодов (не истекших)"""
+    title = 'статус промокодов'
     parameter_name = 'promo_status'
 
     def lookups(self, request, model_admin):
@@ -215,7 +215,7 @@ class StoreAdmin(ImportExportModelAdmin):
         ('Р’РёР·СѓР°Р»СЊРЅРѕРµ РѕС„РѕСЂРјР»РµРЅРёРµ', {
             'fields': ('logo', 'rating')
         }),
-        ('РЎСЃС‹Р»РєРё', {
+        ('Ссылки', {
             'fields': ('site_url',)
         }),
         ('РќР°СЃС‚СЂРѕР№РєРё', {
@@ -242,11 +242,11 @@ class StoreAdmin(ImportExportModelAdmin):
     def site_link(self, obj):
         if obj.site_url:
             return format_html(
-                '<a href="{}" target="_blank" rel="noopener">рџ”— РЎР°Р№С‚</a>',
+                '<a href="{}" target="_blank" rel="noopener">🔗 Сайт</a>',
                 obj.site_url
             )
-        return 'вЂ”'
-    site_link.short_description = 'РЎР°Р№С‚'
+        return 'вЂ"'
+    site_link.short_description = 'Сайт'
     
     def promocodes_count(self, obj):
         count = obj.promocodes_count
@@ -304,7 +304,7 @@ class PromoCodeAdmin(ImportExportModelAdmin):
             'fields': ('long_description', 'steps', 'fine_print', 'disclaimer'),
             'classes': ['collapse']
         }),
-        ('вљЎ РЎРїРµС†РёР°Р»СЊРЅС‹Рµ РѕС‚РјРµС‚РєРё', {
+        ('⚡ Специальные отметки', {
             'fields': ('is_hot', 'is_recommended'),
             'classes': ['wide']
         }),
@@ -349,7 +349,7 @@ class PromoCodeAdmin(ImportExportModelAdmin):
         if obj.discount_value:
             return f"{obj.discount_value}%"
         return 'вЂ”'
-    discount_display.short_description = 'РЎРєРёРґРєР°'
+    discount_display.short_description = 'Скидка'
     
     def code_display(self, obj):
         if obj.code:
@@ -364,22 +364,22 @@ class PromoCodeAdmin(ImportExportModelAdmin):
         badges = []
         now = timezone.now()
         
-        # РЎС‚Р°С‚СѓСЃ Р°РєС‚РёРІРЅРѕСЃС‚Рё/РёСЃС‚РµС‡РµРЅРёСЏ
+        # Статус активности/истечения
         if obj.expires_at <= now:
             badges.append('<span class="badge badge-danger">РСЃС‚С‘Рє</span>')
         elif obj.is_active:
             badges.append('<span class="badge badge-success">РђРєС‚РёРІРµРЅ</span>')
         else:
             badges.append('<span class="badge badge-secondary">РќРµР°РєС‚РёРІРµРЅ</span>')
-            
-        # РЎРїРµС†РёР°Р»СЊРЅС‹Рµ РѕС‚РјРµС‚РєРё
+
+        # Специальные отметки
         if obj.is_hot:
             badges.append('<span class="badge badge-warning">рџ”Ґ Р“РѕСЂСЏС‡РёР№</span>')
         if obj.is_recommended:
             badges.append('<span class="badge badge-info">в­ђ BoltPromo</span>')
             
         return format_html(' '.join(badges))
-    status_badges.short_description = 'РЎС‚Р°С‚СѓСЃ'
+    status_badges.short_description = 'Статус'
     
     actions = [make_active, make_inactive, make_hot, make_recommended]
 
@@ -422,7 +422,7 @@ class BannerAdmin(ExportMixin, admin.ModelAdmin):
                 obj.cta_url, obj.cta_text
             )
         return 'вЂ”'
-    cta_link.short_description = 'РЎСЃС‹Р»РєР°'
+    cta_link.short_description = 'Ссылка'
     
     actions = [make_active, make_inactive]
 
@@ -446,11 +446,11 @@ class PartnerAdmin(ExportMixin, admin.ModelAdmin):
     def partner_link(self, obj):
         if obj.url:
             return format_html(
-                '<a href="{}" target="_blank" rel="noopener">рџ”— РЎР°Р№С‚</a>',
+                '<a href="{}" target="_blank" rel="noopener">🔗 Сайт</a>',
                 obj.url
             )
         return 'вЂ”'
-    partner_link.short_description = 'РЎР°Р№С‚'
+    partner_link.short_description = 'Сайт'
     
     actions = [make_active, make_inactive]
 
@@ -497,7 +497,7 @@ class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
     readonly_fields = ['user_agent', 'ip_address', 'created_at', 'processed_at']
     
     fieldsets = (
-        ('рџ“§ РЎРѕРѕР±С‰РµРЅРёРµ', {
+        ('📧 Сообщение', {
             'fields': ('name', 'email', 'subject', 'message')
         }),
         ('рџЊђ РњРµС‚Р°РґР°РЅРЅС‹Рµ', {
@@ -517,16 +517,16 @@ class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
     
     def message_short(self, obj):
         return obj.short_message
-    message_short.short_description = 'РЎРѕРѕР±С‰РµРЅРёРµ'
+    message_short.short_description = 'Сообщение'
     
     def status_display(self, obj):
         if obj.is_spam:
-            return format_html('<span class="badge badge-danger">РЎРїР°Рј</span>')
+            return format_html('<span class="badge badge-danger">Спам</span>')
         elif obj.is_processed:
             return format_html('<span class="badge badge-success">РћР±СЂР°Р±РѕС‚Р°РЅРѕ</span>')
         else:
             return format_html('<span class="badge badge-warning">РќРѕРІРѕРµ</span>')
-    status_display.short_description = 'РЎС‚Р°С‚СѓСЃ'
+    status_display.short_description = 'Статус'
     
     actions = [mark_as_processed, 'mark_as_spam']
     

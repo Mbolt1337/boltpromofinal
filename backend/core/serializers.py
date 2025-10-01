@@ -41,12 +41,10 @@ class PromoCodeSerializer(serializers.ModelSerializer):
     store = StoreSerializer(read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
     
-    # Р ВР РЋР СџР В Р С’Р вЂ™Р вЂєР вЂўР СњР С›: Computed Р С—Р С•Р В»РЎРЏ Р Т‘Р В»РЎРЏ РЎС“Р Т‘Р С•Р В±РЎРѓРЎвЂљР Р†Р В° РЎвЂћРЎР‚Р С•Р Р…РЎвЂљР ВµР Р…Р Т‘Р В°
     has_promocode = serializers.SerializerMethodField()
     is_expired = serializers.SerializerMethodField()
     days_until_expiry = serializers.SerializerMethodField()
     
-    # Р ВР РЋР СџР В Р С’Р вЂ™Р вЂєР вЂўР СњР С›: Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…РЎвЂ№Р Вµ Р С—Р С•Р В»РЎРЏ РЎРѓ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С•Р в„– Р Р…Р В° РЎРѓРЎС“РЎвЂ°Р ВµРЎРѓРЎвЂљР Р†Р С•Р Р†Р В°Р Р…Р С‘Р Вµ
     discount_text = serializers.SerializerMethodField()
     valid_until = serializers.SerializerMethodField()
     offer_type_display = serializers.SerializerMethodField()
@@ -54,7 +52,6 @@ class PromoCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromoCode
         fields = [
-            # Р вЂР С’Р вЂ”Р С›Р вЂ™Р В«Р вЂў Р С—Р С•Р В»РЎРЏ Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р Вµ РЎвЂљР С•РЎвЂЎР Р…Р С• Р ВµРЎРѓРЎвЂљРЎРЉ Р Р† Р СР С•Р Т‘Р ВµР В»Р С‘
             'id', 'title', 'description', 'code', 'discount_value', 
             'discount_label', 'is_hot', 'is_recommended', 'expires_at', 'views', 
             'affiliate_url', 'store', 'categories', 'is_active',
@@ -64,16 +61,13 @@ class PromoCodeSerializer(serializers.ModelSerializer):
             'discount_text', 'valid_until', 'offer_type_display'
         ]
         
-        # Р вЂќР С›Р вЂР С’Р вЂ™Р вЂєР вЂўР СњР С›: Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р В°РЎРЏ Р С•Р В±РЎР‚Р В°Р В±Р С•РЎвЂљР С”Р В° Р Т‘Р С•Р С—Р С•Р В»Р Р…Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р В»Р ВµР в„–
         extra_kwargs = {}
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Р ВР РЋР СџР В Р С’Р вЂ™Р вЂєР вЂўР СњР С›: Р вЂќР С‘Р Р…Р В°Р СР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘ Р Т‘Р С•Р В±Р В°Р Р†Р В»РЎРЏР ВµР С Р С—Р С•Р В»РЎРЏ Р ВµРЎРѓР В»Р С‘ Р С•Р Р…Р С‘ Р ВµРЎРѓРЎвЂљРЎРЉ Р Р† Р СР С•Р Т‘Р ВµР В»Р С‘
         model_fields = [f.name for f in self.Meta.model._meta.get_fields()]
         
-        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р Р…Р В°Р В»Р С‘РЎвЂЎР С‘Р Вµ Р Т‘Р С•Р С—Р С•Р В»Р Р…Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№РЎвЂ¦ Р С—Р С•Р В»Р ВµР в„–
         additional_fields = [
             'offer_type', 'long_description', 'steps', 
             'fine_print', 'disclaimer', 'external_link'
@@ -84,18 +78,15 @@ class PromoCodeSerializer(serializers.ModelSerializer):
                 self.fields[field_name] = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     
     def get_has_promocode(self, obj):
-        """Р С›Р С—РЎР‚Р ВµР Т‘Р ВµР В»РЎРЏР ВµР С, Р ВµРЎРѓРЎвЂљРЎРЉ Р В»Р С‘ Р С—РЎР‚Р С•Р СР С•Р С”Р С•Р Т‘ Р Т‘Р В»РЎРЏ Р С”Р С•Р С—Р С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ"""
         return bool(getattr(obj, 'code', None) and str(getattr(obj, 'code', '')).strip())
     
     def get_is_expired(self, obj):
-        """Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С, Р С‘РЎРѓРЎвЂљР ВµР С” Р В»Р С‘ Р С—РЎР‚Р С•Р СР С•Р С”Р С•Р Т‘"""
         expires_at = getattr(obj, 'expires_at', None)
         if not expires_at:
             return False
         return expires_at <= timezone.now()
     
     def get_days_until_expiry(self, obj):
-        """Р С™Р С•Р В»Р С‘РЎвЂЎР ВµРЎРѓРЎвЂљР Р†Р С• Р Т‘Р Р…Р ВµР в„– Р Т‘Р С• Р С‘РЎРѓРЎвЂљР ВµРЎвЂЎР ВµР Р…Р С‘РЎРЏ"""
         expires_at = getattr(obj, 'expires_at', None)
         if not expires_at:
             return None
@@ -106,8 +97,6 @@ class PromoCodeSerializer(serializers.ModelSerializer):
         return delta.days
     
     def get_discount_text(self, obj):
-        """Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…Р С‘Р Вµ РЎвЂљР ВµР С”РЎРѓРЎвЂљР В° РЎРѓР С”Р С‘Р Т‘Р С”Р С‘"""
-        # Р СџРЎР‚Р С•Р В±РЎС“Р ВµР С РЎР‚Р В°Р В·Р Р…РЎвЂ№Р Вµ Р Р†Р В°РЎР‚Р С‘Р В°Р Р…РЎвЂљРЎвЂ№ Р Р…Р В°Р В·Р Р†Р В°Р Р…Р С‘Р в„– Р С—Р С•Р В»Р ВµР в„–
         discount_label = getattr(obj, 'discount_label', None)
         if discount_label:
             return discount_label
@@ -123,28 +112,24 @@ class PromoCodeSerializer(serializers.ModelSerializer):
         return "Р РЋР С”Р С‘Р Т‘Р С”Р В°"
     
     def get_valid_until(self, obj):
-        """Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…Р С‘Р Вµ Р Т‘Р В°РЎвЂљРЎвЂ№ Р С‘РЎРѓРЎвЂљР ВµРЎвЂЎР ВµР Р…Р С‘РЎРЏ"""
         expires_at = getattr(obj, 'expires_at', None)
         valid_until = getattr(obj, 'valid_until', None)
         
         return expires_at or valid_until
     
     def get_offer_type_display(self, obj):
-        """Р вЂР ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•Р Вµ Р С—Р С•Р В»РЎС“РЎвЂЎР ВµР Р…Р С‘Р Вµ РЎвЂљР С‘Р С—Р В° Р С•РЎвЂћРЎвЂћР ВµРЎР‚Р В°"""
-        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р ВµРЎРѓРЎвЂљРЎРЉ Р В»Р С‘ Р СР ВµРЎвЂљР С•Р Т‘ get_offer_type_display
         if hasattr(obj, 'get_offer_type_display'):
             try:
                 return obj.get_offer_type_display()
             except:
                 pass
         
-        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р ВµРЎРѓРЎвЂљРЎРЉ Р В»Р С‘ Р С—Р С•Р В»Р Вµ offer_type
         offer_type = getattr(obj, 'offer_type', None)
         if offer_type:
             type_mapping = {
-                'coupon': 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘',
-                'deal': 'Р РЋР С”Р С‘Р Т‘Р С”Р В°', 
-                'financial': 'Р В¤Р С‘Р Р…Р В°Р Р…РЎРѓР С•Р Р†Р В°РЎРЏ РЎС“РЎРѓР В»РЎС“Р С–Р В°',
+                'coupon': 'Промокод',
+                'deal': 'Скидка',
+                'financial': 'Финансовая услуга',
                 'cashback': 'Р С™РЎРЊРЎв‚¬Р В±РЎРЊР С”'
             }
             return type_mapping.get(offer_type, 'Р СџРЎР‚Р С•Р СР С•Р С”Р С•Р Т‘')
@@ -184,9 +169,7 @@ class StaticPageSerializer(serializers.ModelSerializer):
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
-    """Р РЋР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂљР С•РЎР‚ Р Т‘Р В»РЎРЏ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р в„– Р С•Р В±РЎР‚Р В°РЎвЂљР Р…Р С•Р в„– РЎРѓР Р†РЎРЏР В·Р С‘"""
     
-    # Р СџР С•Р В»РЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р Т‘Р В»РЎРЏ РЎвЂЎРЎвЂљР ВµР Р…Р С‘РЎРЏ - Р В·Р В°Р С—Р С•Р В»Р Р…РЎРЏРЎР‹РЎвЂљРЎРѓРЎРЏ Р В°Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘
     created_at = serializers.DateTimeField(read_only=True)
     is_processed = serializers.BooleanField(read_only=True)
     
@@ -198,7 +181,6 @@ class ContactMessageSerializer(serializers.ModelSerializer):
             'created_at', 'is_processed'         # Р СџР С•Р В»РЎРЏ РЎвЂљР С•Р В»РЎРЉР С”Р С• Р Т‘Р В»РЎРЏ РЎвЂЎРЎвЂљР ВµР Р…Р С‘РЎРЏ
         ]
         
-        # Р Р€Р С”Р В°Р В·РЎвЂ№Р Р†Р В°Р ВµР С, Р С”Р В°Р С”Р С‘Р Вµ Р С—Р С•Р В»РЎРЏ Р С•Р В±РЎРЏР В·Р В°РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№ Р Т‘Р В»РЎРЏ Р В·Р В°Р С—Р С•Р В»Р Р…Р ВµР Р…Р С‘РЎРЏ
         extra_kwargs = {
             'name': {
                 'required': True,
@@ -236,16 +218,13 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         }
     
     def validate_name(self, value):
-        """Р вЂ™Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘РЎРЏ Р С—Р С•Р В»РЎРЏ Р С‘Р СР ВµР Р…Р С‘"""
         if not value or not value.strip():
-            raise serializers.ValidationError("Р ВР СРЎРЏ Р Р…Р Вµ Р СР С•Р В¶Р ВµРЎвЂљ Р В±РЎвЂ№РЎвЂљРЎРЉ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р С")
+            raise serializers.ValidationError("Invalid input")
         
-        # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С Р В»Р С‘РЎв‚¬Р Р…Р С‘Р Вµ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№
         value = value.strip()
         
-        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…РЎС“РЎР‹ Р Т‘Р В»Р С‘Р Р…РЎС“
         if len(value) < 2:
-            raise serializers.ValidationError("Р ВР СРЎРЏ Р Т‘Р С•Р В»Р В¶Р Р…Р С• РЎРѓР С•Р Т‘Р ВµРЎР‚Р В¶Р В°РЎвЂљРЎРЉ Р СР С‘Р Р…Р С‘Р СРЎС“Р С 2 РЎРѓР С‘Р СР Р†Р С•Р В»Р В°")
+            raise serializers.ValidationError("Invalid input")
         
         return value
     
@@ -261,31 +240,25 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         return value
 
     def validate_message(self, value):
-        """Р вЂ™Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘РЎРЏ Р С—Р С•Р В»РЎРЏ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏ"""
         if not value or not value.strip():
-            raise serializers.ValidationError("Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ Р Р…Р Вµ Р СР С•Р В¶Р ВµРЎвЂљ Р В±РЎвЂ№РЎвЂљРЎРЉ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р С")
+            raise serializers.ValidationError("Invalid input")
         
-        # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С Р В»Р С‘РЎв‚¬Р Р…Р С‘Р Вµ Р С—РЎР‚Р С•Р В±Р ВµР В»РЎвЂ№
         value = value.strip()
         
-        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р СР С‘Р Р…Р С‘Р СР В°Р В»РЎРЉР Р…РЎС“РЎР‹ Р Т‘Р В»Р С‘Р Р…РЎС“
         if len(value) < 10:
-            raise serializers.ValidationError("Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ Р Т‘Р С•Р В»Р В¶Р Р…Р С• РЎРѓР С•Р Т‘Р ВµРЎР‚Р В¶Р В°РЎвЂљРЎРЉ Р СР С‘Р Р…Р С‘Р СРЎС“Р С 10 РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†")
+            raise serializers.ValidationError("Invalid input")
         
-        # Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚РЎРЏР ВµР С Р СР В°Р С”РЎРѓР С‘Р СР В°Р В»РЎРЉР Р…РЎС“РЎР‹ Р Т‘Р В»Р С‘Р Р…РЎС“
         if len(value) > 2000:
-            raise serializers.ValidationError("Р РЋР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р Вµ Р Р…Р Вµ Р Т‘Р С•Р В»Р В¶Р Р…Р С• Р С—РЎР‚Р ВµР Р†РЎвЂ№РЎв‚¬Р В°РЎвЂљРЎРЉ 2000 РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†")
+            raise serializers.ValidationError("Invalid input")
         
         return value
     
     def validate_email(self, value):
-        """Р вЂќР С•Р С—Р С•Р В»Р Р…Р С‘РЎвЂљР ВµР В»РЎРЉР Р…Р В°РЎРЏ Р Р†Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘РЎРЏ email"""
         if not value or not value.strip():
-            raise serializers.ValidationError("Email Р Р…Р Вµ Р СР С•Р В¶Р ВµРЎвЂљ Р В±РЎвЂ№РЎвЂљРЎРЉ Р С—РЎС“РЎРѓРЎвЂљРЎвЂ№Р С")
+            raise serializers.ValidationError("Invalid input")
         
         value = value.strip().lower()
         
-        # Р вЂР В°Р В·Р С•Р Р†Р В°РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р В° Р Р…Р В° РЎРѓР С—Р В°Р С-Р Т‘Р С•Р СР ВµР Р…РЎвЂ№ (Р СР С•Р В¶Р Р…Р С• РЎР‚Р В°РЎРѓРЎв‚¬Р С‘РЎР‚Р С‘РЎвЂљРЎРЉ)
         spam_domains = [
             'tempmail.org', '10minutemail.com', 'guerrillamail.com',
             'mailinator.com', 'yopmail.com'
@@ -293,23 +266,19 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         
         domain = value.split('@')[-1] if '@' in value else ''
         if domain in spam_domains:
-            raise serializers.ValidationError("Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Р†РЎР‚Р ВµР СР ВµР Р…Р Р…РЎвЂ№РЎвЂ¦ email Р В°Р Т‘РЎР‚Р ВµРЎРѓР С•Р Р† Р В·Р В°Р С—РЎР‚Р ВµРЎвЂ°Р ВµР Р…Р С•")
+            raise serializers.ValidationError("Invalid input")
         
         return value
     
     def create(self, validated_data):
-        """Р СџР ВµРЎР‚Р ВµР С•Р С—РЎР‚Р ВµР Т‘Р ВµР В»РЎРЏР ВµР С РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘Р Вµ Р С•Р В±РЎР‰Р ВµР С”РЎвЂљР В° Р Т‘Р В»РЎРЏ Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р СР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦"""
         
-        # Р СџР С•Р В»РЎС“РЎвЂЎР В°Р ВµР С request Р С‘Р В· Р С”Р С•Р Р…РЎвЂљР ВµР С”РЎРѓРЎвЂљР В°
         request = self.context.get('request')
         
         if request:
-            # Р С’Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘ Р В·Р В°Р С—Р С•Р В»Р Р…РЎРЏР ВµР С Р СР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ Р С‘Р В· Р В·Р В°Р С—РЎР‚Р С•РЎРѓР В°
             if not validated_data.get('user_agent'):
                 validated_data['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
             
             if not validated_data.get('ip_address'):
-                # Р СџР С•Р В»РЎС“РЎвЂЎР В°Р ВµР С IP Р В°Р Т‘РЎР‚Р ВµРЎРѓ РЎРѓ РЎС“РЎвЂЎР ВµРЎвЂљР С•Р С Р С—РЎР‚Р С•Р С”РЎРѓР С‘
                 x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
                 if x_forwarded_for:
                     validated_data['ip_address'] = x_forwarded_for.split(',')[0].strip()
@@ -317,21 +286,16 @@ class ContactMessageSerializer(serializers.ModelSerializer):
                     validated_data['ip_address'] = request.META.get('REMOTE_ADDR')
             
             if not validated_data.get('page'):
-                # Р СџРЎвЂ№РЎвЂљР В°Р ВµР СРЎРѓРЎРЏ Р С—Р С•Р В»РЎС“РЎвЂЎР С‘РЎвЂљРЎРЉ РЎР‚Р ВµРЎвЂћР ВµРЎР‚Р ВµРЎР‚
                 validated_data['page'] = request.META.get('HTTP_REFERER', '')
         
-        # Р РЋР С•Р В·Р Т‘Р В°Р ВµР С Р С•Р В±РЎР‰Р ВµР С”РЎвЂљ
         return super().create(validated_data)
     
     def to_representation(self, instance):
-        """Р С™Р В°РЎРѓРЎвЂљР С•Р СР С‘Р В·Р С‘РЎР‚РЎС“Р ВµР С Р Р†РЎвЂ№Р Р†Р С•Р Т‘ Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦"""
         data = super().to_representation(instance)
         
-        # Р вЂќР С•Р В±Р В°Р Р†Р В»РЎРЏР ВµР С РЎРѓРЎвЂљР В°РЎвЂљРЎС“РЎРѓ Р Т‘Р В»РЎРЏ РЎвЂћРЎР‚Р С•Р Р…РЎвЂљР ВµР Р…Р Т‘Р В°
         data['status'] = 'success'
         data['message_status'] = 'sent'
         
-        # Р Р€Р В±Р С‘РЎР‚Р В°Р ВµР С РЎвЂЎРЎС“Р Р†РЎРѓРЎвЂљР Р†Р С‘РЎвЂљР ВµР В»РЎРЉР Р…РЎвЂ№Р Вµ Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ Р С‘Р В· Р С•РЎвЂљР Р†Р ВµРЎвЂљР В°
         data.pop('user_agent', None)
         data.pop('ip_address', None)
 
