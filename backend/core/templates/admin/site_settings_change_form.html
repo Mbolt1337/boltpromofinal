@@ -1,0 +1,58 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+{{ block.super }}
+
+<div class="submit-row" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+    <p style="text-align: center; margin-bottom: 10px;">
+        <strong>Быстрые действия:</strong>
+    </p>
+
+    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        {% if original.allow_admin_cache_flush %}
+        <a href="{% url 'admin:flush_cache' %}"
+           class="button"
+           onclick="return confirm('Очистить весь кэш?');"
+           style="background: #ff9800; color: white;">
+            🗑️ Сбросить весь кэш
+        </a>
+
+        <a href="{% url 'admin:flush_cache_pages' %}"
+           class="button"
+           onclick="return confirm('Очистить кэш страниц?');">
+            📄 Сбросить кэш страниц
+        </a>
+
+        <a href="{% url 'admin:flush_cache_api' %}"
+           class="button"
+           onclick="return confirm('Очистить кэш API?');">
+            🔌 Сбросить кэш API
+        </a>
+        {% endif %}
+
+        <a href="{% url 'admin:regenerate_sitemap' %}"
+           class="button"
+           onclick="return confirm('Перегенерировать sitemap.xml?');"
+           style="background: #4caf50; color: white;">
+            🗺️ Перегенерировать sitemap
+        </a>
+
+        {% if original.maintenance_enabled %}
+        <a href="{% url 'admin:toggle_maintenance' %}"
+           class="button"
+           onclick="return confirm('Отключить режим техработ?');"
+           style="background: #f44336; color: white;">
+            ❌ Отключить техработы
+        </a>
+        {% else %}
+        <a href="{% url 'admin:toggle_maintenance' %}"
+           class="button"
+           onclick="return confirm('Включить режим техработ?');"
+           style="background: #2196F3; color: white;">
+            🔧 Включить техработы
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

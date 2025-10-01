@@ -1,5 +1,10 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
+
+# Router для ViewSet'ов
+router = DefaultRouter()
+router.register(r'showcases', views.ShowcaseViewSet, basename='showcase')
 
 urlpatterns = [
     # Health Check для мониторинга
@@ -46,4 +51,7 @@ urlpatterns = [
     path('banners/', views.BannerListView.as_view(), name='banner-list'),
     path('partners/', views.PartnerListView.as_view(), name='partner-list'),
     path('pages/<slug:slug>/', views.StaticPageDetailView.as_view(), name='staticpage-detail'),
+
+    # Витрины (подборки)
+    path('', include(router.urls)),
 ]

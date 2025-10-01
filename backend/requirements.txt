@@ -1,0 +1,22 @@
+Django==5.0.8
+djangorestframework==3.14.0
+django-filter==23.3
+django-cors-headers==4.3.1
+drf-spectacular==0.26.5
+
+# ИСПРАВЛЕНО: Более новая версия Pillow для Python 3.13
+Pillow==10.4.0
+
+# Админка и импорт/экспорт
+django-jazzmin==2.6.0
+django-import-export==4.0.7
+
+# Дополнительные утилиты для админки (с упрощенными версиями)
+openpyxl==3.1.5
+tablib==3.6.1
+
+# Переменные окружения
+python-dotenv==1.0.0
+
+# PostgreSQL драйвер для продакшена
+psycopg2-binary==2.9.9

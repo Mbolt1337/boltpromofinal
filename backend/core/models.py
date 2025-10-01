@@ -358,3 +358,109 @@ class ShowcaseItem(models.Model):
 
     def __str__(self):
         return f"{self.showcase.title} - {self.promocode.title}"
+
+
+class SiteSettings(models.Model):
+    """Централизованные настройки сайта (singleton)"""
+    singleton_id = models.PositiveSmallIntegerField(default=1, unique=True, editable=False)
+
+    # Maintenance
+    maintenance_enabled = models.BooleanField(default=False, verbose_name="Включить режим техработ")
+    maintenance_message = models.TextField(blank=True, default="", verbose_name="Сообщение пользователю")
+    maintenance_expected_end = models.DateTimeField(blank=True, null=True, verbose_name="Ожидаемое завершение работ")
+    maintenance_telegram_url = models.URLField(blank=True, default="", verbose_name="Ссылка на Telegram")
+    maintenance_ip_whitelist = models.JSONField(default=list, blank=True, verbose_name="Белый список IP")
+
+    # SEO
+    canonical_host = models.CharField(max_length=255, blank=True, default="", verbose_name="Канонический домен (пример: boltpromo.ru)")
+    robots_txt = models.TextField(blank=True, default="", verbose_name="robots.txt (кастом)")
+    noindex_expired_promos = models.BooleanField(default=True, verbose_name="noindex для просроченных промо")
+
+    # Cache
+    allow_admin_cache_flush = models.BooleanField(default=True, verbose_name="Разрешить сброс кэша из админки")
+
+    def save(self, *args, **kwargs):
+        self.singleton_id = 1
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return "Настройки сайта"
+
+    class Meta:
+        verbose_name = "Настройки сайта"
+        verbose_name_plural = "Настройки сайта"
+
+
+class AdminActionLog(models.Model):
+    """Лог действий администратора"""
+    user = models.CharField(max_length=150, verbose_name="Пользователь")
+    action = models.CharField(max_length=100, verbose_name="Действие")
+    details = models.TextField(blank=True, default="", verbose_name="Детали")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
+
+    class Meta:
+        verbose_name = "Лог действий админа"
+        verbose_name_plural = "Логи действий админов"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user} - {self.action} - {self.created_at.strftime('%d.%m.%Y %H:%M')}"
+
+
+class Event(models.Model):
+    """Событие трекинга"""
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    event_type = models.CharField(max_length=40, db_index=True, verbose_name="Тип события")
+    # Типы: 'promo_view','promo_copy','promo_open','finance_open','deal_open','showcase_view','showcase_open'
+
+    promo = models.ForeignKey('PromoCode', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Промокод")
+    store = models.ForeignKey('Store', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Магазин")
+    showcase = models.ForeignKey('Showcase', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Витрина")
+
+    session_id = models.CharField(max_length=64, blank=True, default="", verbose_name="ID сессии")
+    client_ip = models.GenericIPAddressField(null=True, blank=True, verbose_name="IP")
+    user_agent = models.TextField(blank=True, default="", verbose_name="User Agent")
+
+    ref = models.CharField(max_length=100, blank=True, default="", verbose_name="Реферер")
+    utm_source = models.CharField(max_length=100, blank=True, default="", verbose_name="UTM Source")
+    utm_medium = models.CharField(max_length=100, blank=True, default="", verbose_name="UTM Medium")
+    utm_campaign = models.CharField(max_length=100, blank=True, default="", verbose_name="UTM Campaign")
+
+    is_unique = models.BooleanField(default=False, verbose_name="Уникальное")
+
+    class Meta:
+        verbose_name = "Событие"
+        verbose_name_plural = "События"
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['event_type', 'created_at']),
+            models.Index(fields=['promo', 'event_type']),
+            models.Index(fields=['store', 'event_type']),
+        ]
+
+    def __str__(self):
+        return f"{self.event_type} - {self.created_at.strftime('%d.%m.%Y %H:%M')}"
+
+
+class DailyAgg(models.Model):
+    """Агрегированная статистика по дням"""
+    date = models.DateField(db_index=True, verbose_name="Дата")
+    event_type = models.CharField(max_length=40, db_index=True, verbose_name="Тип события")
+
+    promo = models.ForeignKey('PromoCode', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Промокод")
+    store = models.ForeignKey('Store', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Магазин")
+    showcase = models.ForeignKey('Showcase', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Витрина")
+
+    count = models.PositiveIntegerField(default=0, verbose_name="Количество")
+    unique_count = models.PositiveIntegerField(default=0, verbose_name="Уникальных")
+
+    class Meta:
+        verbose_name = "Агрегат по дням"
+        verbose_name_plural = "Агрегаты по дням"
+        unique_together = [('date', 'event_type', 'promo', 'store', 'showcase')]
+        indexes = [
+            models.Index(fields=['date', 'event_type']),
+        ]
+
+    def __str__(self):
+        return f"{self.date} - {self.event_type} - {self.count}"

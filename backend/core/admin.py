@@ -10,7 +10,8 @@ from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
 from .models import (
     Category, Store, PromoCode, Banner, Partner,
-    StaticPage, ContactMessage, Showcase, ShowcaseItem
+    StaticPage, ContactMessage, Showcase, ShowcaseItem,
+    SiteSettings, AdminActionLog, Event, DailyAgg
 )
 
 
@@ -581,3 +582,93 @@ class ShowcaseAdmin(ExportMixin, admin.ModelAdmin):
     promos_count_display.short_description = 'Количество'
 
     actions = [make_active, make_inactive]
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    """Админка для настроек сайта (singleton)"""
+
+    fieldsets = (
+        ('🔧 Режим техработ', {
+            'fields': (
+                'maintenance_enabled', 'maintenance_message',
+                'maintenance_expected_end', 'maintenance_telegram_url',
+                'maintenance_ip_whitelist'
+            )
+        }),
+        ('🔍 SEO настройки', {
+            'fields': ('canonical_host', 'robots_txt', 'noindex_expired_promos')
+        }),
+        ('💾 Кэш', {
+            'fields': ('allow_admin_cache_flush',)
+        }),
+    )
+
+    def has_add_permission(self, request):
+        """Запрещаем создание новых записей (singleton)"""
+        return not SiteSettings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        """Запрещаем удаление настроек"""
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        """Автоматически открываем единственную запись"""
+        obj = SiteSettings.objects.first()
+        if obj:
+            from django.shortcuts import redirect
+            return redirect('admin:core_sitesettings_change', obj.pk)
+        return super().changelist_view(request, extra_context)
+
+    change_form_template = 'admin/site_settings_change_form.html'
+
+
+@admin.register(AdminActionLog)
+class AdminActionLogAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = ['created_at', 'user', 'action', 'details_short']
+    list_filter = ['created_at', 'user', 'action']
+    search_fields = ['user', 'action', 'details']
+    readonly_fields = ['user', 'action', 'details', 'created_at']
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def details_short(self, obj):
+        if len(obj.details) > 50:
+            return f"{obj.details[:47]}..."
+        return obj.details
+    details_short.short_description = 'Детали'
+
+
+@admin.register(Event)
+class EventAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = ['created_at', 'event_type', 'promo', 'store', 'showcase', 'is_unique', 'client_ip']
+    list_filter = ['event_type', 'is_unique', 'created_at']
+    search_fields = ['session_id', 'client_ip', 'promo__title', 'store__name']
+    readonly_fields = [
+        'created_at', 'event_type', 'promo', 'store', 'showcase',
+        'session_id', 'client_ip', 'user_agent', 'ref',
+        'utm_source', 'utm_medium', 'utm_campaign', 'is_unique'
+    ]
+    date_hierarchy = 'created_at'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+
+@admin.register(DailyAgg)
+class DailyAggAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = ['date', 'event_type', 'promo', 'store', 'showcase', 'count', 'unique_count']
+    list_filter = ['event_type', 'date']
+    search_fields = ['promo__title', 'store__name', 'showcase__title']
+    readonly_fields = ['date', 'event_type', 'promo', 'store', 'showcase', 'count', 'unique_count']
+    date_hierarchy = 'date'
+
+    def has_add_permission(self, request):
+        return False

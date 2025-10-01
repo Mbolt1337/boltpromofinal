@@ -1,0 +1,55 @@
+# Общие
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Переменные окружения
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backend Django
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/.venv/
+backend/venv/
+backend/env/
+backend/__pycache__/
+backend/*/__pycache__/
+backend/*/*/__pycache__/
+backend/*.pyc
+backend/*/*.pyc
+backend/*.pyo
+backend/*/*.pyo
+backend/staticfiles/
+backend/media/
+backend/.coverage
+backend/htmlcov/
+backend/celerybeat-schedule
+
+# Frontend Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+frontend/.turbo/
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+*.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+ehthumbs.db
+desktop.ini

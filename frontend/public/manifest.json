@@ -1,0 +1,79 @@
+{
+  "name": "BoltPromo - Промокоды и скидки",
+  "short_name": "BoltPromo",
+  "description": "Лучшие промокоды и скидки от популярных интернет-магазинов России",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ru",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180", 
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Горячие промокоды",
+      "short_name": "Горячие",
+      "description": "Самые выгодные предложения",
+      "url": "/hot",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Каталог магазинов",
+      "short_name": "Магазины", 
+      "description": "Все партнерские магазины",
+      "url": "/stores",
+      "icons": [
+        {
+          "src": "/icon-192.png", 
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Категории",
+      "short_name": "Категории",
+      "description": "Промокоды по категориям",
+      "url": "/categories",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/search",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "q",
+      "url": "url"
+    }
+  }
+}
