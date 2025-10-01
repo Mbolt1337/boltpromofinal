@@ -62,8 +62,8 @@ class Store(models.Model):
 
 class PromoCode(models.Model):
     OFFER_TYPE_CHOICES = [
-        ('coupon', 'РџСЂРѕРјРѕРєРѕРґ'),
-        ('deal', 'РЎРєРёРґРєР°'),
+        ('coupon', 'Промокод'),
+        ('deal', 'Скидка'),
         ('financial', 'Финансовая услуга'),
         ('cashback', 'Кэшбэк'),
     ]
@@ -184,7 +184,7 @@ class PromoCode(models.Model):
             if self.offer_type == 'cashback':
                 self.discount_label = f"Кэшбэк {self.discount_value}%"
             else:
-                self.discount_label = f"РЎРєРёРґРєР° {self.discount_value}%"
+                self.discount_label = f"Скидка {self.discount_value}%"
         super().save(*args, **kwargs)
 
 
