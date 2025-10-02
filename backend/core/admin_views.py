@@ -3,7 +3,7 @@
 """
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.core.cache import cache
 from django.utils import timezone
 
@@ -86,11 +86,16 @@ def regenerate_sitemap_view(request):
 @staff_member_required
 def stats_dashboard_view(request):
     """Дашборд статистики"""
-    from django.shortcuts import render
-
     context = {
         'title': 'Статистика',
         'site_header': 'BoltPromo - Статистика',
     }
-
     return render(request, 'admin/stats.html', context)
+
+
+@staff_member_required
+def help_view(request):
+    """Страница помощи для админки"""
+    return render(request, 'admin/help.html', {
+        'title': 'Помощь',
+    })

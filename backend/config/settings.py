@@ -297,23 +297,36 @@ JAZZMIN_SETTINGS = {
     "hide_apps": [],
     "hide_models": [],
     
-    # Порядок приложений и моделей
-    "order_with_respect_to": ["core", "auth"],
-    
-    # Кастомные ссылки для приложения core
+    # Порядок приложений и моделей (логичный порядок для навигации)
+    "order_with_respect_to": [
+        "core.PromoCode",
+        "core.Store",
+        "core.Category",
+        "core.Showcase",
+        "core.Banner",
+        "core.Partner",
+        "core.StaticPage",
+        "core.ContactMessage",
+        "core.Event",
+        "core.DailyAgg",
+        "core.SiteSettings",
+        "auth"
+    ],
+
+    # Кастомные ссылки для приложения core (ОДНА ссылка на настройки)
     "custom_links": {
         "core": [
             {
-                "name": "📊 Статистика",
+                "name": "Статистика",
                 "url": "admin_stats_dashboard",
                 "icon": "fas fa-chart-line",
                 "permissions": ["core.view_event"]
             },
             {
-                "name": "⚙️ Настройки сайта",
-                "url": "/admin/core/sitesettings/1/change/",
-                "icon": "fas fa-cog",
-                "permissions": ["core.change_sitesettings"]
+                "name": "Помощь",
+                "url": "admin_help",
+                "icon": "fas fa-question-circle",
+                "permissions": []
             }
         ]
     },
@@ -323,7 +336,7 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
-        
+
         "core.Category": "fas fa-tags",
         "core.Store": "fas fa-store",
         "core.PromoCode": "fas fa-ticket-alt",
@@ -331,7 +344,17 @@ JAZZMIN_SETTINGS = {
         "core.Partner": "fas fa-handshake",
         "core.StaticPage": "fas fa-file-alt",
         "core.ContactMessage": "fas fa-envelope",
+        "core.SiteSettings": "fas fa-cog",
+        "core.Event": "fas fa-bolt",
+        "core.DailyAgg": "fas fa-chart-line",
+        "core.Showcase": "fas fa-layer-group",
+        "core.AdminActionLog": "fas fa-history",
+        "core.ShowcaseItem": "fas fa-puzzle-piece",
     },
+
+    # Подключение кастомного CSS
+    "custom_css": "admin/admin-tweaks.css",
+    "custom_js": None,
     
     # Цвета интерфейса
     "default_icon_parents": "fas fa-chevron-circle-right",
@@ -374,9 +397,9 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_child_indent": False,
     "sidebar_nav_flat_style": False,
     
-    # Улучшенная читаемость - светлая тема с хорошим контрастом
-    "theme": "lumen",  # Светлая тема с хорошим контрастом
-    "dark_mode_theme": "darkly",
+    # Тёмная тема для лучшей читаемости с кастомным CSS
+    "theme": "darkly",  # Тёмная тема
+    "dark_mode_theme": None,
     "button_classes": {
         "primary": "btn-primary",        # Синие кнопки
         "secondary": "btn-secondary",    # Серые кнопки 

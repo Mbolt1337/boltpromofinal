@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from core import views as core_views
 from core import admin_views
+from core import admin_import
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -16,6 +17,12 @@ urlpatterns = [
     path('admin/toggle-maintenance/', admin_views.toggle_maintenance_view, name='admin_toggle_maintenance'),
     path('admin/regenerate-sitemap/', admin_views.regenerate_sitemap_view, name='admin_regenerate_sitemap'),
     path('admin/core/stats/', admin_views.stats_dashboard_view, name='admin_stats_dashboard'),
+    path('admin/core/help/', admin_views.help_view, name='admin_help'),
+
+    # Import/Export URLs
+    path('admin/core/promocode/import/', admin_import.import_promocodes_view, name='import_promocodes'),
+    path('admin/core/promocode/import/execute/', admin_import.import_execute_view, name='import_execute'),
+    path('admin/core/promocode/import/template/', admin_import.download_template, name='import_template'),
 
     path('admin/', admin.site.urls),
     path('api/v1/', include('core.urls')),
