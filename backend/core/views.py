@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -84,7 +84,7 @@ class CategoryPromocodesView(generics.ListAPIView):
     def get_queryset(self):
         slug = self.kwargs.get('slug')
 
-        category = get_category_queryset().filter(slug=slug).first()
+        category = Category.objects.filter(slug=slug, is_active=True).first()
 
         if not category:
             return PromoCode.objects.none()
@@ -94,7 +94,7 @@ class CategoryPromocodesView(generics.ListAPIView):
             is_active=True,
             expires_at__gt=timezone.now()
         ).select_related('store').prefetch_related(
-            Prefetch('categories', queryset=get_category_queryset())
+            Prefetch('categories', queryset=Category.objects.filter(is_active=True))
         )
 
         search_query = self.request.query_params.get('search', None)
@@ -692,3 +692,59 @@ class ShowcaseViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = PromoCodeSerializer(paginated_promocodes, many=True)
 
         return paginator.get_paginated_response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def site_assets_view(request):
+    """
+    API для получения медиа-ресурсов сайта (favicon, OG, PWA)
+    GET /api/v1/site/assets/
+    """
+    from .models import SiteAssets
+    
+    try:
+        assets = SiteAssets.objects.first()
+        
+        if not assets:
+            return Response({
+                'favicon_ico': None,
+                'favicon_16': None,
+                'favicon_32': None,
+                'og_default': None,
+                'twitter_default': None,
+                'apple_touch_icon': None,
+                'pwa_192': None,
+                'pwa_512': None,
+                'pwa_maskable': None,
+                'safari_pinned_svg': None,
+                'theme_color': '#0b1020',
+                'background_color': '#0b1020',
+            }, status=200)
+        
+        # Формируем полные URLs
+        request_host = request.build_absolute_uri('/')[:-1]
+        
+        def make_url(field):
+            if field:
+                return request_host + settings.MEDIA_URL + field
+            return None
+        
+        data = {
+            'favicon_ico': make_url(assets.favicon_ico_path),
+            'favicon_16': make_url(assets.favicon_16_path),
+            'favicon_32': make_url(assets.favicon_32_path),
+            'og_default': request_host + assets.og_default.url if assets.og_default else None,
+            'twitter_default': request_host + assets.twitter_default.url if assets.twitter_default else None,
+            'apple_touch_icon': make_url(assets.apple_touch_icon_path),
+            'pwa_192': make_url(assets.pwa_192_path),
+            'pwa_512': make_url(assets.pwa_512_path),
+            'pwa_maskable': make_url(assets.pwa_maskable_path),
+            'safari_pinned_svg': request_host + assets.safari_pinned_svg.url if assets.safari_pinned_svg else None,
+            'theme_color': assets.theme_color,
+            'background_color': assets.background_color,
+        }
+        
+        return Response(data, status=200)
+        
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)

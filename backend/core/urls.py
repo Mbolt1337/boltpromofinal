@@ -64,4 +64,7 @@ urlpatterns = [
     path('stats/top-stores/', views_analytics.stats_top_stores, name='stats-top-stores'),
     path('stats/types-share/', views_analytics.stats_types_share, name='stats-types-share'),
     path('stats/showcases-ctr/', views_analytics.stats_showcases_ctr, name='stats-showcases-ctr'),
+
+    # Медиа-ресурсы сайта
+    path('site/assets/', views.site_assets_view, name='site-assets'),
 ]
