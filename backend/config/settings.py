@@ -352,9 +352,9 @@ JAZZMIN_SETTINGS = {
         "core.ShowcaseItem": "fas fa-puzzle-piece",
     },
 
-    # Подключение кастомного CSS
+    # Подключение кастомного CSS и JS
     "custom_css": "admin/admin-tweaks.css",
-    "custom_js": None,
+    "custom_js": "admin/admin-confirm.js",
     
     # Цвета интерфейса
     "default_icon_parents": "fas fa-chevron-circle-right",
