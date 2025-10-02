@@ -11,17 +11,17 @@ from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 from .models import (
     Category, Store, PromoCode, Banner, Partner,
     StaticPage, ContactMessage, Showcase, ShowcaseItem,
-    SiteSettings, AdminActionLog, Event, DailyAgg
+    SiteSettings, AdminActionLog, Event, DailyAgg, SiteAssets
 )
 from .admin_mixins import AntiMojibakeModelForm
 
 
 # =============================================================================
-# RESOURCES Р”Р›РЇ IMPORT-EXPORT
+# RESOURCES ДЛЯ IMPORT-EXPORT
 # =============================================================================
 
 class CategoryResource(resources.ModelResource):
-    """Р РµСЃСѓСЂСЃ РґР»СЏ РёРјРїРѕСЂС‚Р°/СЌРєСЃРїРѕСЂС‚Р° РєР°С‚РµРіРѕСЂРёР№"""
+    """Ресурс для импорта/экспорта категорий"""
     
     class Meta:
         model = Category
@@ -30,7 +30,7 @@ class CategoryResource(resources.ModelResource):
 
 
 class StoreResource(resources.ModelResource):
-    """Р РµСЃСѓСЂСЃ РґР»СЏ РёРјРїРѕСЂС‚Р°/СЌРєСЃРїРѕСЂС‚Р° РјР°РіР°Р·РёРЅРѕРІ"""
+    """Ресурс для импорта/экспорта магазинов"""
     
     class Meta:
         model = Store
@@ -39,7 +39,7 @@ class StoreResource(resources.ModelResource):
 
 
 class PromoCodeResource(resources.ModelResource):
-    """Р РµСЃСѓСЂСЃ РґР»СЏ РёРјРїРѕСЂС‚Р°/СЌРєСЃРїРѕСЂС‚Р° РїСЂРѕРјРѕРєРѕРґРѕРІ"""
+    """Ресурс для импорта/экспорта промокодов"""
     
     store = fields.Field(
         column_name='store',
@@ -77,10 +77,10 @@ class ActivePromocodesFilter(SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            ('active', 'РђРєС‚РёРІРЅС‹Рµ (РЅРµ РёСЃС‚РµРєР»Рё)'),
-            ('expired', 'РСЃС‚РµРєС€РёРµ'),
-            ('hot', 'Р“РѕСЂСЏС‡РёРµ'),
-            ('recommended', 'Р РµРєРѕРјРµРЅРґСѓРµРјС‹Рµ'),
+            ('active', 'Активные (не истекли)'),
+            ('expired', 'Истекшие'),
+            ('hot', 'Горячие'),
+            ('recommended', 'Рекомендуемые'),
         )
 
     def queryset(self, request, queryset):
@@ -99,8 +99,8 @@ class ActivePromocodesFilter(SimpleListFilter):
 
 
 class OfferTypeFilter(SimpleListFilter):
-    """Р¤РёР»СЊС‚СЂ РїРѕ С‚РёРїСѓ РїСЂРµРґР»РѕР¶РµРЅРёСЏ"""
-    title = 'С‚РёРї РїСЂРµРґР»РѕР¶РµРЅРёСЏ'
+    """Фильтр по типу предложения"""
+    title = 'тип предложения'
     parameter_name = 'offer_type'
 
     def lookups(self, request, model_admin):
@@ -117,38 +117,38 @@ class OfferTypeFilter(SimpleListFilter):
 # =============================================================================
 
 def make_active(modeladmin, request, queryset):
-    """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ Р°РєС‚РёРІРЅС‹РјРё"""
+    """Массовое действие: сделать активными"""
     updated = queryset.update(is_active=True)
-    modeladmin.message_user(request, f'РђРєС‚РёРІРёСЂРѕРІР°РЅРѕ: {updated} Р·Р°РїРёСЃРµР№.')
-make_active.short_description = "вњ… РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ РІС‹Р±СЂР°РЅРЅС‹Рµ"
+    modeladmin.message_user(request, f'Активировано: {updated} записей.')
+make_active.short_description = "✅ Активировать выбранные"
 
 
 def make_inactive(modeladmin, request, queryset):
-    """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ РЅРµР°РєС‚РёРІРЅС‹РјРё"""
+    """Массовое действие: сделать неактивными"""
     updated = queryset.update(is_active=False)
-    modeladmin.message_user(request, f'Р”РµР°РєС‚РёРІРёСЂРѕРІР°РЅРѕ: {updated} Р·Р°РїРёСЃРµР№.')
-make_inactive.short_description = "вќЊ Р”РµР°РєС‚РёРІРёСЂРѕРІР°С‚СЊ РІС‹Р±СЂР°РЅРЅС‹Рµ"
+    modeladmin.message_user(request, f'Деактивировано: {updated} записей.')
+make_inactive.short_description = "❌ Деактивировать выбранные"
 
 
 def make_hot(modeladmin, request, queryset):
-    """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ РіРѕСЂСЏС‡РёРјРё"""
+    """Массовое действие: сделать горячими"""
     updated = queryset.filter(offer_type='coupon').update(is_hot=True)
-    modeladmin.message_user(request, f'РћС‚РјРµС‡РµРЅРѕ РєР°Рє РіРѕСЂСЏС‡РёРµ: {updated} РїСЂРѕРјРѕРєРѕРґРѕРІ.')
-make_hot.short_description = "рџ”Ґ РћС‚РјРµС‚РёС‚СЊ РєР°Рє РіРѕСЂСЏС‡РёРµ"
+    modeladmin.message_user(request, f'Отмечено как горячие: {updated} промокодов.')
+make_hot.short_description = "🔥 Отметить как горячие"
 
 
 def make_recommended(modeladmin, request, queryset):
-    """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ СЂРµРєРѕРјРµРЅРґСѓРµРјС‹РјРё"""
+    """Массовое действие: сделать рекомендуемыми"""
     updated = queryset.update(is_recommended=True)
-    modeladmin.message_user(request, f'РћС‚РјРµС‡РµРЅРѕ РєР°Рє СЂРµРєРѕРјРµРЅРґСѓРµРјС‹Рµ: {updated} РїСЂРѕРјРѕРєРѕРґРѕРІ.')
-make_recommended.short_description = "в­ђ РћС‚РјРµС‚РёС‚СЊ РєР°Рє СЂРµРєРѕРјРµРЅРґСѓРµРјС‹Рµ"
+    modeladmin.message_user(request, f'Отмечено как рекомендуемые: {updated} промокодов.')
+make_recommended.short_description = "⭐ Отметить как рекомендуемые"
 
 
 def mark_as_processed(modeladmin, request, queryset):
-    """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: РѕС‚РјРµС‚РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ РєР°Рє РѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹Рµ"""
+    """Массовое действие: отметить сообщения как обработанные"""
     updated = queryset.update(is_processed=True, processed_at=timezone.now())
-    modeladmin.message_user(request, f'РћР±СЂР°Р±РѕС‚Р°РЅРѕ: {updated} СЃРѕРѕР±С‰РµРЅРёР№.')
-mark_as_processed.short_description = "вњ… РћС‚РјРµС‚РёС‚СЊ РєР°Рє РѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹Рµ"
+    modeladmin.message_user(request, f'Обработано: {updated} сообщений.')
+mark_as_processed.short_description = "✅ Отметить как обработанные"
 
 
 # =============================================================================
@@ -164,8 +164,8 @@ class CategoryAdmin(ImportExportModelAdmin):
     search_fields = ['name', 'slug', 'description']
     list_editable = ['is_active']
     prepopulated_fields = {'slug': ('name',)}
-    
-    # РўРѕР»СЊРєРѕ Р°РєС‚РёРІРЅС‹Рµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+
+    # Только активные по умолчанию
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if not request.GET.get('is_active__exact'):
@@ -179,7 +179,7 @@ class CategoryAdmin(ImportExportModelAdmin):
                 obj.icon, obj.icon
             )
         return 'вЂ”'
-    icon_display.short_description = 'РРєРѕРЅРєР°'
+    icon_display.short_description = 'Иконка'
     
     def promocodes_count(self, obj):
         count = obj.promocodes_count
@@ -190,7 +190,7 @@ class CategoryAdmin(ImportExportModelAdmin):
                 url, obj.id, count
             )
         return count
-    promocodes_count.short_description = 'РџСЂРѕРјРѕРєРѕРґС‹'
+    promocodes_count.short_description = 'Промокоды'
     
     actions = [make_active, make_inactive]
 
@@ -209,35 +209,35 @@ class StoreAdmin(ImportExportModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     
     fieldsets = (
-        ('РћСЃРЅРѕРІРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ', {
+        ('Основная информация', {
             'fields': ('name', 'slug', 'description')
         }),
-        ('Р’РёР·СѓР°Р»СЊРЅРѕРµ РѕС„РѕСЂРјР»РµРЅРёРµ', {
+        ('Визуальное оформление', {
             'fields': ('logo', 'rating')
         }),
         ('Ссылки', {
             'fields': ('site_url',)
         }),
-        ('РќР°СЃС‚СЂРѕР№РєРё', {
+        ('Настройки', {
             'fields': ('is_active',)
         }),
     )
     
-    # РўРѕР»СЊРєРѕ Р°РєС‚РёРІРЅС‹Рµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+    # Только активные по умолчанию
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if not request.GET.get('is_active__exact'):
             return qs.filter(is_active=True)
         return qs
-    
+
     def logo_preview(self, obj):
         if obj.logo:
             return format_html(
                 '<img src="{}" width="40" height="40" style="object-fit: cover; border-radius: 4px;" />',
                 obj.logo.url
             )
-        return 'вЂ”'
-    logo_preview.short_description = 'Р›РѕРіРѕ'
+        return '—'
+    logo_preview.short_description = 'Лого'
     
     def site_link(self, obj):
         if obj.site_url:
@@ -257,7 +257,7 @@ class StoreAdmin(ImportExportModelAdmin):
                 url, obj.id, count
             )
         return count
-    promocodes_count.short_description = 'РџСЂРѕРјРѕРєРѕРґС‹'
+    promocodes_count.short_description = 'Промокоды'
     
     actions = [make_active, make_inactive]
 
@@ -291,16 +291,16 @@ class PromoCodeAdmin(ImportExportModelAdmin):
     date_hierarchy = 'expires_at'
     
     fieldsets = (
-        ('рџЋЇ РћСЃРЅРѕРІРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ', {
+        ('🎯 Основная информация', {
             'fields': ('title', 'description', 'store', 'categories')
         }),
-        ('рџ’° РџСЂРµРґР»РѕР¶РµРЅРёРµ', {
+        ('💰 Предложение', {
             'fields': (
                 'offer_type', 'code', 'discount_value', 'discount_label',
                 'affiliate_url'
             )
         }),
-        ('рџ“ќ РџРѕРґСЂРѕР±РЅРѕСЃС‚Рё', {
+        ('📝 Подробности', {
             'fields': ('long_description', 'steps', 'fine_print', 'disclaimer'),
             'classes': ['collapse']
         }),
@@ -308,57 +308,57 @@ class PromoCodeAdmin(ImportExportModelAdmin):
             'fields': ('is_hot', 'is_recommended'),
             'classes': ['wide']
         }),
-        ('вЏ° Р’СЂРµРјРµРЅРЅС‹Рµ СЂР°РјРєРё', {
+        ('⏰ Временные рамки', {
             'fields': ('expires_at',)
         }),
-        ('рџ”§ РќР°СЃС‚СЂРѕР№РєРё', {
+        ('🔧 Настройки', {
             'fields': ('is_active',),
             'classes': ['collapse']
         }),
     )
     
-    # РўРѕР»СЊРєРѕ Р°РєС‚РёРІРЅС‹Рµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+    # Только активные по умолчанию
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if not request.GET.get('is_active__exact'):
             return qs.filter(is_active=True)
         return qs
-    
+
     def title_short(self, obj):
         title = obj.title
         if len(title) > 50:
             return f"{title[:47]}..."
         return title
-    title_short.short_description = 'Р—Р°РіРѕР»РѕРІРѕРє'
+    title_short.short_description = 'Заголовок'
     
     def offer_type_badge(self, obj):
         colors = {
-            'coupon': 'success',      # Р·РµР»РµРЅС‹Р№
-            'deal': 'primary',        # СЃРёРЅРёР№  
-            'financial': 'warning',   # Р¶РµР»С‚С‹Р№
-            'cashback': 'info'        # РіРѕР»СѓР±РѕР№
+            'coupon': 'success',      # зеленый
+            'deal': 'primary',        # синий
+            'financial': 'warning',   # желтый
+            'cashback': 'info'        # голубой
         }
         color = colors.get(obj.offer_type, 'secondary')
         return format_html(
             '<span class="badge badge-{}">{}</span>',
             color, obj.get_offer_type_display()
         )
-    offer_type_badge.short_description = 'РўРёРї'
+    offer_type_badge.short_description = 'Тип'
     
     def discount_display(self, obj):
         if obj.discount_value:
             return f"{obj.discount_value}%"
-        return 'вЂ”'
+        return '—'
     discount_display.short_description = 'Скидка'
-    
+
     def code_display(self, obj):
         if obj.code:
             return format_html(
                 '<code style="background: #f1f1f1; padding: 2px 6px; border-radius: 3px;">{}</code>',
                 obj.code
             )
-        return 'вЂ”'
-    code_display.short_description = 'РљРѕРґ'
+        return '—'
+    code_display.short_description = 'Код'
     
     def status_badges(self, obj):
         badges = []
@@ -366,17 +366,17 @@ class PromoCodeAdmin(ImportExportModelAdmin):
         
         # Статус активности/истечения
         if obj.expires_at <= now:
-            badges.append('<span class="badge badge-danger">РСЃС‚С‘Рє</span>')
+            badges.append('<span class="badge badge-danger">Истёк</span>')
         elif obj.is_active:
-            badges.append('<span class="badge badge-success">РђРєС‚РёРІРµРЅ</span>')
+            badges.append('<span class="badge badge-success">Активен</span>')
         else:
-            badges.append('<span class="badge badge-secondary">РќРµР°РєС‚РёРІРµРЅ</span>')
+            badges.append('<span class="badge badge-secondary">Неактивен</span>')
 
         # Специальные отметки
         if obj.is_hot:
-            badges.append('<span class="badge badge-warning">рџ”Ґ Р“РѕСЂСЏС‡РёР№</span>')
+            badges.append('<span class="badge badge-warning">🔥 Горячий</span>')
         if obj.is_recommended:
-            badges.append('<span class="badge badge-info">в­ђ BoltPromo</span>')
+            badges.append('<span class="badge badge-info">⭐ BoltPromo</span>')
             
         return format_html(' '.join(badges))
     status_badges.short_description = 'Статус'
@@ -403,8 +403,8 @@ class BannerAdmin(ExportMixin, admin.ModelAdmin):
     def subtitle_short(self, obj):
         if obj.subtitle and len(obj.subtitle) > 40:
             return f"{obj.subtitle[:37]}..."
-        return obj.subtitle or 'вЂ”'
-    subtitle_short.short_description = 'РџРѕРґР·Р°РіРѕР»РѕРІРѕРє'
+        return obj.subtitle or '—'
+    subtitle_short.short_description = 'Подзаголовок'
     
     def image_preview(self, obj):
         if obj.image:
@@ -412,8 +412,8 @@ class BannerAdmin(ExportMixin, admin.ModelAdmin):
                 '<img src="{}" width="60" height="40" style="object-fit: cover; border-radius: 4px;" />',
                 obj.image.url
             )
-        return 'вЂ”'
-    image_preview.short_description = 'РџСЂРµРІСЊСЋ'
+        return '—'
+    image_preview.short_description = 'Превью'
     
     def cta_link(self, obj):
         if obj.cta_url:
@@ -440,16 +440,16 @@ class PartnerAdmin(ExportMixin, admin.ModelAdmin):
                 '<img src="{}" width="40" height="40" style="object-fit: cover; border-radius: 4px;" />',
                 obj.logo.url
             )
-        return 'вЂ”'
-    logo_preview.short_description = 'Р›РѕРіРѕ'
-    
+        return '—'
+    logo_preview.short_description = 'Лого'
+
     def partner_link(self, obj):
         if obj.url:
             return format_html(
                 '<a href="{}" target="_blank" rel="noopener">🔗 Сайт</a>',
                 obj.url
             )
-        return 'вЂ”'
+        return '—'
     partner_link.short_description = 'Сайт'
     
     actions = [make_active, make_inactive]
@@ -473,9 +473,9 @@ class StaticPageAdmin(ExportMixin, admin.ModelAdmin):
     def content_length(self, obj):
         length = len(obj.content)
         if length > 1000:
-            return f"{length:,} СЃРёРјРІРѕР»РѕРІ"
-        return f"{length} СЃРёРјРІРѕР»РѕРІ"
-    content_length.short_description = 'Р Р°Р·РјРµСЂ РєРѕРЅС‚РµРЅС‚Р°'
+            return f"{length:,} символов"
+        return f"{length} символов"
+    content_length.short_description = 'Размер контента'
     
     actions = [make_active, make_inactive]
 
@@ -500,11 +500,11 @@ class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
         ('📧 Сообщение', {
             'fields': ('name', 'email', 'subject', 'message')
         }),
-        ('рџЊђ РњРµС‚Р°РґР°РЅРЅС‹Рµ', {
+        ('🏷️ Метаданные', {
             'fields': ('page', 'user_agent', 'ip_address', 'created_at'),
             'classes': ['collapse']
         }),
-        ('вљЎ РћР±СЂР°Р±РѕС‚РєР°', {
+        ('⚡ Обработка', {
             'fields': ('is_processed', 'processed_at', 'is_spam')
         }),
     )
@@ -512,8 +512,8 @@ class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
     def subject_short(self, obj):
         if obj.subject and len(obj.subject) > 30:
             return f"{obj.subject[:27]}..."
-        return obj.subject or 'вЂ”'
-    subject_short.short_description = 'РўРµРјР°'
+        return obj.subject or '—'
+    subject_short.short_description = 'Тема'
     
     def message_short(self, obj):
         return obj.short_message
@@ -523,25 +523,25 @@ class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
         if obj.is_spam:
             return format_html('<span class="badge badge-danger">Спам</span>')
         elif obj.is_processed:
-            return format_html('<span class="badge badge-success">РћР±СЂР°Р±РѕС‚Р°РЅРѕ</span>')
+            return format_html('<span class="badge badge-success">Обработано</span>')
         else:
-            return format_html('<span class="badge badge-warning">РќРѕРІРѕРµ</span>')
+            return format_html('<span class="badge badge-warning">Новое</span>')
     status_display.short_description = 'Статус'
     
     actions = [mark_as_processed, 'mark_as_spam']
     
     def mark_as_spam(self, request, queryset):
         updated = queryset.update(is_spam=True, is_processed=True, processed_at=timezone.now())
-        self.message_user(request, f'РћС‚РјРµС‡РµРЅРѕ РєР°Рє СЃРїР°Рј: {updated} СЃРѕРѕР±С‰РµРЅРёР№.')
-    mark_as_spam.short_description = "рџљ« РћС‚РјРµС‚РёС‚СЊ РєР°Рє СЃРїР°Рј"
+        self.message_user(request, f'Отмечено как спам: {updated} сообщений.')
+    mark_as_spam.short_description = "🚫 Отметить как спам"
 
 
 # =============================================================================
 # НАСТРОЙКА АДМИНКИ
 # =============================================================================
 
-# РР·РјРµРЅРµРЅРёРµ Р·Р°РіРѕР»РѕРІРєРѕРІ Р°РґРјРёРЅРєРё
-admin.site.site_header = "BoltPromo - РђРґРјРёРЅРєР°"
+# Изменение заголовков админки
+admin.site.site_header = "BoltPromo - Админка"
 admin.site.site_title = "BoltPromo Admin"
 
 
@@ -670,15 +670,70 @@ class AdminActionLogAdmin(ExportMixin, admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(ExportMixin, admin.ModelAdmin):
-    list_display = ['created_at', 'event_type', 'promo', 'store', 'showcase', 'is_unique', 'client_ip']
-    list_filter = ['event_type', 'is_unique', 'created_at']
-    search_fields = ['session_id', 'client_ip', 'promo__title', 'store__name']
+    list_display = ['created_at', 'event_type', 'promo', 'store', 'showcase', 'is_unique', 'session_id_short', 'client_ip']
+    list_filter = ['event_type', 'is_unique', 'created_at', 'store', 'showcase']
+    search_fields = ['session_id', 'client_ip', 'user_agent', 'utm_source', 'utm_campaign', 'promo__title', 'store__name']
     readonly_fields = [
         'created_at', 'event_type', 'promo', 'store', 'showcase',
         'session_id', 'client_ip', 'user_agent', 'ref',
         'utm_source', 'utm_medium', 'utm_campaign', 'is_unique'
     ]
     date_hierarchy = 'created_at'
+    list_per_page = 50
+    list_max_show_all = 200
+    actions = ['export_csv_events']
+
+    class Media:
+        css = {
+            'all': ('admin/admin-tweaks.css',)
+        }
+
+    def session_id_short(self, obj):
+        """Короткий ID сессии для компактного отображения"""
+        return obj.session_id[:8] + "…" if obj.session_id else "—"
+    session_id_short.short_description = 'Session ID'
+
+    def export_csv_events(self, request, queryset):
+        """Экспорт выбранных событий в CSV"""
+        import csv
+        from django.http import HttpResponse
+        from datetime import datetime
+
+        response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+        response['Content-Disposition'] = f'attachment; filename="events_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['Дата', 'Тип события', 'Промокод', 'Магазин', 'Витрина', 'Уникальное', 'Session ID', 'IP', 'User Agent', 'UTM Source', 'UTM Campaign'])
+
+        for event in queryset:
+            writer.writerow([
+                event.created_at.strftime('%Y-%m-%d %H:%M:%S') if event.created_at else '',
+                event.event_type,
+                event.promo.title if event.promo else '',
+                event.store.name if event.store else '',
+                event.showcase.title if event.showcase else '',
+                'Да' if event.is_unique else 'Нет',
+                event.session_id or '',
+                event.client_ip or '',
+                event.user_agent or '',
+                event.utm_source or '',
+                event.utm_campaign or '',
+            ])
+
+        return response
+    export_csv_events.short_description = "Экспортировать выбранные события в CSV"
+
+    def changelist_view(self, request, extra_context=None):
+        from django.contrib import messages
+        extra_context = extra_context or {}
+        extra_context['title'] = 'События и аналитика'
+        extra_context['subtitle'] = 'Просмотр всех событий: просмотры, клики, копирования промокодов и действия с витринами'
+
+        # Пустое состояние
+        if not Event.objects.exists():
+            messages.info(request, 'Пока данных нет. События начнут накапливаться автоматически при взаимодействиях пользователей.')
+
+        return super().changelist_view(request, extra_context)
 
     def has_add_permission(self, request):
         return False
@@ -694,6 +749,172 @@ class DailyAggAdmin(ExportMixin, admin.ModelAdmin):
     search_fields = ['promo__title', 'store__name', 'showcase__title']
     readonly_fields = ['date', 'event_type', 'promo', 'store', 'showcase', 'count', 'unique_count']
     date_hierarchy = 'date'
+    list_per_page = 50
+    list_max_show_all = 200
+    actions = ['export_csv_dailyagg']
+
+    class Media:
+        css = {
+            'all': ('admin/admin-tweaks.css',)
+        }
+
+    def export_csv_dailyagg(self, request, queryset):
+        """Экспорт выбранных агрегатов в CSV"""
+        import csv
+        from django.http import HttpResponse
+        from datetime import datetime
+
+        response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+        response['Content-Disposition'] = f'attachment; filename="daily_stats_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['Дата', 'Тип события', 'Промокод', 'Магазин', 'Витрина', 'Всего', 'Уникальных'])
+
+        for agg in queryset:
+            writer.writerow([
+                agg.date.strftime('%Y-%m-%d') if agg.date else '',
+                agg.event_type,
+                agg.promo.title if agg.promo else '',
+                agg.store.name if agg.store else '',
+                agg.showcase.title if agg.showcase else '',
+                agg.count,
+                agg.unique_count,
+            ])
+
+        return response
+    export_csv_dailyagg.short_description = "Экспортировать выбранные агрегаты в CSV"
+
+    def changelist_view(self, request, extra_context=None):
+        from django.contrib import messages
+        extra_context = extra_context or {}
+        extra_context['title'] = 'Агрегированная статистика'
+        extra_context['subtitle'] = 'Ежедневная статистика по промокодам, магазинам и витринам с подсчетом уникальных действий'
+
+        # Пустое состояние
+        if not DailyAgg.objects.exists():
+            messages.info(request, 'Пока данных нет. Агрегаты создаются автоматически при накоплении событий. Запустите команду aggregate_events для первичной агрегации.')
+
+        return super().changelist_view(request, extra_context)
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(SiteAssets)
+class SiteAssetsAdmin(admin.ModelAdmin):
+    """Админка для медиа-ресурсов сайта (singleton)"""
+
+    fieldsets = (
+        ('🖼️ Favicon', {
+            'fields': ('favicon_src', 'favicon_preview'),
+            'description': 'Загрузите PNG/ICO изображение 512×512px. Будут автоматически сгенерированы: favicon.ico, favicon-16.png, favicon-32.png'
+        }),
+        ('📱 Open Graph и Social Media', {
+            'fields': ('og_default', 'og_preview', 'twitter_default'),
+            'description': 'OG: 1200×630px, Twitter: 1200×600px (опционально)'
+        }),
+        ('🍎 Apple и PWA', {
+            'fields': ('apple_touch_icon_src', 'apple_preview', 'pwa_icon_src', 'pwa_preview', 'safari_pinned_svg'),
+            'description': 'Apple: 180×180px, PWA: 512×512px (будут созданы варианты 192, 512, maskable)'
+        }),
+        ('🎨 PWA Цвета', {
+            'fields': ('theme_color', 'background_color')
+        }),
+        ('📊 Информация о генерации', {
+            'fields': ('last_generated_at', 'generated_files_info'),
+            'classes': ['collapse']
+        }),
+    )
+
+    readonly_fields = [
+        'favicon_preview', 'og_preview', 'apple_preview', 'pwa_preview',
+        'last_generated_at', 'generated_files_info'
+    ]
+
+    def favicon_preview(self, obj):
+        if obj.favicon_src:
+            return format_html(
+                '<img src="{}" width="64" height="64" style="image-rendering: pixelated; border: 1px solid #3f4451; border-radius: 4px;" /><br><small>Исходник</small>',
+                obj.favicon_src.url
+            )
+        return '—'
+    favicon_preview.short_description = 'Превью'
+
+    def og_preview(self, obj):
+        if obj.og_default:
+            return format_html(
+                '<img src="{}" width="300" style="border: 1px solid #3f4451; border-radius: 8px;" /><br><small>1200×630px</small>',
+                obj.og_default.url
+            )
+        return '—'
+    og_preview.short_description = 'Превью OG'
+
+    def apple_preview(self, obj):
+        if obj.apple_touch_icon_src:
+            return format_html(
+                '<img src="{}" width="90" height="90" style="border: 1px solid #3f4451; border-radius: 12px;" /><br><small>Apple Touch Icon</small>',
+                obj.apple_touch_icon_src.url
+            )
+        return '—'
+    apple_preview.short_description = 'Превью'
+
+    def pwa_preview(self, obj):
+        if obj.pwa_icon_src:
+            return format_html(
+                '<img src="{}" width="128" height="128" style="border: 1px solid #3f4451; border-radius: 4px;" /><br><small>PWA Icon</small>',
+                obj.pwa_icon_src.url
+            )
+        return '—'
+    pwa_preview.short_description = 'Превью'
+
+    def generated_files_info(self, obj):
+        files = []
+        if obj.favicon_ico_path:
+            files.append(f'✓ favicon.ico: {obj.favicon_ico_path}')
+        if obj.favicon_16_path:
+            files.append(f'✓ favicon-16.png: {obj.favicon_16_path}')
+        if obj.favicon_32_path:
+            files.append(f'✓ favicon-32.png: {obj.favicon_32_path}')
+        if obj.apple_touch_icon_path:
+            files.append(f'✓ apple-touch-icon.png: {obj.apple_touch_icon_path}')
+        if obj.pwa_192_path:
+            files.append(f'✓ icon-192.png: {obj.pwa_192_path}')
+        if obj.pwa_512_path:
+            files.append(f'✓ icon-512.png: {obj.pwa_512_path}')
+        if obj.pwa_maskable_path:
+            files.append(f'✓ maskable-icon-512.png: {obj.pwa_maskable_path}')
+
+        if files:
+            return format_html('<br>'.join(files))
+        return 'Нет сгенерированных файлов. Загрузите исходники и сохраните.'
+    generated_files_info.short_description = 'Сгенерированные файлы'
+
+    def has_add_permission(self, request):
+        """Запрещаем создание новых записей (singleton)"""
+        return not SiteAssets.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        """Запрещаем удаление"""
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        """Автоматически открываем единственную запись"""
+        obj = SiteAssets.objects.first()
+        if obj:
+            from django.shortcuts import redirect
+            return redirect('admin:core_siteassets_change', obj.pk)
+        return super().changelist_view(request, extra_context)
+
+    def save_model(self, request, obj, form, change):
+        """Запускаем генерацию производных при сохранении"""
+        super().save_model(request, obj, form, change)
+
+        # Запускаем Celery задачу генерации
+        try:
+            from .tasks import generate_site_assets
+            task = generate_site_assets.delay(obj.id)
+            messages.success(request, f'Запущена генерация медиа-файлов (задача {task.id})')
+        except Exception as e:
+            messages.warning(request, f'Не удалось запустить генерацию: {str(e)}. Проверьте настройки Celery.')
+
+    change_form_template = 'admin/siteassets_change_form.html'

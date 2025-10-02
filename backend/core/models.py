@@ -79,7 +79,7 @@ class PromoCode(models.Model):
         help_text='Промокод - копируется код, Скидка - прямая ссылка, Финансовая услуга - CTA с дисклеймером, Кэшбэк - бейдж и переход'
     )
     
-    code = models.CharField(max_length=50, blank=True, verbose_name='РџСЂРѕРјРѕРєРѕРґ')
+    code = models.CharField(max_length=50, blank=True, verbose_name='Промокод')
     discount_value = models.PositiveIntegerField(default=0, verbose_name='Размер скидки')
     
     # ИСПРАВЛЕНО: Добавлено отсутствующее поле discount_label
@@ -136,8 +136,8 @@ class PromoCode(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'РџСЂРѕРјРѕРєРѕРґ'
-        verbose_name_plural = 'РџСЂРѕРјРѕРєРѕРґС‹'
+        verbose_name = 'Промокод'
+        verbose_name_plural = 'Промокоды'
         ordering = ['-is_recommended', '-is_hot', '-created_at']
 
     def __str__(self):
@@ -211,7 +211,7 @@ class Partner(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
     logo = models.ImageField(upload_to='partners/', verbose_name='Логотип')
     url = models.URLField(blank=True, verbose_name='Сайт партнера')
-    order = models.PositiveIntegerField(default=0, verbose_name='РџРѕСЂСЏРґРѕРє')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
     is_active = models.BooleanField(default=True, verbose_name='Активен')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -405,6 +405,99 @@ class AdminActionLog(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.action} - {self.created_at.strftime('%d.%m.%Y %H:%M')}"
+
+
+class SiteAssets(models.Model):
+    """Медиа-ресурсы сайта (favicon, OG, PWA иконки) - singleton"""
+    singleton_id = models.PositiveSmallIntegerField(default=1, unique=True, editable=False)
+
+    # Исходные файлы
+    favicon_src = models.ImageField(
+        upload_to='site_assets/favicon/',
+        blank=True,
+        null=True,
+        verbose_name="Favicon (исходник)",
+        help_text="PNG/ICO, рекомендуется 512×512px (будет конвертирован в .ico)"
+    )
+
+    og_default = models.ImageField(
+        upload_to='site_assets/og/',
+        blank=True,
+        null=True,
+        verbose_name="OG изображение по умолчанию",
+        help_text="1200×630px для Open Graph"
+    )
+
+    twitter_default = models.ImageField(
+        upload_to='site_assets/twitter/',
+        blank=True,
+        null=True,
+        verbose_name="Twitter Card изображение",
+        help_text="1200×600px (опционально, если отличается от OG)"
+    )
+
+    apple_touch_icon_src = models.ImageField(
+        upload_to='site_assets/apple/',
+        blank=True,
+        null=True,
+        verbose_name="Apple Touch Icon (исходник)",
+        help_text="PNG, рекомендуется 180×180px или больше"
+    )
+
+    pwa_icon_src = models.ImageField(
+        upload_to='site_assets/pwa/',
+        blank=True,
+        null=True,
+        verbose_name="PWA иконка (исходник)",
+        help_text="PNG, рекомендуется 512×512px (будут созданы 192, 512, maskable)"
+    )
+
+    safari_pinned_svg = models.FileField(
+        upload_to='site_assets/safari/',
+        blank=True,
+        null=True,
+        verbose_name="Safari Pinned Tab SVG",
+        help_text="Монохромный SVG для Safari"
+    )
+
+    # Цвета PWA
+    theme_color = models.CharField(
+        max_length=7,
+        default="#0b1020",
+        verbose_name="Theme Color",
+        help_text="Цвет темы браузера (hex формат)"
+    )
+
+    background_color = models.CharField(
+        max_length=7,
+        default="#0b1020",
+        verbose_name="Background Color",
+        help_text="Фоновый цвет для splash screen"
+    )
+
+    # Сгенерированные файлы (пути)
+    favicon_ico_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к favicon.ico")
+    favicon_16_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к favicon-16.png")
+    favicon_32_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к favicon-32.png")
+    apple_touch_icon_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к apple-touch-icon.png")
+    pwa_192_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к icon-192.png")
+    pwa_512_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к icon-512.png")
+    pwa_maskable_path = models.CharField(max_length=255, blank=True, verbose_name="Путь к maskable-icon-512.png")
+
+    # Метаданные
+    last_generated_at = models.DateTimeField(blank=True, null=True, verbose_name="Последняя генерация")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
+
+    def save(self, *args, **kwargs):
+        self.singleton_id = 1
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return "Медиа-ресурсы сайта"
+
+    class Meta:
+        verbose_name = "Медиа-ресурсы сайта"
+        verbose_name_plural = "Медиа-ресурсы сайта"
 
 
 class Event(models.Model):

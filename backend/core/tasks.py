@@ -170,3 +170,101 @@ def cleanup_redis_dedup_keys():
     except Exception as e:
         logger.error(f"Redis cleanup error: {str(e)}")
         return {'status': 'error', 'message': str(e)}
+
+
+@shared_task
+def generate_site_assets(asset_id):
+    """
+    Генерация производных медиа-файлов из исходников
+    Требует: Pillow
+    """
+    from .models import SiteAssets
+    from django.conf import settings
+    import os
+    
+    try:
+        from PIL import Image
+    except ImportError:
+        logger.error('Pillow не установлен. Установите: pip install Pillow')
+        return {'status': 'error', 'message': 'Pillow not installed'}
+    
+    try:
+        asset = SiteAssets.objects.get(id=asset_id)
+        media_root = settings.MEDIA_ROOT
+        results = []
+        
+        # 1. Генерация favicon (16, 32, ico)
+        if asset.favicon_src:
+            src_path = asset.favicon_src.path
+            img = Image.open(src_path).convert('RGBA')
+            
+            # favicon-16.png
+            favicon_16 = img.copy().resize((16, 16), Image.Resampling.LANCZOS)
+            favicon_16_path = os.path.join(media_root, 'site_assets/generated/favicon-16.png')
+            os.makedirs(os.path.dirname(favicon_16_path), exist_ok=True)
+            favicon_16.save(favicon_16_path, 'PNG')
+            asset.favicon_16_path = 'site_assets/generated/favicon-16.png'
+            results.append('✓ favicon-16.png')
+            
+            # favicon-32.png
+            favicon_32 = img.copy().resize((32, 32), Image.Resampling.LANCZOS)
+            favicon_32_path = os.path.join(media_root, 'site_assets/generated/favicon-32.png')
+            favicon_32.save(favicon_32_path, 'PNG')
+            asset.favicon_32_path = 'site_assets/generated/favicon-32.png'
+            results.append('✓ favicon-32.png')
+            
+            # favicon.ico (multi-size)
+            favicon_ico_path = os.path.join(media_root, 'site_assets/generated/favicon.ico')
+            img.save(favicon_ico_path, format='ICO', sizes=[(16,16), (32,32), (48,48)])
+            asset.favicon_ico_path = 'site_assets/generated/favicon.ico'
+            results.append('✓ favicon.ico')
+        
+        # 2. Apple Touch Icon (180×180)
+        if asset.apple_touch_icon_src:
+            src_path = asset.apple_touch_icon_src.path
+            img = Image.open(src_path).convert('RGBA')
+            apple_icon = img.copy().resize((180, 180), Image.Resampling.LANCZOS)
+            apple_path = os.path.join(media_root, 'site_assets/generated/apple-touch-icon.png')
+            os.makedirs(os.path.dirname(apple_path), exist_ok=True)
+            apple_icon.save(apple_path, 'PNG')
+            asset.apple_touch_icon_path = 'site_assets/generated/apple-touch-icon.png'
+            results.append('✓ apple-touch-icon.png')
+        
+        # 3. PWA иконки (192, 512, maskable)
+        if asset.pwa_icon_src:
+            src_path = asset.pwa_icon_src.path
+            img = Image.open(src_path).convert('RGBA')
+            
+            # icon-192.png
+            pwa_192 = img.copy().resize((192, 192), Image.Resampling.LANCZOS)
+            pwa_192_path = os.path.join(media_root, 'site_assets/generated/icon-192.png')
+            pwa_192.save(pwa_192_path, 'PNG')
+            asset.pwa_192_path = 'site_assets/generated/icon-192.png'
+            results.append('✓ icon-192.png')
+            
+            # icon-512.png
+            pwa_512 = img.copy().resize((512, 512), Image.Resampling.LANCZOS)
+            pwa_512_path = os.path.join(media_root, 'site_assets/generated/icon-512.png')
+            pwa_512.save(pwa_512_path, 'PNG')
+            asset.pwa_512_path = 'site_assets/generated/icon-512.png'
+            results.append('✓ icon-512.png')
+            
+            # maskable-icon-512.png (с padding для safe area)
+            maskable = Image.new('RGBA', (512, 512), (0, 0, 0, 0))
+            pwa_resized = img.copy().resize((410, 410), Image.Resampling.LANCZOS)
+            maskable.paste(pwa_resized, (51, 51))
+            maskable_path = os.path.join(media_root, 'site_assets/generated/maskable-icon-512.png')
+            maskable.save(maskable_path, 'PNG')
+            asset.pwa_maskable_path = 'site_assets/generated/maskable-icon-512.png'
+            results.append('✓ maskable-icon-512.png')
+        
+        # Обновляем timestamp
+        asset.last_generated_at = timezone.now()
+        asset.save()
+        
+        logger.info(f'Generated site assets: {", ".join(results)}')
+        return {'status': 'success', 'files': results}
+        
+    except Exception as e:
+        logger.error(f'Error generating site assets: {str(e)}', exc_info=True)
+        return {'status': 'error', 'message': str(e)}
