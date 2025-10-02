@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -234,7 +235,7 @@ class StaticPage(models.Model):
     
     slug = models.CharField(max_length=20, choices=SLUG_CHOICES, unique=True, verbose_name='URL')
     title = models.CharField(max_length=200, blank=True, verbose_name='Заголовок')
-    content = models.TextField(verbose_name='Содержимое')
+    content = RichTextField(verbose_name='Содержимое', config_name='default')
     is_active = models.BooleanField(default=True, verbose_name='Активна')
     updated_at = models.DateTimeField(auto_now=True)
 

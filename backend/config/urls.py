@@ -25,6 +25,10 @@ urlpatterns = [
     path('admin/core/promocode/import/template/', admin_import.download_template, name='import_template'),
 
     path('admin/', admin.site.urls),
+
+    # CKEditor upload
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+
     path('api/v1/', include('core.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

@@ -49,9 +49,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
-    
+
     # ✅ НОВОЕ: Импорт/экспорт для админки
     'import_export',
+
+    # ✅ WYSIWYG редактор
+    'ckeditor',
+    'ckeditor_uploader',
     
     # Local apps
     'core',
@@ -486,4 +490,46 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+# ========================================
+# CKEditor Configuration
+# ========================================
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
+            ['Format', 'Styles'],
+            ['TextColor', 'BGColor'],
+            ['RemoveFormat', 'Source']
+        ],
+        'height': 400,
+        'width': '100%',
+        'removePlugins': 'stylesheetparser',
+        'allowedContent': True,
+        'extraAllowedContent': 'iframe[*]',
+        'format_tags': 'p;h1;h2;h3;h4;h5;h6;pre',
+        'removeDialogTabs': 'image:advanced;link:advanced',
+    },
+    'minimal': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['Link', 'Unlink'],
+            ['NumberedList', 'BulletedList'],
+            ['RemoveFormat']
+        ],
+        'height': 200,
+        'width': '100%',
+        'removePlugins': 'stylesheetparser',
+    }
 }
