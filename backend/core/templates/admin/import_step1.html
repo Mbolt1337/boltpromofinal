@@ -1,0 +1,184 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+<style>
+    .import-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #252932;
+        border-radius: 12px;
+        border: 1px solid #3f4451;
+    }
+
+    .import-header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #3B82F6;
+    }
+
+    .import-header h1 {
+        color: #F3F4F6;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .import-header p {
+        color: #9CA3AF;
+        font-size: 14px;
+    }
+
+    .upload-zone {
+        border: 2px dashed #3f4451;
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        background: #2d3139;
+        margin-bottom: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .upload-zone:hover {
+        border-color: #3B82F6;
+        background: #323842;
+    }
+
+    .upload-zone .icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+    }
+
+    .upload-zone input[type="file"] {
+        display: none;
+    }
+
+    .upload-label {
+        display: inline-block;
+        padding: 12px 32px;
+        background: #3B82F6;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s ease;
+    }
+
+    .upload-label:hover {
+        background: #2563EB;
+    }
+
+    .file-info {
+        margin-top: 16px;
+        color: #9CA3AF;
+        font-size: 14px;
+    }
+
+    .template-link {
+        display: block;
+        padding: 16px;
+        background: rgba(59, 130, 246, 0.1);
+        border-radius: 8px;
+        border-left: 4px solid #3B82F6;
+        color: #93C5FD;
+        margin-bottom: 24px;
+        text-decoration: none;
+    }
+
+    .template-link:hover {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60A5FA;
+    }
+
+    .submit-btn {
+        padding: 14px 40px;
+        background: #10B981;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .submit-btn:hover {
+        background: #059669;
+    }
+
+    .submit-btn:disabled {
+        background: #6B7280;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="import-container">
+    <div class="import-header">
+        <h1>📥 Импорт промокодов</h1>
+        <p>Шаг 1 из 2: Загрузка файла CSV или XLSX</p>
+    </div>
+
+    <a href="{% url 'import_template' %}" class="template-link">
+        📄 Скачать шаблон CSV для импорта
+    </a>
+
+    <form method="post" enctype="multipart/form-data" id="importForm">
+        {% csrf_token %}
+
+        <div class="upload-zone" id="uploadZone">
+            <div class="icon">📁</div>
+            <label for="fileInput" class="upload-label">
+                Выбрать файл
+            </label>
+            <input type="file" name="file" id="fileInput" accept=".csv,.xlsx" required>
+            <div class="file-info" id="fileInfo">
+                Поддерживаются форматы: CSV, XLSX
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn" disabled>
+            Загрузить и перейти к превью
+        </button>
+    </form>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const submitBtn = document.getElementById('submitBtn');
+const fileInfo = document.getElementById('fileInfo');
+const uploadZone = document.getElementById('uploadZone');
+
+fileInput.addEventListener('change', function(e) {
+    if (this.files.length > 0) {
+        const file = this.files[0];
+        fileInfo.textContent = `Выбран файл: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+        submitBtn.disabled = false;
+        uploadZone.style.borderColor = '#10B981';
+    }
+});
+
+uploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.style.borderColor = '#3B82F6';
+});
+
+uploadZone.addEventListener('dragleave', function(e) {
+    this.style.borderColor = '#3f4451';
+});
+
+uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+    }
+    this.style.borderColor = '#10B981';
+});
+</script>
+{% endblock %}

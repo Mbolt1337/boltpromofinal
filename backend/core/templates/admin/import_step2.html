@@ -1,0 +1,272 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+<style>
+    .preview-container {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 30px;
+    }
+
+    .preview-header {
+        margin-bottom: 30px;
+        padding: 24px;
+        background: #252932;
+        border-radius: 12px;
+        border: 1px solid #3f4451;
+    }
+
+    .preview-header h1 {
+        color: #F3F4F6;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .preview-header p {
+        color: #9CA3AF;
+        font-size: 14px;
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+    }
+
+    .stat-card {
+        padding: 20px;
+        background: #2d3139;
+        border-radius: 10px;
+        border: 1px solid #3f4451;
+    }
+
+    .stat-label {
+        color: #9CA3AF;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #F3F4F6;
+    }
+
+    .stat-value.success {
+        color: #10B981;
+    }
+
+    .stat-value.error {
+        color: #EF4444;
+    }
+
+    .preview-table-wrapper {
+        background: #252932;
+        border-radius: 12px;
+        border: 1px solid #3f4451;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    .preview-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .preview-table th {
+        background: #2d3139;
+        color: #E5E7EB;
+        font-weight: 600;
+        padding: 12px;
+        text-align: left;
+        border-bottom: 2px solid #3f4451;
+        font-size: 13px;
+        position: sticky;
+        top: 0;
+    }
+
+    .preview-table td {
+        padding: 12px;
+        border-bottom: 1px solid #3f4451;
+        color: #D1D5DB;
+        font-size: 13px;
+    }
+
+    .preview-table tr.valid td {
+        background: rgba(16, 185, 129, 0.05);
+    }
+
+    .preview-table tr.invalid td {
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-badge.valid {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10B981;
+    }
+
+    .status-badge.invalid {
+        background: rgba(239, 68, 68, 0.2);
+        color: #EF4444;
+    }
+
+    .error-list {
+        color: #FCA5A5;
+        font-size: 12px;
+        margin: 0;
+        padding-left: 16px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+        margin-top: 24px;
+    }
+
+    .btn {
+        padding: 14px 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-cancel {
+        background: #6B7280;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #4B5563;
+    }
+
+    .btn-submit {
+        background: #10B981;
+        color: white;
+    }
+
+    .btn-submit:hover {
+        background: #059669;
+    }
+
+    .btn-submit:disabled {
+        background: #6B7280;
+        cursor: not-allowed;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        color: #FCD34D;
+        padding: 16px 20px;
+        border-radius: 12px;
+        border-left: 4px solid #F59E0B;
+        margin-bottom: 24px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="preview-container">
+    <div class="preview-header">
+        <h1>📋 Превью импорта</h1>
+        <p>Шаг 2 из 2: Проверка данных перед импортом</p>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">Всего строк</div>
+                <div class="stat-value">{{ total }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Валидных</div>
+                <div class="stat-value success">{{ valid_count }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">С ошибками</div>
+                <div class="stat-value error">{{ invalid_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if invalid_count > 0 %}
+    <div class="warning-box">
+        ⚠️ <strong>Внимание:</strong> Обнаружено {{ invalid_count }} строк с ошибками.
+        Они будут пропущены при импорте. Валидные строки ({{ valid_count }}) будут импортированы.
+    </div>
+    {% endif %}
+
+    <div class="preview-table-wrapper">
+        <table class="preview-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Статус</th>
+                    <th>Название</th>
+                    <th>Магазин</th>
+                    <th>Тип</th>
+                    <th>Скидка</th>
+                    <th>Код</th>
+                    <th>Ошибки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr class="{% if row.valid %}valid{% else %}invalid{% endif %}">
+                    <td>{{ row.line }}</td>
+                    <td>
+                        <span class="status-badge {% if row.valid %}valid{% else %}invalid{% endif %}">
+                            {% if row.valid %}✓ OK{% else %}✗ Error{% endif %}
+                        </span>
+                    </td>
+                    <td>{{ row.title|truncatechars:40 }}</td>
+                    <td>{{ row.store_slug }}</td>
+                    <td>{{ row.offer_type }}</td>
+                    <td>{{ row.discount_value }}%</td>
+                    <td><code>{{ row.code|default:"—" }}</code></td>
+                    <td>
+                        {% if row.errors %}
+                        <ul class="error-list">
+                            {% for error in row.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <form method="post" action="{% url 'import_execute' %}" id="executeForm">
+        {% csrf_token %}
+        <div class="action-buttons">
+            <a href="{% url 'import_promocodes' %}" class="btn btn-cancel">
+                Отмена
+            </a>
+            <button type="submit" class="btn btn-submit"
+                    {% if valid_count == 0 %}disabled{% endif %}
+                    onclick="return confirm('Вы уверены, что хотите импортировать {{ valid_count }} промокодов?');">
+                Импортировать {{ valid_count }} промокодов
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
