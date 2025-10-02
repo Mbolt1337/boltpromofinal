@@ -749,42 +749,43 @@ export async function getPromocodeById(id: string): Promise<Promocode | null> {
 }
 
 export async function getRelatedPromocodes(
-  promoId: number, 
-  storeId?: number, 
-  categoryId?: number, 
+  promoId: number,
+  storeSlug?: string,
+  categorySlug?: string,
   limit: number = 6
 ): Promise<Promocode[]> {
-  const cacheKey = `related-promocodes-${promoId}-${storeId}-${categoryId}-${limit}`;
-  
+  const cacheKey = `related-promocodes-${promoId}-${storeSlug}-${categorySlug}-${limit}`;
+
   return debounceRequest(cacheKey, async () => {
     try {
-      if (storeId) {
+      if (storeSlug) {
         const storePromos = await getPromocodes({
-          store: storeId.toString(),
-          limit: limit + 1,
+          store: storeSlug,
+          page_size: limit + 1,
           ordering: '-is_recommended,-views_count'
         });
         const filtered = storePromos.results.filter(p => p.id !== promoId);
         if (filtered.length >= 3) {
           return filtered.slice(0, limit);
         }
-        if (categoryId && filtered.length < limit) {
+        if (categorySlug && filtered.length < limit) {
+          const remainingCount = Math.max(1, limit - filtered.length);
           const categoryPromos = await getPromocodes({
-            category: categoryId.toString(),
-            limit: limit - filtered.length,
+            category: categorySlug,
+            page_size: remainingCount,
             ordering: '-is_recommended,-views_count'
           });
-          const additionalPromos = categoryPromos.results.filter(p => 
+          const additionalPromos = categoryPromos.results.filter(p =>
             p.id !== promoId && !filtered.find(fp => fp.id === p.id)
           );
           return [...filtered, ...additionalPromos].slice(0, limit);
         }
         return filtered.slice(0, limit);
       }
-      if (categoryId) {
+      if (categorySlug) {
         const categoryPromos = await getPromocodes({
-          category: categoryId.toString(),
-          limit: limit + 1,
+          category: categorySlug,
+          page_size: limit + 1,
           ordering: '-is_recommended,-views_count'
         });
         return categoryPromos.results
@@ -792,7 +793,7 @@ export async function getRelatedPromocodes(
           .slice(0, limit);
       }
       const popularPromos = await getPromocodes({
-        limit: limit + 1,
+        page_size: limit + 1,
         ordering: '-views_count'
       });
       return popularPromos.results
@@ -972,6 +973,59 @@ export async function getShowcasePromos(
       return {
         count: 0,
         results: []
+      };
+    }
+  });
+}
+
+// ========================================
+// Site Assets API
+// ========================================
+
+export interface SiteAssets {
+  favicon_ico?: string;
+  favicon_16?: string;
+  favicon_32?: string;
+  og_default?: string;
+  twitter_default?: string;
+  apple_touch_icon?: string;
+  pwa_192?: string;
+  pwa_512?: string;
+  pwa_maskable?: string;
+  safari_pinned_svg?: string;
+  theme_color: string;
+  background_color: string;
+  last_generated_at?: string;
+}
+
+/**
+ * Получение медиа-ресурсов сайта (favicon, OG images, PWA icons)
+ * Используется в layout.tsx для динамической подстановки
+ */
+export async function getSiteAssets(): Promise<SiteAssets> {
+  return debounceRequest('site-assets', async () => {
+    try {
+      const cacheStrategy = {
+        ...NORMAL_CACHE,
+        revalidate: 3600, // 1 час - эти данные редко меняются
+        tags: ['site-assets']
+      };
+
+      const response = await apiRequest<SiteAssets>(
+        '/site/assets/',
+        {},
+        {},
+        false,
+        cacheStrategy
+      );
+
+      return response;
+    } catch (error) {
+      console.error('[API] Error loading site assets:', error);
+      // Возвращаем дефолтные значения при ошибке
+      return {
+        theme_color: '#0b1020',
+        background_color: '#0b1020'
       };
     }
   });
