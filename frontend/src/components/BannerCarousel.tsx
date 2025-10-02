@@ -451,7 +451,7 @@ export default function BannerCarousel({
                             <a
                               href={buttonUrl}
                               target="_blank"
-                              rel="noopener noreferrer"
+                              rel="nofollow sponsored noopener noreferrer"
                               className="relative z-40 inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-white/15 hover:bg-white/25 border-2 border-white/30 hover:border-white/50 rounded-xl lg:rounded-2xl text-white font-bold backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 shadow-lg"
                               aria-label={buttonText}
                               onClickCapture={(e) => e.stopPropagation()}

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ExternalLink, Copy, Check } from 'lucide-react'
 import { safeExternalUrl } from '@/lib/utils'
 import { trackPromoCopy, trackPromoOpen, trackFinanceOpen, trackDealOpen } from '@/lib/analytics'
+import Toast from './Toast'
 
 interface PromoActionsProps {
   promoId: number
@@ -14,22 +15,22 @@ interface PromoActionsProps {
   promoAffiliateUrl: string
   storeUrl: string
   title: string
+  storeName?: string
 }
 
 // ===== PRESET-КЛАССЫ ДЛЯ КОНСИСТЕНТНОСТИ =====
 
-// Основная кнопка действия (код/активация)
+// Кнопка с промокодом (emerald - как в PromoCard)
+const BUTTON_PROMOCODE = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+
+// Кнопка в состоянии "скопировано/открываем"
+const BUTTON_LOADING = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-200 font-semibold text-lg transition-all duration-300 ease-out"
+
+// Основная кнопка действия для других типов (deal, financial)
 const PRIMARY_ACTION_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 py-4 glass-card border-white/20 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 hover:bg-white/10 hover:border-white/30 focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none disabled:opacity-70 disabled:cursor-not-allowed"
 
 // Вторичная кнопка (переход в магазин)
 const SECONDARY_ACTION_BUTTON = "group flex items-center justify-center gap-2 w-full px-6 py-3 glass-card border-white/15 text-white/80 font-medium text-base transition-all duration-300 ease-out hover:scale-105 hover:bg-white/8 hover:border-white/25 hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none"
-
-// Кнопка в состоянии "скопировано"
-const COPIED_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 py-4 glass-card border-green-500/30 bg-green-500/10 text-green-300 font-semibold text-lg transition-all duration-300 ease-out hover:bg-green-500/15 hover:border-green-500/40"
-
-// Toast уведомление
-const TOAST_NOTIFICATION = "fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top-4 duration-300"
-const TOAST_CONTENT = "glass-card border-green-500/30 bg-green-500/10 px-6 py-4 flex items-center gap-3 shadow-2xl min-w-[280px]"
 
 export default function PromoActions({
   promoId,
@@ -38,9 +39,12 @@ export default function PromoActions({
   code,
   promoAffiliateUrl,
   storeUrl,
-  title
+  title,
+  storeName
 }: PromoActionsProps) {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'copied'>('idle')
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
 
   // Функция копирования кода в буфер обмена
   const copyToClipboard = async (codeText: string) => {
@@ -49,26 +53,64 @@ export default function PromoActions({
       await navigator.clipboard.writeText(codeText)
       setCopyStatus('copied')
 
+      // Показываем toast
+      setToastMessage(`Промокод скопирован! Открываем ${storeName || 'магазин'}...`)
+      setShowToast(true)
+
       // Трекаем копирование промокода
       trackPromoCopy(promoId)
+
+      // Открываем партнёрскую ссылку через 1.5 сек
+      setTimeout(() => {
+        if (promoAffiliateUrl) {
+          const link = document.createElement('a')
+          link.href = promoAffiliateUrl
+          link.target = '_blank'
+          link.rel = 'nofollow sponsored noopener noreferrer'
+          link.click()
+        }
+      }, 1500)
 
       // Возвращаем в исходное состояние через 2 секунды
       setTimeout(() => setCopyStatus('idle'), 2000)
     } catch (error) {
       console.error('Ошибка копирования:', error)
-      setCopyStatus('idle')
 
       // Fallback для старых браузеров
-      const textArea = document.createElement('textarea')
-      textArea.value = codeText
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
+      try {
+        const textArea = document.createElement('textarea')
+        textArea.value = codeText
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
 
-      setCopyStatus('copied')
-      trackPromoCopy(promoId)
-      setTimeout(() => setCopyStatus('idle'), 2000)
+        setCopyStatus('copied')
+
+        // Показываем toast
+        setToastMessage(`Промокод скопирован! Открываем ${storeName || 'магазин'}...`)
+        setShowToast(true)
+
+        trackPromoCopy(promoId)
+
+        // Открываем партнёрскую ссылку через 1.5 сек (fallback)
+        setTimeout(() => {
+          if (promoAffiliateUrl) {
+            const link = document.createElement('a')
+            link.href = promoAffiliateUrl
+            link.target = '_blank'
+            link.rel = 'nofollow sponsored noopener noreferrer'
+            link.click()
+          }
+        }, 1500)
+
+        setTimeout(() => setCopyStatus('idle'), 2000)
+      } catch (fallbackError) {
+        console.error('Ошибка fallback копирования:', fallbackError)
+        setToastMessage('Не удалось скопировать промокод')
+        setShowToast(true)
+        setCopyStatus('idle')
+      }
     }
   }
 
@@ -158,19 +200,14 @@ export default function PromoActions({
 
   return (
     <>
-      {/* Toast уведомление о копировании */}
-      {copyStatus === 'copied' && (
-        <div className={TOAST_NOTIFICATION}>
-          <div className={TOAST_CONTENT}>
-            <div className="w-8 h-8 bg-green-500/20 border border-green-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Check className="w-5 h-5 text-green-300" />
-            </div>
-            <div className="flex-1">
-              <p className="text-white font-semibold text-base">Промокод скопирован!</p>
-              <p className="text-green-100 text-sm opacity-90">Вставьте его при оформлении заказа</p>
-            </div>
-          </div>
-        </div>
+      {/* Toast уведомление */}
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          type="success"
+          onClose={() => setShowToast(false)}
+          duration={3000}
+        />
       )}
 
       {/* ДЕЙСТВИЯ */}
@@ -180,10 +217,10 @@ export default function PromoActions({
           <button
             onClick={() => copyToClipboard(code!)}
             disabled={copyStatus === 'copying'}
-            className={copyStatus === 'copied' ? COPIED_BUTTON : PRIMARY_ACTION_BUTTON}
+            className={copyStatus === 'copied' || copyStatus === 'copying' ? BUTTON_LOADING : BUTTON_PROMOCODE}
           >
             <span className="truncate">
-              {copyStatus === 'copied' ? 'Скопировано!' : actions.primaryText}
+              {copyStatus === 'copied' ? 'Открываем...' : actions.primaryText}
             </span>
             {actions.primaryIcon}
           </button>
@@ -191,7 +228,7 @@ export default function PromoActions({
           <Link
             href={actions.primaryUrl!}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow sponsored noopener noreferrer"
             className={PRIMARY_ACTION_BUTTON}
             onClick={() => {
               if (offerType === 'financial') {
@@ -212,7 +249,7 @@ export default function PromoActions({
         <a
           href={safeExternalUrl(actions.secondaryUrl)}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="nofollow sponsored noopener noreferrer"
           className={SECONDARY_ACTION_BUTTON}
         >
           <span className="truncate">{actions.secondaryText}</span>
