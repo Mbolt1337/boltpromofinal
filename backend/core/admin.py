@@ -916,5 +916,3 @@ class SiteAssetsAdmin(admin.ModelAdmin):
             messages.success(request, f'Запущена генерация медиа-файлов (задача {task.id})')
         except Exception as e:
             messages.warning(request, f'Не удалось запустить генерацию: {str(e)}. Проверьте настройки Celery.')
-
-    change_form_template = 'admin/siteassets_change_form.html'
