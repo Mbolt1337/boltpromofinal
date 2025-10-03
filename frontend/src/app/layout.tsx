@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import DynamicMetaTags from '@/components/DynamicMetaTags'
+import CookieConsent from '@/components/CookieConsent'
 import { SITE_CONFIG } from '@/lib/seo'
 
 // B2: Оптимизированные шрифты для лучшей производительности
@@ -199,6 +200,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <CookieConsent />
         </ErrorBoundary>
 
         {/* B3: Регистрация Service Worker для PWA (только в production) */}

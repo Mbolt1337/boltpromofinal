@@ -159,37 +159,82 @@ else:
     }
 
 # ✅ ДОБАВЛЕНО: Настройки кэширования
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-        'TIMEOUT': 300,  # 5 минут по умолчанию
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000,
-            'CULL_FREQUENCY': 4,
-        }
-    },
-    # ✅ ДОБАВЛЕНО: Отдельный кэш для долгоживущих данных
-    'long_term': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'long-term-cache',
-        'TIMEOUT': 1800,  # 30 минут для статичных данных
-        'OPTIONS': {
-            'MAX_ENTRIES': 500,
-            'CULL_FREQUENCY': 3,
-        }
-    },
-    # ✅ ДОБАВЛЕНО: Кэш для статистики
-    'stats': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'stats-cache',
-        'TIMEOUT': 600,  # 10 минут для статистики
-        'OPTIONS': {
-            'MAX_ENTRIES': 100,
-            'CULL_FREQUENCY': 2,
+# Используем Redis в продакшене, LocMem для разработки
+if DEBUG:
+    # Локальный кэш для разработки
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+            'TIMEOUT': 300,  # 5 минут по умолчанию
+            'OPTIONS': {
+                'MAX_ENTRIES': 1000,
+                'CULL_FREQUENCY': 4,
+            }
+        },
+        'long_term': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'long-term-cache',
+            'TIMEOUT': 1800,  # 30 минут для статичных данных
+            'OPTIONS': {
+                'MAX_ENTRIES': 500,
+                'CULL_FREQUENCY': 3,
+            }
+        },
+        'stats': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'stats-cache',
+            'TIMEOUT': 600,  # 10 минут для статистики
+            'OPTIONS': {
+                'MAX_ENTRIES': 100,
+                'CULL_FREQUENCY': 2,
+            }
         }
     }
-}
+else:
+    # Redis кэш для продакшена с версионированными ключами
+    REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+    CACHE_VERSION = os.getenv('CACHE_VERSION', '1')  # Увеличивайте для инвалидации всего кэша
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+            'TIMEOUT': 300,  # 5 минут
+            'VERSION': CACHE_VERSION,
+            'KEY_PREFIX': 'boltpromo',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django.core.cache.backends.redis.DefaultClient',
+                'PARSER_CLASS': 'redis.connection.HiredisParser',
+                'CONNECTION_POOL_CLASS_KWARGS': {
+                    'max_connections': 50,
+                    'retry_on_timeout': True,
+                },
+                'SOCKET_CONNECT_TIMEOUT': 5,
+                'SOCKET_TIMEOUT': 5,
+            }
+        },
+        'long_term': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL + '/1',  # Другая БД Redis
+            'TIMEOUT': 1800,  # 30 минут для статичных данных
+            'VERSION': CACHE_VERSION,
+            'KEY_PREFIX': 'boltpromo_long',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django.core.cache.backends.redis.DefaultClient',
+            }
+        },
+        'stats': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL + '/2',  # Ещё одна БД Redis
+            'TIMEOUT': 600,  # 10 минут для статистики
+            'VERSION': CACHE_VERSION,
+            'KEY_PREFIX': 'boltpromo_stats',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django.core.cache.backends.redis.DefaultClient',
+            }
+        }
+    }
 
 # ✅ ДОБАВЛЕНО: Настройки кэширования сессий и middleware
 CACHE_MIDDLEWARE_ALIAS = 'default'

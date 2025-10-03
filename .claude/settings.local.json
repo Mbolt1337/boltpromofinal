@@ -1,14 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(python manage.py makemigrations:*)",
-      "Bash(python manage.py:*)",
-      "Bash(pip install:*)",
-      "Bash(cat:*)",
-      "Bash(del manifest.ts)",
-      "Bash(npm run build:*)"
+      "Bash(python test:*)",
+      "Bash(curl -s \"http://127.0.0.1:8000/api/v1/stats/top-promos?range=7d\")",
+      "Bash(pip show:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(python:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(timeout 15 python manage.py runserver)",
+      "Bash(curl:*)",
+      "Bash(timeout 5 bash -c 'until curl -s http://127.0.0.1:8000/api/v1/health/ > /dev/null 2>&1; do sleep 0.5; done; curl -s \"\"http://127.0.0.1:8000/api/v1/stats/top-promos?range=7d\"\"')",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

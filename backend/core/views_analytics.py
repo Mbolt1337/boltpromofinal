@@ -96,145 +96,220 @@ def track_events(request):
 def stats_top_promos(request):
     """GET /api/v1/stats/top-promos?range=7d"""
     from django.core.cache import cache
-    from .models import DailyAgg
+    from .models import DailyAgg, Event
 
     try:
-        cache_key = f"stats:top_promos:{request.GET.get('range', '7d')}"
+        range_param = request.GET.get('range', '7d')
+        cache_key = f"stats:top_promos:{range_param}"
         cached = cache.get(cache_key)
         if cached:
-            return Response(cached)
+            return Response({'results': cached, 'count': len(cached)})
 
-        days = int(request.GET.get('range', '7d').replace('d', ''))
+        days = int(range_param.replace('d', ''))
         start_date = date.today() - timedelta(days=days)
 
         # Топ-10 промокодов по кликам
         from django.db.models import Sum
 
-        # Учитываем все типы "кликов" (копирование/открытие промокодов)
-        CLICK_EVENT_TYPES = [
-            'promo_copy', 'promo_open',      # промокоды
-            'finance_open',                   # финансовые предложения
-            'deal_open',                      # акции
-            'click', 'copy_code'              # legacy типы из тестов
-        ]
+        # Проверяем, есть ли агрегированные данные
+        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
 
-        top = DailyAgg.objects.filter(
-            date__gte=start_date,
-            event_type__in=CLICK_EVENT_TYPES,
-            promo__isnull=False
-        ).values('promo_id', 'promo__title').annotate(
-            total_clicks=Sum('count')
-        ).order_by('-total_clicks')[:10]
+        if has_agg_data:
+            # Используем агрегированные данные из DailyAgg
+            CLICK_EVENT_TYPES = [
+                'copy', 'open',                   # основные типы
+                'promo_copy', 'promo_open',       # промокоды
+                'finance_open',                   # финансовые предложения
+                'deal_open',                      # акции
+                'click', 'copy_code'              # legacy типы
+            ]
 
-        data = [{'promo_id': item['promo_id'], 'title': item['promo__title'], 'clicks': item['total_clicks']} for item in top]
+            top = DailyAgg.objects.filter(
+                date__gte=start_date,
+                event_type__in=CLICK_EVENT_TYPES,
+                promo__isnull=False
+            ).values('promo_id', 'promo__title').annotate(
+                total_clicks=Sum('count')
+            ).order_by('-total_clicks')[:10]
+
+            data = [{'promo_id': item['promo_id'], 'title': item['promo__title'], 'clicks': item['total_clicks']} for item in top]
+        else:
+            # Fallback: используем сырые события из Event
+            logger.warning('No aggregated data found, using raw events')
+
+            CLICK_EVENT_TYPES = [
+                'copy', 'open',
+                'promo_copy', 'promo_open',
+                'finance_open', 'deal_open'
+            ]
+
+            top = Event.objects.filter(
+                created_at__date__gte=start_date,
+                event_type__in=CLICK_EVENT_TYPES,
+                promo__isnull=False
+            ).values('promo_id', 'promo__title').annotate(
+                total_clicks=Count('id')
+            ).order_by('-total_clicks')[:10]
+
+            data = [{'promo_id': item['promo_id'], 'title': item['promo__title'], 'clicks': item['total_clicks']} for item in top]
 
         cache.set(cache_key, data, timeout=300)  # 5 min
-        return Response(data)
+        return Response({'results': data, 'count': len(data)})
     except Exception as e:
         logger.error(f'stats_top_promos error: {str(e)}', exc_info=True)
-        return Response([], status=200)  # Empty array, not 500
+        return Response({'results': [], 'count': 0}, status=200)  # Empty with proper structure
 
 
 @api_view(['GET'])
 def stats_top_stores(request):
     """GET /api/v1/stats/top-stores?range=7d"""
     from django.core.cache import cache
-    from .models import DailyAgg
+    from .models import DailyAgg, Event
 
     try:
-        cache_key = f"stats:top_stores:{request.GET.get('range', '7d')}"
+        range_param = request.GET.get('range', '7d')
+        cache_key = f"stats:top_stores:{range_param}"
         cached = cache.get(cache_key)
         if cached:
-            return Response(cached)
+            return Response({'results': cached, 'count': len(cached)})
 
-        days = int(request.GET.get('range', '7d').replace('d', ''))
+        days = int(range_param.replace('d', ''))
         start_date = date.today() - timedelta(days=days)
 
         from django.db.models import Sum
 
-        top = DailyAgg.objects.filter(
-            date__gte=start_date,
-            store__isnull=False
-        ).values('store_id', 'store__name').annotate(
-            total_clicks=Sum('count')
-        ).order_by('-total_clicks')[:10]
+        # Проверяем, есть ли агрегированные данные
+        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
 
-        data = [{'store_id': item['store_id'], 'name': item['store__name'], 'clicks': item['total_clicks']} for item in top]
+        if has_agg_data:
+            top = DailyAgg.objects.filter(
+                date__gte=start_date,
+                store__isnull=False
+            ).values('store_id', 'store__name').annotate(
+                total_clicks=Sum('count')
+            ).order_by('-total_clicks')[:10]
+
+            data = [{'store_id': item['store_id'], 'name': item['store__name'], 'clicks': item['total_clicks']} for item in top]
+        else:
+            # Fallback: используем сырые события
+            top = Event.objects.filter(
+                created_at__date__gte=start_date,
+                store__isnull=False
+            ).values('store_id', 'store__name').annotate(
+                total_clicks=Count('id')
+            ).order_by('-total_clicks')[:10]
+
+            data = [{'store_id': item['store_id'], 'name': item['store__name'], 'clicks': item['total_clicks']} for item in top]
 
         cache.set(cache_key, data, timeout=300)
-        return Response(data)
+        return Response({'results': data, 'count': len(data)})
     except Exception as e:
         logger.error(f'stats_top_stores error: {str(e)}', exc_info=True)
-        return Response([], status=200)
+        return Response({'results': [], 'count': 0}, status=200)
 
 
 @api_view(['GET'])
 def stats_types_share(request):
     """GET /api/v1/stats/types-share?range=7d"""
     from django.core.cache import cache
-    from .models import DailyAgg
+    from .models import DailyAgg, Event
 
     try:
-        cache_key = f"stats:types_share:{request.GET.get('range', '7d')}"
+        range_param = request.GET.get('range', '7d')
+        cache_key = f"stats:types_share:{range_param}"
         cached = cache.get(cache_key)
         if cached:
-            return Response(cached)
+            return Response({'results': cached, 'count': len(cached)})
 
-        days = int(request.GET.get('range', '7d').replace('d', ''))
+        days = int(range_param.replace('d', ''))
         start_date = date.today() - timedelta(days=days)
 
-        # Группируем по offer_type промокодов
         from django.db.models import Sum
 
-        types = DailyAgg.objects.filter(
-            date__gte=start_date,
-            promo__isnull=False
-        ).values('promo__offer_type').annotate(
-            total=Sum('count')
-        ).order_by('-total')
+        # Проверяем, есть ли агрегированные данные
+        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
 
-        data = [{'type': item['promo__offer_type'], 'count': item['total']} for item in types]
+        if has_agg_data:
+            types = DailyAgg.objects.filter(
+                date__gte=start_date,
+                promo__isnull=False
+            ).values('promo__offer_type').annotate(
+                total=Sum('count')
+            ).order_by('-total')
+
+            data = [{'type': item['promo__offer_type'], 'count': item['total']} for item in types]
+        else:
+            # Fallback: используем сырые события
+            types = Event.objects.filter(
+                created_at__date__gte=start_date,
+                promo__isnull=False
+            ).values('promo__offer_type').annotate(
+                total=Count('id')
+            ).order_by('-total')
+
+            data = [{'type': item['promo__offer_type'], 'count': item['total']} for item in types]
 
         cache.set(cache_key, data, timeout=300)
-        return Response(data)
+        return Response({'results': data, 'count': len(data)})
     except Exception as e:
         logger.error(f'stats_types_share error: {str(e)}', exc_info=True)
-        return Response([], status=200)
+        return Response({'results': [], 'count': 0}, status=200)
 
 
 @api_view(['GET'])
 def stats_showcases_ctr(request):
     """GET /api/v1/stats/showcases-ctr?range=7d"""
     from django.core.cache import cache
-    from .models import DailyAgg
+    from .models import DailyAgg, Event
 
     try:
-        cache_key = f"stats:showcases_ctr:{request.GET.get('range', '7d')}"
+        range_param = request.GET.get('range', '7d')
+        cache_key = f"stats:showcases_ctr:{range_param}"
         cached = cache.get(cache_key)
         if cached:
-            return Response(cached)
+            return Response({'results': cached, 'count': len(cached)})
 
-        days = int(request.GET.get('range', '7d').replace('d', ''))
+        days = int(range_param.replace('d', ''))
         start_date = date.today() - timedelta(days=days)
 
-        # Витрины с просмотрами и кликами
         from django.db.models import Sum
 
-        views = DailyAgg.objects.filter(
-            date__gte=start_date,
-            event_type='showcase_view',
-            showcase__isnull=False
-        ).values('showcase_id', 'showcase__title').annotate(
-            views_count=Sum('count')
-        )
+        # Проверяем, есть ли агрегированные данные
+        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
 
-        clicks = DailyAgg.objects.filter(
-            date__gte=start_date,
-            event_type='showcase_open',
-            showcase__isnull=False
-        ).values('showcase_id').annotate(
-            clicks_count=Sum('count')
-        )
+        if has_agg_data:
+            views = DailyAgg.objects.filter(
+                date__gte=start_date,
+                event_type='showcase_view',
+                showcase__isnull=False
+            ).values('showcase_id', 'showcase__title').annotate(
+                views_count=Sum('count')
+            )
+
+            clicks = DailyAgg.objects.filter(
+                date__gte=start_date,
+                event_type='showcase_open',
+                showcase__isnull=False
+            ).values('showcase_id').annotate(
+                clicks_count=Sum('count')
+            )
+        else:
+            # Fallback: используем сырые события
+            views = Event.objects.filter(
+                created_at__date__gte=start_date,
+                event_type='showcase_view',
+                showcase__isnull=False
+            ).values('showcase_id', 'showcase__name').annotate(
+                views_count=Count('id')
+            )
+
+            clicks = Event.objects.filter(
+                created_at__date__gte=start_date,
+                event_type='showcase_open',
+                showcase__isnull=False
+            ).values('showcase_id').annotate(
+                clicks_count=Count('id')
+            )
 
         # Объединяем
         clicks_dict = {item['showcase_id']: item['clicks_count'] for item in clicks}
@@ -248,7 +323,7 @@ def stats_showcases_ctr(request):
 
             data.append({
                 'showcase_id': showcase_id,
-                'title': view_item['showcase__title'],
+                'title': view_item.get('showcase__title') or view_item.get('showcase__name', 'Unknown'),
                 'views': views_count,
                 'clicks': clicks_count,
                 'ctr': round(ctr, 2)
@@ -257,7 +332,7 @@ def stats_showcases_ctr(request):
         data = sorted(data, key=lambda x: x['ctr'], reverse=True)[:10]
 
         cache.set(cache_key, data, timeout=300)
-        return Response(data)
+        return Response({'results': data, 'count': len(data)})
     except Exception as e:
         logger.error(f'stats_showcases_ctr error: {str(e)}', exc_info=True)
-        return Response([], status=200)
+        return Response({'results': [], 'count': 0}, status=200)
