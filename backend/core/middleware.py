@@ -154,3 +154,57 @@ class RateLimitMiddleware:
                 'message': 'Rate limit exceeded. Please try again later.',
                 'retry_after': 60  # seconds
             }, status=429)
+
+
+class SecurityHeadersMiddleware:
+    """
+    Middleware для добавления security headers:
+    - Content-Security-Policy
+    - X-Frame-Options
+    - Referrer-Policy
+    - Permissions-Policy
+    - X-Content-Type-Options
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+
+        # CSP: разрешаем только свой домен, встроенные стили/скрипты с nonce
+        # Для production нужно добавить реальные домены CDN
+        csp_directives = [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",  # Next.js требует unsafe-eval
+            "style-src 'self' 'unsafe-inline'",  # Tailwind inline styles
+            "img-src 'self' data: https:",
+            "font-src 'self' data:",
+            "connect-src 'self'",
+            "frame-ancestors 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+        ]
+        response['Content-Security-Policy'] = '; '.join(csp_directives)
+
+        # X-Frame-Options: запрет встраивания в iframe
+        response['X-Frame-Options'] = 'DENY'
+
+        # Referrer-Policy: не передаём полный URL при переходе на внешние сайты
+        response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+
+        # Permissions-Policy: отключаем ненужные browser features
+        response['Permissions-Policy'] = (
+            'geolocation=(), '
+            'microphone=(), '
+            'camera=(), '
+            'payment=(), '
+            'usb=(), '
+            'magnetometer=(), '
+            'gyroscope=()'
+        )
+
+        # X-Content-Type-Options: запрет MIME-sniffing
+        response['X-Content-Type-Options'] = 'nosniff'
+
+        return response
