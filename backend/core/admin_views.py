@@ -116,21 +116,20 @@ def reaggregate_events_view(request):
         
         try:
             from .tasks import aggregate_events_hourly
-            
+
             # Запускаем задачу
             task = aggregate_events_hourly.delay()
             task_id = task.id if hasattr(task, 'id') else 'N/A'
-            
+
             # Логируем действие
             AdminActionLog.objects.create(
-                user=request.user,
+                user=request.user.username,
                 action='reaggregate_events',
-                params={'days': days},
-                task_id=task_id
+                details=f'Переагрегация за {days} дней. Task ID: {task_id}'
             )
-            
+
             messages.success(
-                request, 
+                request,
                 f'Запущена переагрегация событий за последние {days} дней. Task ID: {task_id}'
             )
         except Exception as e:
