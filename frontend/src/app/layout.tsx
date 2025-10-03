@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     ],
     shortcut: '/favicon.ico'
   },
-  manifest: '/manifest.json',
+  manifest: '/manifest.webmanifest',
   openGraph: {
     type: 'website',
     locale: 'ru_RU',
