@@ -11,9 +11,9 @@ Pillow==10.4.0
 django-jazzmin==2.6.0
 django-import-export==4.0.7
 
-# Дополнительные утилиты для админки (с упрощенными версиями)
+# Дополнительные утилиты для админки (табlib 3.5.0 для совместимости с django-import-export)
 openpyxl==3.1.5
-tablib==3.6.1
+tablib==3.5.0
 
 # Переменные окружения
 python-dotenv==1.0.0
