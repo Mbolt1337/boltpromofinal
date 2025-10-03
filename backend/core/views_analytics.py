@@ -105,9 +105,17 @@ def stats_top_promos(request):
         # Топ-10 промокодов по кликам
         from django.db.models import Sum
 
+        # Учитываем все типы "кликов" (копирование/открытие промокодов)
+        CLICK_EVENT_TYPES = [
+            'promo_copy', 'promo_open',      # промокоды
+            'finance_open',                   # финансовые предложения
+            'deal_open',                      # акции
+            'click', 'copy_code'              # legacy типы из тестов
+        ]
+
         top = DailyAgg.objects.filter(
             date__gte=start_date,
-            event_type__in=['promo_copy', 'promo_open', 'finance_open', 'deal_open'],
+            event_type__in=CLICK_EVENT_TYPES,
             promo__isnull=False
         ).values('promo_id', 'promo__title').annotate(
             total_clicks=Sum('count')
