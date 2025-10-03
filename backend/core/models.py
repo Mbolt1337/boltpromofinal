@@ -140,6 +140,12 @@ class PromoCode(models.Model):
         verbose_name = 'Промокод'
         verbose_name_plural = 'Промокоды'
         ordering = ['-is_recommended', '-is_hot', '-created_at']
+        indexes = [
+            models.Index(fields=['is_active', 'expires_at']),
+            models.Index(fields=['store', 'is_active']),
+            models.Index(fields=['is_hot', 'is_active']),
+            models.Index(fields=['-created_at']),
+        ]
 
     def __str__(self):
         return f"{self.title} - {self.store.name}"
