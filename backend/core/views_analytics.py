@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count
 from datetime import date, timedelta
+from ipware import get_client_ip
 import json
 import logging
 
@@ -32,12 +33,11 @@ def track_events(request):
         if not events_data:
             return JsonResponse({'error': 'No events provided'}, status=400)
 
-        # Получаем IP и User-Agent
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            client_ip = x_forwarded_for.split(',')[0]
-        else:
-            client_ip = request.META.get('REMOTE_ADDR')
+        # Получаем IP и User-Agent (безопасно через django-ipware)
+        client_ip, is_routable = get_client_ip(request)
+        if client_ip is None:
+            client_ip = 'unknown'
+            logger.warning('Could not determine client IP for analytics event')
 
         user_agent = request.META.get('HTTP_USER_AGENT', '')
 

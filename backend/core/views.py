@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
+from ipware import get_client_ip as get_client_ip_safe
 import time
 
 from .models import Store, Category, PromoCode, Banner, StaticPage, Partner, ContactMessage, Showcase, ShowcaseItem
@@ -500,12 +501,9 @@ class ContactMessageCreateView(generics.CreateAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
     
     def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0].strip()
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
+        """Безопасное извлечение client IP через django-ipware"""
+        client_ip, is_routable = get_client_ip_safe(request)
+        return client_ip or 'unknown'
     
     def get_serializer_context(self):
         context = super().get_serializer_context()
