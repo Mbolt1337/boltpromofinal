@@ -1,20 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python test:*)",
-      "Bash(curl -s \"http://127.0.0.1:8000/api/v1/stats/top-promos?range=7d\")",
-      "Bash(pip show:*)",
-      "Bash(pip uninstall:*)",
-      "Bash(python:*)",
-      "Bash(dir:*)",
-      "Bash(findstr:*)",
-      "Bash(timeout 15 python manage.py runserver)",
-      "Bash(curl:*)",
-      "Bash(timeout 5 bash -c 'until curl -s http://127.0.0.1:8000/api/v1/health/ > /dev/null 2>&1; do sleep 0.5; done; curl -s \"\"http://127.0.0.1:8000/api/v1/stats/top-promos?range=7d\"\"')",
-      "Bash(git add:*)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix(api): исправлен формат ответа stats API endpoints\n\nПроблема:\n- API статистики возвращал массив вместо объекта с ключом ''results''\n- Фронтенд ожидал формат {results: [], count: N}\n- При отсутствии агрегированных данных API падал\n\nИсправления:\n1. Все stats endpoints теперь возвращают {results: [], count: N}\n2. Добавлен fallback на сырые события (Event) если DailyAgg пустая\n3. Улучшена обработка ошибок (возвращает пустой массив вместо 500)\n\nДополнительно:\n- Добавлен Cookie Consent баннер (frontend/src/components/CookieConsent.tsx)\n- Обновлён .env.example с полной документацией\n- Оптимизировано кэширование (Redis для production)\n- Добавлены backend unit tests (12 test cases)\n- Создан FINAL_DEPLOY_REPORT.md\n\nAPI endpoints:\n- /api/v1/stats/top-promos/ ✅\n- /api/v1/stats/top-stores/ ✅\n- /api/v1/stats/types-share/ ✅\n- /api/v1/stats/showcases-ctr/ ✅\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(del test_stats_api.py)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix(admin): исправлено отображение статистики в админке\n\nПроблема:\n- JavaScript код в админке ожидал массив напрямую\n- API теперь возвращает {results: [], count: N}\n- Графики не отображались из-за несовпадения формата\n\nИсправления:\n- Добавлен fallback: responseData.results || responseData || []\n- Исправлены все 4 функции загрузки графиков:\n  * loadTopPromos()\n  * loadTopStores()\n  * loadTypesShare()\n  * loadShowcasesCTR()\n\nТеперь статистика в админке корректно отображается.\n\nФайл: backend/core/templates/admin/stats.html\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix(csp): добавлены CDN в whitelist для админки\n\nПроблема:\n- CSP блокировал загрузку Chart.js из CDN\n- CSP блокировал Google Fonts для Jazzmin админки\n- Графики в админке не отображались (Chart is not defined)\n\nИсправления:\n- Разделены CSP правила для админки и фронтенда\n- Для админки добавлены в whitelist:\n  * https://cdn.jsdelivr.net (Chart.js)\n  * https://fonts.googleapis.com (Google Fonts CSS)\n  * https://fonts.gstatic.com (Google Fonts файлы)\n  * https://r2cdn.perplexity.ai (Perplexity шрифты)\n- Для фронтенда сохранены строгие правила\n\nТеперь статистика в админке загружается корректно.\n\nФайл: backend/core/middleware.py:159-227\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []

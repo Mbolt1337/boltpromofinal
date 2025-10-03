@@ -172,19 +172,36 @@ class SecurityHeadersMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
 
-        # CSP: разрешаем только свой домен, встроенные стили/скрипты с nonce
-        # Для production нужно добавить реальные домены CDN
-        csp_directives = [
-            "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",  # Next.js требует unsafe-eval
-            "style-src 'self' 'unsafe-inline'",  # Tailwind inline styles
-            "img-src 'self' data: https:",
-            "font-src 'self' data:",
-            "connect-src 'self'",
-            "frame-ancestors 'none'",
-            "base-uri 'self'",
-            "form-action 'self'",
-        ]
+        # Проверяем, это админка или фронтенд
+        is_admin = request.path.startswith('/admin/')
+
+        # CSP для админки - более мягкие правила для Chart.js и Google Fonts
+        if is_admin:
+            csp_directives = [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",  # Chart.js CDN
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Google Fonts
+                "font-src 'self' data: https://fonts.gstatic.com https://r2cdn.perplexity.ai",  # Google Fonts + Perplexity
+                "img-src 'self' data: https:",
+                "connect-src 'self'",
+                "frame-ancestors 'none'",
+                "base-uri 'self'",
+                "form-action 'self'",
+            ]
+        else:
+            # CSP для фронтенда - более строгие правила
+            csp_directives = [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval'",  # Next.js требует unsafe-eval
+                "style-src 'self' 'unsafe-inline'",  # Tailwind inline styles
+                "img-src 'self' data: https:",
+                "font-src 'self' data:",
+                "connect-src 'self'",
+                "frame-ancestors 'none'",
+                "base-uri 'self'",
+                "form-action 'self'",
+            ]
+
         response['Content-Security-Policy'] = '; '.join(csp_directives)
 
         # X-Frame-Options: запрет встраивания в iframe
