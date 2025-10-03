@@ -99,3 +99,50 @@ def help_view(request):
     return render(request, 'admin/help.html', {
         'title': 'Помощь',
     })
+
+
+@staff_member_required
+def reaggregate_events_view(request):
+    """
+    Ручная переагрегация событий за последние N дней
+    """
+    from .models import AdminActionLog
+    
+    if request.method == 'POST':
+        days = int(request.POST.get('days', 7))
+        
+        try:
+            from .tasks import aggregate_events_hourly
+            
+            # Запускаем задачу
+            task = aggregate_events_hourly.delay()
+            task_id = task.id if hasattr(task, 'id') else 'N/A'
+            
+            # Логируем действие
+            AdminActionLog.objects.create(
+                user=request.user,
+                action='reaggregate_events',
+                params={'days': days},
+                task_id=task_id
+            )
+            
+            messages.success(
+                request, 
+                f'Запущена переагрегация событий за последние {days} дней. Task ID: {task_id}'
+            )
+        except Exception as e:
+            logger.error(f'Reaggregate error: {str(e)}', exc_info=True)
+            messages.error(
+                request, 
+                f'Ошибка при запуске переагрегации: {str(e)}'
+            )
+        
+        return redirect('admin_stats_dashboard')
+    
+    # GET - показываем форму
+    context = {
+        'title': 'Переагрегация событий',
+        'site_header': 'BoltPromo - Переагрегация',
+        'days_options': [7, 14, 30],
+    }
+    return render(request, 'admin/reaggregate_form.html', context)

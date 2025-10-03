@@ -17,6 +17,7 @@ urlpatterns = [
     path('admin/toggle-maintenance/', admin_views.toggle_maintenance_view, name='admin_toggle_maintenance'),
     path('admin/regenerate-sitemap/', admin_views.regenerate_sitemap_view, name='admin_regenerate_sitemap'),
     path('admin/core/stats/', admin_views.stats_dashboard_view, name='admin_stats_dashboard'),
+    path('admin/core/stats/reaggregate/', admin_views.reaggregate_events_view, name='admin_reaggregate'),
     path('admin/core/help/', admin_views.help_view, name='admin_help'),
 
     # Import/Export URLs

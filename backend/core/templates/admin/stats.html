@@ -11,23 +11,33 @@
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-        gap: 20px;
+        grid-template-columns: 1fr;
+        gap: 24px;
         margin-top: 20px;
     }
 
+    @media (min-width: 1024px) {
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
     .chart-card {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        background: #252932;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        border: 1px solid #3f4451;
     }
 
     .chart-card h3 {
         margin-top: 0;
-        color: #417690;
+        color: #F3F4F6;
         font-size: 18px;
-        margin-bottom: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #3B82F6;
     }
 
     .chart-wrapper {
@@ -37,29 +47,116 @@
 
     .loading {
         text-align: center;
-        color: #999;
+        color: #9CA3AF;
         padding: 40px;
     }
 
     .range-selector {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        padding: 16px;
+        background: #252932;
+        border-radius: 10px;
+        border: 2px solid #3f4451;
+    }
+
+    .range-selector label {
+        color: #E5E7EB;
+        font-weight: 600;
+        margin-right: 12px;
     }
 
     .range-selector select {
-        padding: 8px 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        padding: 10px 16px;
+        border: 2px solid #3f4451;
+        border-radius: 8px;
         font-size: 14px;
+        background-color: #2d3139;
+        color: #F3F4F6;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .range-selector select:focus {
+        border-color: #3B82F6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        color: #FCA5A5;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin: 12px 0;
+        border-left: 4px solid #EF4444;
+    }
+
+    .empty-message {
+        text-align: center;
+        color: #9CA3AF;
+        padding: 60px 20px;
+        background: #252932;
+        border-radius: 12px;
+        border: 2px dashed #3f4451;
+    }
+
+    .empty-message .icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+    }
+
+    .info-box {
+        background: rgba(59, 130, 246, 0.1);
+        color: #93C5FD;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        border-left: 4px solid #3B82F6;
+    }
+
+    .info-box strong {
+        color: #60A5FA;
+    }
+
+    /* Кастомизация заголовка страницы */
+    .stats-header {
+        margin-bottom: 32px;
+    }
+
+    .stats-header h1 {
+        color: #F3F4F6;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .stats-header p {
+        color: #9CA3AF;
+        font-size: 16px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="stats-container">
-    <h1>📊 Статистика BoltPromo</h1>
+    <div class="stats-header">
+        <h1>📊 Статистика BoltPromo</h1>
+        <p>Аналитика событий и взаимодействий пользователей</p>
+    </div>
+
+    <div class="info-box">
+        <strong>ℹ️ Информация:</strong> Статистика обновляется в реальном времени на основе событий пользователей.
+        Выберите период для отображения данных. Если графики не загружаются, проверьте работу API endpoints.
+        <a href="{% url 'admin_reaggregate' %}" style="margin-left: 20px; padding: 6px 12px; background: #48bb78; color: white; text-decoration: none; border-radius: 4px; font-size: 13px;">
+            <i class="fas fa-sync-alt"></i> Переагрегировать события
+        </a>
+    </div>
+
+    <div id="global-error" class="error-message" style="display: none;"></div>
 
     <div class="range-selector">
-        <label for="range">Период:</label>
+        <label for="range">Период отображения:</label>
         <select id="range" onchange="loadAllCharts()">
             <option value="7d" selected>Последние 7 дней</option>
             <option value="14d">Последние 14 дней</option>
@@ -69,9 +166,13 @@
 
     <div class="stats-grid">
         <div class="chart-card">
-            <h3>🔥 Топ-10 офферов по кликам</h3>
+            <h3>🔥 Топ-10 промокодов по кликам</h3>
             <div class="chart-wrapper">
                 <canvas id="topPromosChart"></canvas>
+                <div id="topPromosEmpty" class="empty-message" style="display: none;">
+                    <div class="icon">📊</div>
+                    <p>Нет данных за выбранный период</p>
+                </div>
             </div>
         </div>
 
@@ -79,20 +180,32 @@
             <h3>🏪 Топ-10 магазинов</h3>
             <div class="chart-wrapper">
                 <canvas id="topStoresChart"></canvas>
+                <div id="topStoresEmpty" class="empty-message" style="display: none;">
+                    <div class="icon">🏪</div>
+                    <p>Нет данных за выбранный период</p>
+                </div>
             </div>
         </div>
 
         <div class="chart-card">
-            <h3>📦 Распределение по типам</h3>
+            <h3>📦 Распределение по типам офферов</h3>
             <div class="chart-wrapper">
                 <canvas id="typesShareChart"></canvas>
+                <div id="typesShareEmpty" class="empty-message" style="display: none;">
+                    <div class="icon">📦</div>
+                    <p>Нет данных за выбранный период</p>
+                </div>
             </div>
         </div>
 
         <div class="chart-card">
-            <h3>🎯 CTR витрин (показы/клики)</h3>
+            <h3>🎯 CTR витрин (просмотры/клики)</h3>
             <div class="chart-wrapper">
                 <canvas id="showcasesCTRChart"></canvas>
+                <div id="showcasesCTREmpty" class="empty-message" style="display: none;">
+                    <div class="icon">🎯</div>
+                    <p>Нет данных за выбранный период</p>
+                </div>
             </div>
         </div>
     </div>
@@ -108,20 +221,54 @@
 <script>
 let charts = {};
 
+function showError(message) {
+    const errorDiv = document.getElementById('global-error');
+    errorDiv.textContent = '❌ Ошибка: ' + message;
+    errorDiv.style.display = 'block';
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+    }, 10000);
+}
+
+function hideError() {
+    const errorDiv = document.getElementById('global-error');
+    errorDiv.style.display = 'none';
+}
+
 async function loadAllCharts() {
     const range = document.getElementById('range').value;
-    await loadTopPromos(range);
-    await loadTopStores(range);
-    await loadTypesShare(range);
-    await loadShowcasesCTR(range);
+    hideError();
+    await Promise.all([
+        loadTopPromos(range),
+        loadTopStores(range),
+        loadTypesShare(range),
+        loadShowcasesCTR(range)
+    ]);
 }
 
 async function loadTopPromos(range) {
+    const canvasId = 'topPromosChart';
+    const emptyId = 'topPromosEmpty';
+
     try {
         const response = await fetch(`/api/v1/stats/top-promos/?range=${range}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
 
-        const ctx = document.getElementById('topPromosChart');
+        if (!data || data.length === 0) {
+            document.getElementById(canvasId).style.display = 'none';
+            document.getElementById(emptyId).style.display = 'flex';
+            return;
+        }
+
+        document.getElementById(canvasId).style.display = 'block';
+        document.getElementById(emptyId).style.display = 'none';
+
+        const ctx = document.getElementById(canvasId);
 
         if (charts.topPromos) {
             charts.topPromos.destroy();
@@ -134,32 +281,63 @@ async function loadTopPromos(range) {
                 datasets: [{
                     label: 'Клики',
                     data: data.map(item => item.clicks),
-                    backgroundColor: 'rgba(102, 126, 234, 0.6)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#E5E7EB' }
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
                     }
                 }
             }
         });
     } catch (error) {
         console.error('Error loading top promos:', error);
+        showError('Не удалось загрузить топ промокодов. Проверьте API endpoint /api/v1/stats/top-promos/');
+        document.getElementById(canvasId).style.display = 'none';
+        document.getElementById(emptyId).style.display = 'flex';
     }
 }
 
 async function loadTopStores(range) {
+    const canvasId = 'topStoresChart';
+    const emptyId = 'topStoresEmpty';
+
     try {
         const response = await fetch(`/api/v1/stats/top-stores/?range=${range}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
         const data = await response.json();
 
-        const ctx = document.getElementById('topStoresChart');
+        if (!data || data.length === 0) {
+            document.getElementById(canvasId).style.display = 'none';
+            document.getElementById(emptyId).style.display = 'flex';
+            return;
+        }
+
+        document.getElementById(canvasId).style.display = 'block';
+        document.getElementById(emptyId).style.display = 'none';
+
+        const ctx = document.getElementById(canvasId);
 
         if (charts.topStores) {
             charts.topStores.destroy();
@@ -172,33 +350,63 @@ async function loadTopStores(range) {
                 datasets: [{
                     label: 'Клики',
                     data: data.map(item => item.clicks),
-                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        labels: { color: '#E5E7EB' }
+                    }
+                },
                 scales: {
                     x: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    },
+                    y: {
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
                     }
                 }
             }
         });
     } catch (error) {
         console.error('Error loading top stores:', error);
+        document.getElementById(canvasId).style.display = 'none';
+        document.getElementById(emptyId).style.display = 'flex';
     }
 }
 
 async function loadTypesShare(range) {
+    const canvasId = 'typesShareChart';
+    const emptyId = 'typesShareEmpty';
+
     try {
         const response = await fetch(`/api/v1/stats/types-share/?range=${range}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
         const data = await response.json();
 
-        const ctx = document.getElementById('typesShareChart');
+        if (!data || data.length === 0) {
+            document.getElementById(canvasId).style.display = 'none';
+            document.getElementById(emptyId).style.display = 'flex';
+            return;
+        }
+
+        document.getElementById(canvasId).style.display = 'block';
+        document.getElementById(emptyId).style.display = 'none';
+
+        const ctx = document.getElementById(canvasId);
 
         if (charts.typesShare) {
             charts.typesShare.destroy();
@@ -218,30 +426,56 @@ async function loadTypesShare(range) {
                 datasets: [{
                     data: data.map(item => item.count),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(153, 102, 255, 0.6)'
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(16, 185, 129, 0.7)',
+                        'rgba(245, 158, 11, 0.7)',
+                        'rgba(139, 92, 246, 0.7)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2,
+                    borderColor: '#252932'
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#E5E7EB', padding: 15 }
+                    }
+                }
             }
         });
     } catch (error) {
         console.error('Error loading types share:', error);
+        document.getElementById(canvasId).style.display = 'none';
+        document.getElementById(emptyId).style.display = 'flex';
     }
 }
 
 async function loadShowcasesCTR(range) {
+    const canvasId = 'showcasesCTRChart';
+    const emptyId = 'showcasesCTREmpty';
+
     try {
         const response = await fetch(`/api/v1/stats/showcases-ctr/?range=${range}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
         const data = await response.json();
 
-        const ctx = document.getElementById('showcasesCTRChart');
+        if (!data || data.length === 0) {
+            document.getElementById(canvasId).style.display = 'none';
+            document.getElementById(emptyId).style.display = 'flex';
+            return;
+        }
+
+        document.getElementById(canvasId).style.display = 'block';
+        document.getElementById(emptyId).style.display = 'none';
+
+        const ctx = document.getElementById(canvasId);
 
         if (charts.showcasesCTR) {
             charts.showcasesCTR.destroy();
@@ -255,31 +489,44 @@ async function loadShowcasesCTR(range) {
                     {
                         label: 'Просмотры',
                         data: data.map(item => item.views),
-                        backgroundColor: 'rgba(201, 203, 207, 0.6)',
-                        borderColor: 'rgba(201, 203, 207, 1)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(156, 163, 175, 0.6)',
+                        borderColor: 'rgba(156, 163, 175, 1)',
+                        borderWidth: 2
                     },
                     {
                         label: 'Клики',
                         data: data.map(item => item.clicks),
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 2
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#E5E7EB' }
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
                     }
                 }
             }
         });
     } catch (error) {
         console.error('Error loading showcases CTR:', error);
+        document.getElementById(canvasId).style.display = 'none';
+        document.getElementById(emptyId).style.display = 'flex';
     }
 }
 

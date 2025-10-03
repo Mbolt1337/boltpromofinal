@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | BoltPromo Admin{% endblock %}
+
+{% block content %}
+<div class="content-wrapper" style="padding: 20px;">
+    <h1 style="margin-bottom: 20px;">
+        <i class="fas fa-sync-alt"></i> Переагрегация событий
+    </h1>
+
+    <div style="background: #1e2a3a; border-radius: 8px; padding: 24px; max-width: 600px;">
+        <p style="margin-bottom: 20px; color: #cbd5e0;">
+            Эта функция запустит задачу агрегации событий (Events) в дневную статистику (DailyAgg).
+            Обычно это происходит автоматически каждый час через Celery Beat.
+        </p>
+
+        <form method="post" style="margin-top: 24px;">
+            {% csrf_token %}
+
+            <div style="margin-bottom: 20px;">
+                <label for="days" style="display: block; margin-bottom: 8px; font-weight: 600; color: #e2e8f0;">
+                    Период для агрегации:
+                </label>
+                <select name="days" id="days"
+                        style="width: 100%; padding: 12px; background: #2d3748; border: 1px solid #4a5568; border-radius: 6px; color: white; font-size: 16px;">
+                    {% for days_opt in days_options %}
+                        <option value="{{ days_opt }}">Последние {{ days_opt }} дней</option>
+                    {% endfor %}
+                </select>
+                <p style="margin-top: 8px; font-size: 13px; color: #a0aec0;">
+                    Задача агрегирует события за выбранный период. Это безопасная операция.
+                </p>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit"
+                        style="padding: 12px 24px; background: #48bb78; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                        onmouseover="this.style.background='#38a169'"
+                        onmouseout="this.style.background='#48bb78'"
+                        onclick="return confirm('Запустить переагрегацию событий?')">
+                    <i class="fas fa-play"></i> Запустить
+                </button>
+
+                <a href="{% url 'admin_stats_dashboard' %}"
+                   style="padding: 12px 24px; background: #4a5568; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.2s; display: inline-block;"
+                   onmouseover="this.style.background='#718096'"
+                   onmouseout="this.style.background='#4a5568'">
+                    <i class="fas fa-arrow-left"></i> Отмена
+                </a>
+            </div>
+        </form>
+
+        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #4a5568;">
+            <h3 style="margin-bottom: 12px; color: #e2e8f0;">
+                <i class="fas fa-info-circle"></i> Информация
+            </h3>
+            <ul style="margin: 0; padding-left: 24px; color: #cbd5e0; line-height: 1.8;">
+                <li>Задача выполняется асинхронно через Celery</li>
+                <li>Результаты можно посмотреть в <a href="/admin/core/dailyagg/" style="color: #63b3ed;">DailyAgg</a></li>
+                <li>Действие логируется в <a href="/admin/core/adminactionlog/" style="color: #63b3ed;">AdminActionLog</a></li>
+                <li>При ошибке задача не повлияет на работу сайта</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+button:hover, a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+</style>
+{% endblock %}
