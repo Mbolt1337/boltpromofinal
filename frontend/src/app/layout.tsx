@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import DynamicMetaTags from '@/components/DynamicMetaTags'
 import { SITE_CONFIG } from '@/lib/seo'
 
 // B2: Оптимизированные шрифты для лучшей производительности
@@ -139,24 +140,27 @@ export default function RootLayout({
       <head>
         {/* B2: Критически важный meta description */}
         <meta name="description" content="Лучшие промокоды от 100+ магазинов России. 500+ актуальных предложений. Экономьте на покупках техники, одежды, красоты." />
-        
-        <meta name="theme-color" content="#0a0a0a" />
+
+        {/* Dynamic meta tags from SiteAssets API */}
+        {/* @ts-expect-error Async Server Component */}
+        <DynamicMetaTags />
+
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="BoltPromo" />
-        
+
         <link rel="alternate" hrefLang="ru" href={SITE_CONFIG.url} />
         <link rel="alternate" hrefLang="x-default" href={SITE_CONFIG.url} />
-        
+
         {/* B2: Условная DNS prefetch только для production */}
         {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_API_URL && (
           <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_API_URL} />
         )}
-        
+
         {/* B2: Security headers для улучшения Lighthouse */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="Referrer-Policy" content="origin-when-cross-origin" />
-        
+
         {/* B2: Resource hints для производительности */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
