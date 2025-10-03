@@ -93,27 +93,33 @@ def stats_top_promos(request):
     from django.core.cache import cache
     from .models import DailyAgg
 
-    cache_key = f"stats:top_promos:{request.GET.get('range', '7d')}"
-    cached = cache.get(cache_key)
-    if cached:
-        return Response(cached)
+    try:
+        cache_key = f"stats:top_promos:{request.GET.get('range', '7d')}"
+        cached = cache.get(cache_key)
+        if cached:
+            return Response(cached)
 
-    days = int(request.GET.get('range', '7d').replace('d', ''))
-    start_date = date.today() - timedelta(days=days)
+        days = int(request.GET.get('range', '7d').replace('d', ''))
+        start_date = date.today() - timedelta(days=days)
 
-    # Топ-10 промокодов по кликам
-    top = DailyAgg.objects.filter(
-        date__gte=start_date,
-        event_type__in=['promo_copy', 'promo_open', 'finance_open', 'deal_open'],
-        promo__isnull=False
-    ).values('promo_id', 'promo__title').annotate(
-        total_clicks=Count('id')
-    ).order_by('-total_clicks')[:10]
+        # Топ-10 промокодов по кликам
+        from django.db.models import Sum
 
-    data = [{'promo_id': item['promo_id'], 'title': item['promo__title'], 'clicks': item['total_clicks']} for item in top]
+        top = DailyAgg.objects.filter(
+            date__gte=start_date,
+            event_type__in=['promo_copy', 'promo_open', 'finance_open', 'deal_open'],
+            promo__isnull=False
+        ).values('promo_id', 'promo__title').annotate(
+            total_clicks=Sum('count')
+        ).order_by('-total_clicks')[:10]
 
-    cache.set(cache_key, data, timeout=300)  # 5 min
-    return Response(data)
+        data = [{'promo_id': item['promo_id'], 'title': item['promo__title'], 'clicks': item['total_clicks']} for item in top]
+
+        cache.set(cache_key, data, timeout=300)  # 5 min
+        return Response(data)
+    except Exception as e:
+        logger.error(f'stats_top_promos error: {str(e)}', exc_info=True)
+        return Response([], status=200)  # Empty array, not 500
 
 
 @api_view(['GET'])
@@ -122,25 +128,31 @@ def stats_top_stores(request):
     from django.core.cache import cache
     from .models import DailyAgg
 
-    cache_key = f"stats:top_stores:{request.GET.get('range', '7d')}"
-    cached = cache.get(cache_key)
-    if cached:
-        return Response(cached)
+    try:
+        cache_key = f"stats:top_stores:{request.GET.get('range', '7d')}"
+        cached = cache.get(cache_key)
+        if cached:
+            return Response(cached)
 
-    days = int(request.GET.get('range', '7d').replace('d', ''))
-    start_date = date.today() - timedelta(days=days)
+        days = int(request.GET.get('range', '7d').replace('d', ''))
+        start_date = date.today() - timedelta(days=days)
 
-    top = DailyAgg.objects.filter(
-        date__gte=start_date,
-        store__isnull=False
-    ).values('store_id', 'store__name').annotate(
-        total_clicks=Count('id')
-    ).order_by('-total_clicks')[:10]
+        from django.db.models import Sum
 
-    data = [{'store_id': item['store_id'], 'name': item['store__name'], 'clicks': item['total_clicks']} for item in top]
+        top = DailyAgg.objects.filter(
+            date__gte=start_date,
+            store__isnull=False
+        ).values('store_id', 'store__name').annotate(
+            total_clicks=Sum('count')
+        ).order_by('-total_clicks')[:10]
 
-    cache.set(cache_key, data, timeout=300)
-    return Response(data)
+        data = [{'store_id': item['store_id'], 'name': item['store__name'], 'clicks': item['total_clicks']} for item in top]
+
+        cache.set(cache_key, data, timeout=300)
+        return Response(data)
+    except Exception as e:
+        logger.error(f'stats_top_stores error: {str(e)}', exc_info=True)
+        return Response([], status=200)
 
 
 @api_view(['GET'])
@@ -149,26 +161,32 @@ def stats_types_share(request):
     from django.core.cache import cache
     from .models import DailyAgg
 
-    cache_key = f"stats:types_share:{request.GET.get('range', '7d')}"
-    cached = cache.get(cache_key)
-    if cached:
-        return Response(cached)
+    try:
+        cache_key = f"stats:types_share:{request.GET.get('range', '7d')}"
+        cached = cache.get(cache_key)
+        if cached:
+            return Response(cached)
 
-    days = int(request.GET.get('range', '7d').replace('d', ''))
-    start_date = date.today() - timedelta(days=days)
+        days = int(request.GET.get('range', '7d').replace('d', ''))
+        start_date = date.today() - timedelta(days=days)
 
-    # Группируем по offer_type промокодов
-    types = DailyAgg.objects.filter(
-        date__gte=start_date,
-        promo__isnull=False
-    ).values('promo__offer_type').annotate(
-        total=Count('id')
-    ).order_by('-total')
+        # Группируем по offer_type промокодов
+        from django.db.models import Sum
 
-    data = [{'type': item['promo__offer_type'], 'count': item['total']} for item in types]
+        types = DailyAgg.objects.filter(
+            date__gte=start_date,
+            promo__isnull=False
+        ).values('promo__offer_type').annotate(
+            total=Sum('count')
+        ).order_by('-total')
 
-    cache.set(cache_key, data, timeout=300)
-    return Response(data)
+        data = [{'type': item['promo__offer_type'], 'count': item['total']} for item in types]
+
+        cache.set(cache_key, data, timeout=300)
+        return Response(data)
+    except Exception as e:
+        logger.error(f'stats_types_share error: {str(e)}', exc_info=True)
+        return Response([], status=200)
 
 
 @api_view(['GET'])
@@ -177,50 +195,56 @@ def stats_showcases_ctr(request):
     from django.core.cache import cache
     from .models import DailyAgg
 
-    cache_key = f"stats:showcases_ctr:{request.GET.get('range', '7d')}"
-    cached = cache.get(cache_key)
-    if cached:
-        return Response(cached)
+    try:
+        cache_key = f"stats:showcases_ctr:{request.GET.get('range', '7d')}"
+        cached = cache.get(cache_key)
+        if cached:
+            return Response(cached)
 
-    days = int(request.GET.get('range', '7d').replace('d', ''))
-    start_date = date.today() - timedelta(days=days)
+        days = int(request.GET.get('range', '7d').replace('d', ''))
+        start_date = date.today() - timedelta(days=days)
 
-    # Витрины с просмотрами и кликами
-    views = DailyAgg.objects.filter(
-        date__gte=start_date,
-        event_type='showcase_view',
-        showcase__isnull=False
-    ).values('showcase_id', 'showcase__title').annotate(
-        views_count=Count('id')
-    )
+        # Витрины с просмотрами и кликами
+        from django.db.models import Sum
 
-    clicks = DailyAgg.objects.filter(
-        date__gte=start_date,
-        event_type='showcase_open',
-        showcase__isnull=False
-    ).values('showcase_id').annotate(
-        clicks_count=Count('id')
-    )
+        views = DailyAgg.objects.filter(
+            date__gte=start_date,
+            event_type='showcase_view',
+            showcase__isnull=False
+        ).values('showcase_id', 'showcase__title').annotate(
+            views_count=Sum('count')
+        )
 
-    # Объединяем
-    clicks_dict = {item['showcase_id']: item['clicks_count'] for item in clicks}
+        clicks = DailyAgg.objects.filter(
+            date__gte=start_date,
+            event_type='showcase_open',
+            showcase__isnull=False
+        ).values('showcase_id').annotate(
+            clicks_count=Sum('count')
+        )
 
-    data = []
-    for view_item in views:
-        showcase_id = view_item['showcase_id']
-        views_count = view_item['views_count']
-        clicks_count = clicks_dict.get(showcase_id, 0)
-        ctr = (clicks_count / views_count * 100) if views_count > 0 else 0
+        # Объединяем
+        clicks_dict = {item['showcase_id']: item['clicks_count'] for item in clicks}
 
-        data.append({
-            'showcase_id': showcase_id,
-            'title': view_item['showcase__title'],
-            'views': views_count,
-            'clicks': clicks_count,
-            'ctr': round(ctr, 2)
-        })
+        data = []
+        for view_item in views:
+            showcase_id = view_item['showcase_id']
+            views_count = view_item['views_count']
+            clicks_count = clicks_dict.get(showcase_id, 0)
+            ctr = (clicks_count / views_count * 100) if views_count > 0 else 0
 
-    data = sorted(data, key=lambda x: x['ctr'], reverse=True)[:10]
+            data.append({
+                'showcase_id': showcase_id,
+                'title': view_item['showcase__title'],
+                'views': views_count,
+                'clicks': clicks_count,
+                'ctr': round(ctr, 2)
+            })
 
-    cache.set(cache_key, data, timeout=300)
-    return Response(data)
+        data = sorted(data, key=lambda x: x['ctr'], reverse=True)[:10]
+
+        cache.set(cache_key, data, timeout=300)
+        return Response(data)
+    except Exception as e:
+        logger.error(f'stats_showcases_ctr error: {str(e)}', exc_info=True)
+        return Response([], status=200)
