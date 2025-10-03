@@ -4,12 +4,13 @@ Analytics и Tracking views
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse, HttpResponse
+from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count
 from datetime import date, timedelta
 from ipware import get_client_ip
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 import json
 import logging
 
@@ -45,42 +46,44 @@ def track_events(request):
 
         created_count = 0
 
-        for event_data in events_data:
-            event_type = event_data.get('event_type')
-            if not event_type:
-                continue
+        # Атомарная транзакция для всех событий
+        with transaction.atomic():
+            for event_data in events_data:
+                event_type = event_data.get('event_type')
+                if not event_type:
+                    continue
 
-            promo_id = event_data.get('promo_id')
-            store_id = event_data.get('store_id')
-            showcase_id = event_data.get('showcase_id')
-            session_id = event_data.get('session_id', '')
+                promo_id = event_data.get('promo_id')
+                store_id = event_data.get('store_id')
+                showcase_id = event_data.get('showcase_id')
+                session_id = event_data.get('session_id', '')
 
-            # Redis дедупликация (30 минут)
-            dedup_key = f"click:{event_type}:{promo_id}:{session_id}"
-            is_unique = False
+                # Redis дедупликация (30 минут)
+                dedup_key = f"click:{event_type}:{promo_id}:{session_id}"
+                is_unique = False
 
-            if session_id:
-                if not cache.get(dedup_key):
-                    cache.set(dedup_key, '1', timeout=1800)  # 30 min
-                    is_unique = True
+                if session_id:
+                    if not cache.get(dedup_key):
+                        cache.set(dedup_key, '1', timeout=1800)  # 30 min
+                        is_unique = True
 
-            # Создаём событие
-            Event.objects.create(
-                event_type=event_type,
-                promo_id=promo_id,
-                store_id=store_id,
-                showcase_id=showcase_id,
-                session_id=session_id,
-                client_ip=client_ip,
-                user_agent=user_agent,
-                ref=event_data.get('ref', ''),
-                utm_source=event_data.get('utm_source', ''),
-                utm_medium=event_data.get('utm_medium', ''),
-                utm_campaign=event_data.get('utm_campaign', ''),
-                is_unique=is_unique
-            )
+                # Создаём событие
+                Event.objects.create(
+                    event_type=event_type,
+                    promo_id=promo_id,
+                    store_id=store_id,
+                    showcase_id=showcase_id,
+                    session_id=session_id,
+                    client_ip=client_ip,
+                    user_agent=user_agent,
+                    ref=event_data.get('ref', ''),
+                    utm_source=event_data.get('utm_source', ''),
+                    utm_medium=event_data.get('utm_medium', ''),
+                    utm_campaign=event_data.get('utm_campaign', ''),
+                    is_unique=is_unique
+                )
 
-            created_count += 1
+                created_count += 1
 
         return HttpResponse(status=204)
 
