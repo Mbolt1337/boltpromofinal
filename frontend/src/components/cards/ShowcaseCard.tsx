@@ -5,6 +5,7 @@ import { Showcase } from '@/lib/api';
 import { Tag } from 'lucide-react';
 import BaseCard from '@/components/ui/BaseCard';
 import CardImage from '@/components/ui/CardImage';
+import { trackShowcaseOpen } from '@/lib/analytics';
 
 interface ShowcaseCardProps {
   showcase: Showcase;
@@ -15,8 +16,16 @@ export default function ShowcaseCard({ showcase }: ShowcaseCardProps) {
     ? showcase.banner
     : `${process.env.NEXT_PUBLIC_API_URL}${showcase.banner}`;
 
+  const handleClick = () => {
+    trackShowcaseOpen(showcase.id);
+  };
+
   return (
-    <Link href={`/showcases/${showcase.slug}`} className="group block">
+    <Link
+      href={`/showcases/${showcase.slug}`}
+      className="group block"
+      onClick={handleClick}
+    >
       <BaseCard className="card-pad overflow-hidden">
         {/* Banner Image */}
         <div className="relative">

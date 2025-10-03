@@ -10,26 +10,6 @@ import { CategoryGridSkeleton } from '@/components/CategoryGrid'
 import ShowcaseSection from '@/components/ShowcaseSection'
 import { createOgImageObject } from '@/lib/og-utils'
 
-// Генерация метаданных с fallback на default OG image из SiteAssets
-export async function generateMetadata(): Promise<Metadata> {
-  const ogImage = await createOgImageObject()
-
-  return {
-    title: 'BoltPromo - Лучшие промокоды и скидки от популярных интернет-магазинов России',
-    description: 'Лучшие промокоды от 100+ магазинов России. 500+ актуальных предложений. Экономьте на покупках техники, одежды, красоты.',
-    openGraph: {
-      title: 'BoltPromo - Промокоды и скидки',
-      description: 'Лучшие промокоды от 100+ популярных интернет-магазинов России. 500+ актуальных предложений.',
-      images: ogImage ? [ogImage] : undefined,
-    },
-    twitter: {
-      title: 'BoltPromo - Промокоды и скидки',
-      description: 'Лучшие промокоды от 100+ популярных интернет-магазинов России.',
-      images: ogImage ? [ogImage.url] : undefined,
-    }
-  }
-}
-
 // B2: Ленивая загрузка неприоритетных компонентов для улучшения LCP
 const PromoList = lazy(() => import('@/components/PromoList'))
 const StoreGrid = lazy(() => import('@/components/StoreGrid'))
@@ -213,7 +193,10 @@ export default function HomePage() {
 // SEO метаданные для главной страницы
 export async function generateMetadata() {
   try {
-    const globalStats = await getGlobalStats()
+    const [globalStats, ogImage] = await Promise.all([
+      getGlobalStats(),
+      createOgImageObject()
+    ])
 
     const categoriesCount = globalStats.active_categories || 50
     const storesCount = globalStats.active_stores || 100
@@ -246,7 +229,7 @@ export async function generateMetadata() {
         description: `${promocodesCount}+ актуальных промокодов от ${storesCount}+ проверенных магазинов. Экономьте на каждой покупке!`,
         url: SITE_CONFIG.url,
         siteName: SITE_CONFIG.name,
-        images: [
+        images: ogImage ? [ogImage] : [
           {
             url: `${SITE_CONFIG.url}/og-home.jpg`,
             width: 1200,
@@ -261,7 +244,7 @@ export async function generateMetadata() {
         card: 'summary_large_image',
         title: 'BoltPromo - Промокоды от 100+ магазинов России',
         description: `Экономьте на покупках с ${promocodesCount}+ актуальными промокодами от проверенных магазинов!`,
-        images: [`${SITE_CONFIG.url}/og-home.jpg`],
+        images: ogImage ? [ogImage.url] : [`${SITE_CONFIG.url}/og-home.jpg`],
         creator: '@boltpromo'
       },
       alternates: {
@@ -281,7 +264,7 @@ export async function generateMetadata() {
     }
   } catch (error) {
     console.error('Ошибка при генерации метаданных главной страницы:', error)
-    
+
     return {
       title: SITE_CONFIG.title,
       description: SITE_CONFIG.description,

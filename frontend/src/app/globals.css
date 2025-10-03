@@ -8,7 +8,11 @@
   * {
     box-sizing: border-box;
   }
-  
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
     background: linear-gradient(135deg, #0a0a0a 0%, #111111 25%, #1a1a1a 75%, #222222 100%);
@@ -114,6 +118,25 @@
     border-color: rgba(255, 255, 255, 0.2);
   }
   
+  /* Цветные кнопки с контрастным текстом */
+  .btn-success,
+  .bg-green-500,
+  .bg-green-600,
+  button.bg-green-500,
+  button.bg-green-600 {
+    @apply text-white font-bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-info,
+  .bg-blue-500,
+  .bg-blue-600,
+  button.bg-blue-500,
+  button.bg-blue-600 {
+    @apply text-white font-bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
   .btn-outline {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(12px);
@@ -669,5 +692,15 @@
 
   .animate-slide-up {
     animation: slide-up 0.3s ease-out;
+  }
+
+  /* Скрыть скроллбар */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

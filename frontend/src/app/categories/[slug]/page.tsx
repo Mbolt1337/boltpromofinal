@@ -125,12 +125,12 @@ async function CategoryPromoList({
   try {
     // ИСПРАВЛЕНО: Передаем search параметр если он есть
     const response = await getCategoryPromocodes(slug, {
-      ordering: sort === 'new' ? '-created_at' : 
+      ordering: sort === 'new' ? '-created_at' :
                 sort === 'popular' ? '-views_count' :
                 sort === 'expiring' ? 'expires_at' :
                 sort === 'hot' ? '-is_hot' : '-created_at',
       page: page,
-      limit: 12, // ✅ Соответствует backend PAGE_SIZE
+      page_size: 12, // ✅ Соответствует backend PAGE_SIZE
       search: search || undefined
     })
 

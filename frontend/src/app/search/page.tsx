@@ -91,10 +91,10 @@ async function SearchContent({ searchParams }: { searchParams: any }) {
   }
 
   // Выполняем поиск
-  const searchResults = await searchAll(query, { 
-    type: type as any, 
-    page, 
-    limit: 20 
+  const searchResults = await searchAll(query, {
+    type: type as any,
+    page,
+    page_size: 20
   })
 
   return (

@@ -117,10 +117,26 @@ const config: Config = {
     'duration-200',
     'duration-300',
     'ease-out',
+    // Карусель
+    'snap-x',
+    'snap-mandatory',
+    'snap-start',
+    'scrollbar-hide',
+    'overflow-x-auto',
+    'shrink-0',
+    'w-[320px]',
+    'w-[340px]',
+    'w-[360px]',
+    'xs:w-[340px]',
+    'xs:w-[360px]',
+    'sm:w-[360px]',
   ],
   
   theme: {
     extend: {
+      screens: {
+        'xs': '480px',
+      },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         display: ['var(--font-inter)', 'system-ui', 'sans-serif'],

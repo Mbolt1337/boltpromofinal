@@ -1,6 +1,13 @@
 {
   "permissions": {
     "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(python manage.py makemigrations:*)",
+      "Bash(python manage.py:*)",
+      "Bash(pip install:*)",
+      "Bash(cat:*)",
+      "Bash(del manifest.ts)",
       "Bash(npm run build:*)"
     ],
     "deny": [],

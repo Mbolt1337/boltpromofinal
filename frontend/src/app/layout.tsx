@@ -142,7 +142,6 @@ export default function RootLayout({
         <meta name="description" content="Лучшие промокоды от 100+ магазинов России. 500+ актуальных предложений. Экономьте на покупках техники, одежды, красоты." />
 
         {/* Dynamic meta tags from SiteAssets API */}
-        {/* @ts-expect-error Async Server Component */}
         <DynamicMetaTags />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />

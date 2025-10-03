@@ -32,22 +32,22 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='promocode',
-            options={'ordering': ['-is_recommended', '-is_hot', '-created_at'], 'verbose_name': 'РџСЂРѕРјРѕРєРѕРґ', 'verbose_name_plural': 'РџСЂРѕРјРѕРєРѕРґС‹'},
+            options={'ordering': ['-is_recommended', '-is_hot', '-created_at'], 'verbose_name': 'Промокод', 'verbose_name_plural': 'Промокоды'},
         ),
         migrations.AlterField(
             model_name='partner',
             name='order',
-            field=models.PositiveIntegerField(default=0, verbose_name='РџРѕСЂСЏРґРѕРє'),
+            field=models.PositiveIntegerField(default=0, verbose_name='Порядок'),
         ),
         migrations.AlterField(
             model_name='promocode',
             name='code',
-            field=models.CharField(blank=True, max_length=50, verbose_name='РџСЂРѕРјРѕРєРѕРґ'),
+            field=models.CharField(blank=True, max_length=50, verbose_name='Промокод'),
         ),
         migrations.AlterField(
             model_name='promocode',
             name='offer_type',
-            field=models.CharField(choices=[('coupon', 'РџСЂРѕРјРѕРєРѕРґ'), ('deal', 'РЎРєРёРґРєР°'), ('financial', 'Финансовая услуга'), ('cashback', 'Кэшбэк')], default='coupon', help_text='Промокод - копируется код, Скидка - прямая ссылка, Финансовая услуга - CTA с дисклеймером, Кэшбэк - бейдж и переход', max_length=20, verbose_name='Тип предложения'),
+            field=models.CharField(choices=[('coupon', 'Промокод'), ('deal', 'Скидка'), ('financial', 'Финансовая услуга'), ('cashback', 'Кэшбэк')], default='coupon', help_text='Промокод - копируется код, Скидка - прямая ссылка, Финансовая услуга - CTA с дисклеймером, Кэшбэк - бейдж и переход', max_length=20, verbose_name='Тип предложения'),
         ),
         migrations.AlterField(
             model_name='promocode',

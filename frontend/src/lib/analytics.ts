@@ -31,6 +31,11 @@ class Analytics {
    * Получить или создать session_id из localStorage
    */
   private getOrCreateSessionId(): string {
+    // Проверка для SSR - localStorage доступен только в браузере
+    if (typeof window === 'undefined') {
+      return `ssr_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    }
+
     const key = 'boltpromo_session_id';
     let sessionId = localStorage.getItem(key);
 
@@ -81,6 +86,7 @@ class Analytics {
    */
   async flush() {
     if (this.queue.length === 0) return;
+    if (typeof window === 'undefined') return; // SSR guard
 
     const events = [...this.queue];
     this.queue = [];

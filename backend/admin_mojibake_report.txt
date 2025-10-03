@@ -1,0 +1,56 @@
+Line 24:     """Р РµСЃСѓСЂСЃ РґР»СЏ РёРјРїРѕСЂС‚Р°/СЌРєСЃРїРѕСЂС‚Р° РєР°С‚РµРіРѕСЂРёР№"""
+Line 33:     """Р РµСЃСѓСЂСЃ РґР»СЏ РёРјРїРѕСЂС‚Р°/СЌРєСЃРїРѕСЂС‚Р° РјР°РіР°Р·РёРЅРѕРІ"""
+Line 42:     """Р РµСЃСѓСЂСЃ РґР»СЏ РёРјРїРѕСЂС‚Р°/СЌРєСЃРїРѕСЂС‚Р° РїСЂРѕРјРѕРєРѕРґРѕРІ"""
+Line 80:             ('active', 'РђРєС‚РёРІРЅС‹Рµ (РЅРµ РёСЃС‚РµРєР»Рё)'),
+Line 81:             ('expired', 'РСЃС‚РµРєС€РёРµ'),
+Line 82:             ('hot', 'Р“РѕСЂСЏС‡РёРµ'),
+Line 83:             ('recommended', 'Р РµРєРѕРјРµРЅРґСѓРµРјС‹Рµ'),
+Line 102:     """Р¤РёР»СЊС‚СЂ РїРѕ С‚РёРїСѓ РїСЂРµРґР»РѕР¶РµРЅРёСЏ"""
+Line 103:     title = 'С‚РёРї РїСЂРµРґР»РѕР¶РµРЅРёСЏ'
+Line 120:     """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ Р°РєС‚РёРІРЅС‹РјРё"""
+Line 122:     modeladmin.message_user(request, f'РђРєС‚РёРІРёСЂРѕРІР°РЅРѕ: {updated} Р·Р°РїРёСЃРµР№.')
+Line 123: make_active.short_description = "вњ… РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ РІС‹Р±СЂР°РЅРЅС‹Рµ"
+Line 127:     """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ РЅРµР°РєС‚РёРІРЅС‹РјРё"""
+Line 129:     modeladmin.message_user(request, f'Р”РµР°РєС‚РёРІРёСЂРѕРІР°РЅРѕ: {updated} Р·Р°РїРёСЃРµР№.')
+Line 130: make_inactive.short_description = "вќЊ Р”РµР°РєС‚РёРІРёСЂРѕРІР°С‚СЊ РІС‹Р±СЂР°РЅРЅС‹Рµ"
+Line 134:     """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ РіРѕСЂСЏС‡РёРјРё"""
+Line 136:     modeladmin.message_user(request, f'РћС‚РјРµС‡РµРЅРѕ РєР°Рє РіРѕСЂСЏС‡РёРµ: {updated} РїСЂРѕРјРѕРєРѕРґРѕРІ.')
+Line 137: make_hot.short_description = "рџ”Ґ РћС‚РјРµС‚РёС‚СЊ РєР°Рє РіРѕСЂСЏС‡РёРµ"
+Line 141:     """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: СЃРґРµР»Р°С‚СЊ СЂРµРєРѕРјРµРЅРґСѓРµРјС‹РјРё"""
+Line 143:     modeladmin.message_user(request, f'РћС‚РјРµС‡РµРЅРѕ РєР°Рє СЂРµРєРѕРјРµРЅРґСѓРµРјС‹Рµ: {updated} РїСЂРѕРјРѕРєРѕРґРѕРІ.')
+Line 144: make_recommended.short_description = "в­ђ РћС‚РјРµС‚РёС‚СЊ РєР°Рє СЂРµРєРѕРјРµРЅРґСѓРµРјС‹Рµ"
+Line 148:     """РњР°СЃСЃРѕРІРѕРµ РґРµР№СЃС‚РІРёРµ: РѕС‚РјРµС‚РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ РєР°Рє РѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹Рµ"""
+Line 150:     modeladmin.message_user(request, f'РћР±СЂР°Р±РѕС‚Р°РЅРѕ: {updated} СЃРѕРѕР±С‰РµРЅРёР№.')
+Line 151: mark_as_processed.short_description = "вњ… РћС‚РјРµС‚РёС‚СЊ РєР°Рє РѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹Рµ"
+Line 182:     icon_display.short_description = 'РРєРѕРЅРєР°'
+Line 193:     promocodes_count.short_description = 'РџСЂРѕРјРѕРєРѕРґС‹'
+Line 212:         ('РћСЃРЅРѕРІРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ', {
+Line 215:         ('Р’РёР·СѓР°Р»СЊРЅРѕРµ РѕС„РѕСЂРјР»РµРЅРёРµ', {
+Line 221:         ('РќР°СЃС‚СЂРѕР№РєРё', {
+Line 240:     logo_preview.short_description = 'Р›РѕРіРѕ'
+Line 260:     promocodes_count.short_description = 'РџСЂРѕРјРѕРєРѕРґС‹'
+Line 294:         ('рџЋЇ РћСЃРЅРѕРІРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ', {
+Line 297:         ('рџ’° РџСЂРµРґР»РѕР¶РµРЅРёРµ', {
+Line 303:         ('рџ“ќ РџРѕРґСЂРѕР±РЅРѕСЃС‚Рё', {
+Line 311:         ('вЏ° Р’СЂРµРјРµРЅРЅС‹Рµ СЂР°РјРєРё', {
+Line 314:         ('рџ”§ РќР°СЃС‚СЂРѕР№РєРё', {
+Line 332:     title_short.short_description = 'Р—Р°РіРѕР»РѕРІРѕРє'
+Line 369:             badges.append('<span class="badge badge-danger">РСЃС‚С‘Рє</span>')
+Line 371:             badges.append('<span class="badge badge-success">РђРєС‚РёРІРµРЅ</span>')
+Line 373:             badges.append('<span class="badge badge-secondary">РќРµР°РєС‚РёРІРµРЅ</span>')
+Line 377:             badges.append('<span class="badge badge-warning">рџ”Ґ Р“РѕСЂСЏС‡РёР№</span>')
+Line 407:     subtitle_short.short_description = 'РџРѕРґР·Р°РіРѕР»РѕРІРѕРє'
+Line 416:     image_preview.short_description = 'РџСЂРµРІСЊСЋ'
+Line 444:     logo_preview.short_description = 'Р›РѕРіРѕ'
+Line 478:     content_length.short_description = 'Р Р°Р·РјРµСЂ РєРѕРЅС‚РµРЅС‚Р°'
+Line 503:         ('рџЊђ РњРµС‚Р°РґР°РЅРЅС‹Рµ', {
+Line 507:         ('вљЎ РћР±СЂР°Р±РѕС‚РєР°', {
+Line 516:     subject_short.short_description = 'РўРµРјР°'
+Line 526:             return format_html('<span class="badge badge-success">РћР±СЂР°Р±РѕС‚Р°РЅРѕ</span>')
+Line 528:             return format_html('<span class="badge badge-warning">РќРѕРІРѕРµ</span>')
+Line 535:         self.message_user(request, f'РћС‚РјРµС‡РµРЅРѕ РєР°Рє СЃРїР°Рј: {updated} СЃРѕРѕР±С‰РµРЅРёР№.')
+Line 536:     mark_as_spam.short_description = "рџљ« РћС‚РјРµС‚РёС‚СЊ РєР°Рє СЃРїР°Рј"
+Line 543: # РР·РјРµРЅРµРЅРёРµ Р·Р°РіРѕР»РѕРІРєРѕРІ Р°РґРјРёРЅРєРё
+Line 544: admin.site.site_header = "BoltPromo - РђРґРјРёРЅРєР°"
+
+Total lines with mojibake: 54

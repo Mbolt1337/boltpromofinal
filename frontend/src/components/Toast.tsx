@@ -17,8 +17,8 @@ export default function Toast({ message, type = 'success', onClose, duration = 3
   }, [duration, onClose]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
-      <div className={`flex items-center gap-3 px-5 py-4 glass-card shadow-2xl min-w-[320px] ${
+    <div className="fixed bottom-4 left-4 right-4 sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-slide-up">
+      <div className={`flex items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 glass-card shadow-2xl w-full ${
         type === 'success'
           ? 'border-green-500/30 bg-green-500/10'
           : 'border-red-500/30 bg-red-500/10'

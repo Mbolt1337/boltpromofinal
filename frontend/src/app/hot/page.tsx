@@ -62,7 +62,7 @@ async function getHotPromocodes(
   try {
     // Получаем больше промокодов для фильтрации
     const response = await getPromocodes({
-      limit: limit * 3, // Берем в 3 раза больше для фильтрации
+      page_size: limit * 3, // Берем в 3 раза больше для фильтрации
       ordering: '-created_at'
     })
 

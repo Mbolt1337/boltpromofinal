@@ -74,7 +74,7 @@ async function globalSearchAPI(query: string, limit: number = 20): Promise<{
   total: number
 }> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/v1/search/?q=${encodeURIComponent(query)}&limit=${limit}`)
+    const response = await fetch(`${API_BASE_URL}/api/v1/search/?q=${encodeURIComponent(query)}&page_size=${limit}`)
     
     if (!response.ok) {
       throw new Error(`Search API error: ${response.status}`)
@@ -199,7 +199,7 @@ async function fallbackSearchSuggestions(query: string, limit: number): Promise<
   try {
     // Параллельно загружаем данные
     const [promocodesResponse, stores, categories] = await Promise.all([
-      getPromocodes({ limit: 50, search: query }).catch(() => ({ results: [], count: 0 })),
+      getPromocodes({ page_size: 50, search: query }).catch(() => ({ results: [], count: 0 })),
       getStores().catch(() => ({ results: [] })),
       getCategories().catch(() => [])
     ])
@@ -242,11 +242,11 @@ async function fallbackSearchSuggestions(query: string, limit: number): Promise<
 
 // УЛУЧШЕННАЯ функция полного поиска
 export async function searchAll(
-  query: string, 
+  query: string,
   filters: {
     type?: 'all' | 'promocodes' | 'stores' | 'categories'
     page?: number
-    limit?: number
+    page_size?: number
   } = {}
 ): Promise<SearchResult> {
   if (!query.trim()) {
@@ -258,12 +258,12 @@ export async function searchAll(
     }
   }
 
-  const { type = 'all', page = 1, limit = 20 } = filters
+  const { type = 'all', page = 1, page_size = 20 } = filters
   const normalizedQuery = normalizeSearchQuery(query)
 
   try {
     // ИСПРАВЛЕНО: Используем новый глобальный API
-    const searchData = await globalSearchAPI(query, limit * 2)
+    const searchData = await globalSearchAPI(query, page_size * 2)
     
     const results: SearchResult = {
       promocodes: [],
@@ -285,7 +285,7 @@ export async function searchAll(
         href: `/search?q=${encodeURIComponent(promo.title)}`,
         isHot: promo.is_hot,
         relevance: calculateRelevance(promo.title, normalizedQuery) + (promo.is_recommended ? 20 : 0)
-      })).slice(0, type === 'promocodes' ? limit : 10)
+      })).slice(0, type === 'promocodes' ? page_size : 10)
     }
 
     // Обрабатываем магазины
@@ -297,7 +297,7 @@ export async function searchAll(
         subtitle: store.description || `${store.promocodes_count || 0} промокодов`,
         href: `/stores/${store.slug}`,
         relevance: calculateRelevance(store.name, normalizedQuery)
-      })).slice(0, type === 'stores' ? limit : 5)
+      })).slice(0, type === 'stores' ? page_size : 5)
     }
 
     // Обрабатываем категории
@@ -309,7 +309,7 @@ export async function searchAll(
         subtitle: category.description || `${category.promocodes_count || 0} промокодов`,
         href: `/categories/${category.slug}`,
         relevance: calculateRelevance(category.name, normalizedQuery)
-      })).slice(0, type === 'categories' ? limit : 5)
+      })).slice(0, type === 'categories' ? page_size : 5)
     }
 
     // Подсчитываем общее количество
@@ -348,9 +348,9 @@ async function fallbackSearchAll(query: string, filters: any): Promise<SearchRes
 
     if (type === 'all' || type === 'promocodes') {
       promises.push(
-        getPromocodes({ 
-          search: query, 
-          limit: type === 'promocodes' ? limit : Math.min(limit, 10)
+        getPromocodes({
+          search: query,
+          page_size: type === 'promocodes' ? limit : Math.min(limit, 10)
         }).catch(() => ({ results: [], count: 0 }))
       )
     }

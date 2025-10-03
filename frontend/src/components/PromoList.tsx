@@ -1,5 +1,6 @@
 import { getPromocodes, getStores } from '@/lib/api'
 import PromoCard from './PromoCard'
+import PromoCarouselMobile from './PromoCarouselMobile'
 import { ArrowRight, Tag, Store, Grid3X3, Zap, Users, ShoppingBag, CreditCard, Gift, Percent, Copy } from 'lucide-react'
 import Link from 'next/link'
 import SectionContainer from '@/components/ui/SectionContainer'
@@ -198,15 +199,29 @@ export default async function PromoList({
           <SectionHeader title={headerTitle} subtitle={headerDescription} align="center" />
         )}
 
-        {/* 🚀 ОПТИМИЗАЦИЯ: Сетка промокодов */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {/* Мобильная карусель промокодов */}
+        <PromoCarouselMobile promos={promos} />
+
+        {/* 🚀 ОПТИМИЗАЦИЯ: Кнопки действий (мобилка - после карусели) */}
+        {showActions && (
+          <div className="md:hidden">
+            <ActionButtons />
+          </div>
+        )}
+
+        {/* 🚀 ОПТИМИЗАЦИЯ: Сетка промокодов (десктоп) */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {promos.map((promo) => (
             <PromoCard key={promo.id} promo={promo} />
           ))}
         </div>
 
-        {/* 🚀 ОПТИМИЗАЦИЯ: Кнопки действий */}
-        {showActions && <ActionButtons />}
+        {/* 🚀 ОПТИМИЗАЦИЯ: Кнопки действий (десктоп - после grid) */}
+        {showActions && (
+          <div className="hidden md:block">
+            <ActionButtons />
+          </div>
+        )}
 
         {/* 🚀 ОПТИМИЗАЦИЯ: Статистика с переиспользуемыми компонентами */}
         {showStats && (
