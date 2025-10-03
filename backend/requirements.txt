@@ -20,3 +20,16 @@ python-dotenv==1.0.0
 
 # PostgreSQL драйвер для продакшена
 psycopg2-binary==2.9.9
+
+# Celery для асинхронных задач
+celery==5.3.4
+redis==5.0.1
+
+# Мониторинг и безопасность
+sentry-sdk==1.39.2
+django-silk==5.0.4
+django-ipware==6.0.4
+django-ratelimit==4.1.0
+
+# WYSIWYG редактор
+django-ckeditor==6.7.0

@@ -12,6 +12,27 @@ def _env_bool(name: str, default: bool = False) -> bool:
         return default
     return value.strip().lower() in ('true', '1', 'yes')
 
+# Sentry Integration for Error Monitoring
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            DjangoIntegration(),
+            CeleryIntegration(),
+            RedisIntegration(),
+        ],
+        traces_sample_rate=0.2,  # 20% транзакций для performance monitoring
+        send_default_pii=False,  # Не отправляем PII по умолчанию для GDPR
+        environment="production" if not _env_bool('DEBUG') else "development",
+        before_send=lambda event, hint: event if not _env_bool('DEBUG') else None,  # Не логируем в dev
+    )
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
