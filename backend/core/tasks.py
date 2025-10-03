@@ -11,8 +11,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@shared_task
-def flush_cache(scope='all'):
+@shared_task(bind=True, max_retries=3, soft_time_limit=30, time_limit=60)
+def flush_cache(self, scope='all'):
     """
     Задача очистки кэша
     scope: 'all', 'pages', 'api', 'showcases', 'banners'
@@ -45,8 +45,8 @@ def flush_cache(scope='all'):
         return {'status': 'error', 'message': str(e)}
 
 
-@shared_task
-def aggregate_events_hourly():
+@shared_task(bind=True, max_retries=3, soft_time_limit=120, time_limit=180)
+def aggregate_events_hourly(self):
     """
     Агрегация событий в DailyAgg (запускать каждый час)
     """
@@ -93,11 +93,12 @@ def aggregate_events_hourly():
 
     except Exception as e:
         logger.error(f"Event aggregation error: {str(e)}")
-        return {'status': 'error', 'message': str(e)}
+        # Retry с экспоненциальной задержкой
+        raise self.retry(exc=e, countdown=60 * (2 ** self.request.retries))
 
 
-@shared_task
-def cleanup_old_events(days=30):
+@shared_task(bind=True, max_retries=2, soft_time_limit=300, time_limit=600)
+def cleanup_old_events(self, days=30):
     """
     Удаление старых событий (сырых Event записей)
     Запускать раз в день
@@ -116,8 +117,8 @@ def cleanup_old_events(days=30):
         return {'status': 'error', 'message': str(e)}
 
 
-@shared_task
-def regenerate_sitemap():
+@shared_task(bind=True, max_retries=2, soft_time_limit=60, time_limit=120)
+def regenerate_sitemap(self):
     """
     Регенерация sitemap.xml и пинг поисковиков
     """
@@ -138,8 +139,8 @@ def regenerate_sitemap():
         return {'status': 'error', 'message': str(e)}
 
 
-@shared_task
-def cleanup_redis_dedup_keys():
+@shared_task(bind=True, max_retries=2, soft_time_limit=120, time_limit=180)
+def cleanup_redis_dedup_keys(self):
     """
     Очистка старых Redis ключей дедупликации
     Запускать каждые 6 часов
@@ -172,8 +173,8 @@ def cleanup_redis_dedup_keys():
         return {'status': 'error', 'message': str(e)}
 
 
-@shared_task
-def generate_site_assets(asset_id):
+@shared_task(bind=True, max_retries=1, soft_time_limit=300, time_limit=600)
+def generate_site_assets(self, asset_id):
     """
     Генерация производных медиа-файлов из исходников
     Требует: Pillow
