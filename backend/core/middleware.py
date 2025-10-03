@@ -146,7 +146,7 @@ class RateLimitMiddleware:
         return self.get_response(request)
 
     def process_exception(self, request, exception):
-        from ratelimit.exceptions import Ratelimited
+        from django_ratelimit.exceptions import Ratelimited
 
         if isinstance(exception, Ratelimited):
             return JsonResponse({
