@@ -533,3 +533,34 @@ CKEDITOR_CONFIGS = {
         'removePlugins': 'stylesheetparser',
     }
 }
+# ========================================
+# Celery Configuration
+# ========================================
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
+
+CELERY_BEAT_SCHEDULE = {
+    'aggregate-events-hourly': {
+        'task': 'core.tasks.aggregate_events_hourly',
+        'schedule': 3600.0,  # Every hour (3600 seconds)
+        'options': {'expires': 3300},
+    },
+    'cleanup-old-events-daily': {
+        'task': 'core.tasks.cleanup_old_events',
+        'schedule': 86400.0,  # Every day (24 hours)
+        'args': (30,),  # Keep last 30 days
+        'options': {'expires': 82800},
+    },
+    'cleanup-redis-dedup-keys': {
+        'task': 'core.tasks.cleanup_redis_dedup_keys',
+        'schedule': 21600.0,  # Every 6 hours
+        'options': {'expires': 19800},
+    },
+}
