@@ -108,7 +108,7 @@ MIDDLEWARE = [
 
 # Silk middleware (только если включен)
 if DEBUG or _env_bool('ENABLE_SILK'):
-    MIDDLEWARE.insert(1, 'silk.middleware.SilkMiddleware')
+    MIDDLEWARE.insert(1, 'silk.middleware.SilkyMiddleware')
 
 ROOT_URLCONF = 'config.urls'
 
