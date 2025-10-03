@@ -35,6 +35,10 @@ urlpatterns = [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
+# Silk профилинг (только если включен)
+if settings.DEBUG or getattr(settings, 'ENABLE_SILK', False):
+    urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
+
 # Раздача статических файлов только в режиме разработки
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

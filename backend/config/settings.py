@@ -77,10 +77,14 @@ INSTALLED_APPS = [
     # ✅ WYSIWYG редактор
     'ckeditor',
     'ckeditor_uploader',
-    
+
     # Local apps
     'core',
 ]
+
+# Silk для профилинга запросов (только в DEBUG или для staff)
+if DEBUG or _env_bool('ENABLE_SILK'):
+    INSTALLED_APPS.insert(0, 'silk')
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -99,6 +103,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Silk middleware (только если включен)
+if DEBUG or _env_bool('ENABLE_SILK'):
+    MIDDLEWARE.insert(1, 'silk.middleware.SilkMiddleware')
 
 ROOT_URLCONF = 'config.urls'
 
