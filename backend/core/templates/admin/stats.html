@@ -257,7 +257,8 @@ async function loadTopPromos(range) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.results || responseData || [];
 
         if (!data || data.length === 0) {
             document.getElementById(canvasId).style.display = 'none';
@@ -326,7 +327,8 @@ async function loadTopStores(range) {
             throw new Error(`HTTP ${response.status}`);
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.results || responseData || [];
 
         if (!data || data.length === 0) {
             document.getElementById(canvasId).style.display = 'none';
@@ -395,7 +397,8 @@ async function loadTypesShare(range) {
             throw new Error(`HTTP ${response.status}`);
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.results || responseData || [];
 
         if (!data || data.length === 0) {
             document.getElementById(canvasId).style.display = 'none';
@@ -464,7 +467,8 @@ async function loadShowcasesCTR(range) {
             throw new Error(`HTTP ${response.status}`);
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.results || responseData || [];
 
         if (!data || data.length === 0) {
             document.getElementById(canvasId).style.display = 'none';
