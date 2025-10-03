@@ -131,3 +131,26 @@ class CanonicalHostMiddleware:
             return HttpResponsePermanentRedirect(new_url)
 
         return self.get_response(request)
+
+
+class RateLimitMiddleware:
+    """
+    Middleware для обработки rate limit ошибок.
+    Возвращает JSON 429 при превышении лимита.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)
+
+    def process_exception(self, request, exception):
+        from ratelimit.exceptions import Ratelimited
+
+        if isinstance(exception, Ratelimited):
+            return JsonResponse({
+                'error': 'Too Many Requests',
+                'message': 'Rate limit exceeded. Please try again later.',
+                'retry_after': 60  # seconds
+            }, status=429)

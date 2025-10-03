@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from django.db.models import Count
 from datetime import date, timedelta
 from ipware import get_client_ip
+from ratelimit.decorators import ratelimit
 import json
 import logging
 
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 @require_http_methods(["POST"])
+@ratelimit(key='ip', rate='60/m', block=True, method=['POST'])
 def track_events(request):
     """
     POST /api/v1/track/

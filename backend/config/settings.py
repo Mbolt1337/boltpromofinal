@@ -93,6 +93,8 @@ MIDDLEWARE = [
     'core.middleware.CanonicalHostMiddleware',
     # НОВОЕ: Maintenance mode middleware (проверяется до всех остальных)
     'core.middleware.MaintenanceModeMiddleware',
+    # Rate limiting error handler
+    'core.middleware.RateLimitMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # ✅ ДОБАВЛЕНО: Кэш middleware для оптимизации
     'django.middleware.cache.UpdateCacheMiddleware',
