@@ -1,12 +1,34 @@
 // frontend/src/app/page.tsx
 import { Suspense } from 'react'
 import { lazy } from 'react'
+import type { Metadata } from 'next'
 import BannerCarousel from '@/components/BannerCarousel'
 import JsonLd from '@/components/seo/JsonLd'
 import { getCategories, getGlobalStats } from '@/lib/api'
 import { JsonLd as JsonLdSchemas, SITE_CONFIG } from '@/lib/seo'
 import { CategoryGridSkeleton } from '@/components/CategoryGrid'
 import ShowcaseSection from '@/components/ShowcaseSection'
+import { createOgImageObject } from '@/lib/og-utils'
+
+// Генерация метаданных с fallback на default OG image из SiteAssets
+export async function generateMetadata(): Promise<Metadata> {
+  const ogImage = await createOgImageObject()
+
+  return {
+    title: 'BoltPromo - Лучшие промокоды и скидки от популярных интернет-магазинов России',
+    description: 'Лучшие промокоды от 100+ магазинов России. 500+ актуальных предложений. Экономьте на покупках техники, одежды, красоты.',
+    openGraph: {
+      title: 'BoltPromo - Промокоды и скидки',
+      description: 'Лучшие промокоды от 100+ популярных интернет-магазинов России. 500+ актуальных предложений.',
+      images: ogImage ? [ogImage] : undefined,
+    },
+    twitter: {
+      title: 'BoltPromo - Промокоды и скидки',
+      description: 'Лучшие промокоды от 100+ популярных интернет-магазинов России.',
+      images: ogImage ? [ogImage.url] : undefined,
+    }
+  }
+}
 
 // B2: Ленивая загрузка неприоритетных компонентов для улучшения LCP
 const PromoList = lazy(() => import('@/components/PromoList'))
