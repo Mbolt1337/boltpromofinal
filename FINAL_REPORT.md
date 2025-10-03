@@ -38,9 +38,10 @@
 
 ---
 
-## Список коммитов (16 коммитов)
+## Список коммитов (17 коммитов)
 
 ```
+597b4b1 fix(frontend): resolve duplicate manifest and generateMetadata conflicts
 6da08c5 feat(seo): default og:image from SiteAssets in metadata
 0a0dc47 feat(frontend): dynamic manifest.webmanifest from SiteAssets
 902f5ab feat(frontend): wire favicons and theme color from SiteAssets
@@ -281,7 +282,7 @@ curl "http://127.0.0.1:8000/api/v1/site/assets/"
 
 ## Примечания и ограничения
 
-### ✅ Выполнено полностью (16 коммитов)
+### ✅ Выполнено полностью (17 коммитов)
 - **E1-E4**: Celery beat, переагрегация, корректность агрегатора, API статистики
 - **F1-F4**: SiteAssets API, layout.tsx интеграция, manifest.webmanifest, og:image fallback
 - **G1-G2**: rel-атрибуты, confirm-диалоги
