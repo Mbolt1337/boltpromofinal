@@ -1,6 +1,7 @@
 """
 Специальные view для админских действий
 """
+import logging
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.shortcuts import redirect, render
@@ -8,6 +9,8 @@ from django.core.cache import cache
 from django.utils import timezone
 
 from .models import SiteSettings, AdminActionLog
+
+logger = logging.getLogger(__name__)
 
 
 @staff_member_required
