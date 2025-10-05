@@ -109,7 +109,7 @@ export default function CarouselBase<T>({
 
       {/* Dot Indicators */}
       {showDots && items.length > 1 && (
-        <div className="flex justify-center gap-1.5 mt-4">
+        <div className="flex justify-center gap-1.5 mt-4" role="tablist">
           {items.map((_, index) => (
             <button
               key={index}
@@ -119,8 +119,10 @@ export default function CarouselBase<T>({
                   ? 'w-2 h-2 bg-white'
                   : 'w-2 h-2 bg-white/40 hover:bg-white/60'
               }`}
+              role="tab"
               aria-label={`Перейти к слайду ${index + 1}`}
               aria-current={index === currentIndex}
+              aria-selected={index === currentIndex}
             />
           ))}
         </div>
