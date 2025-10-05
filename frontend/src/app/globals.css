@@ -60,7 +60,8 @@
   }
 
   /* iOS/Safari: Минимальные размеры кнопок для touch (44x44px) */
-  button,
+  /* Исключаем индикаторы каруселей (role="tab") */
+  button:not([role="tab"]),
   a[role="button"],
   input[type="button"],
   input[type="submit"] {
