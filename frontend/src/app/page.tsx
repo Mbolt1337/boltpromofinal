@@ -4,6 +4,7 @@ import { lazy } from 'react'
 import type { Metadata } from 'next'
 import BannerCarousel from '@/components/BannerCarousel'
 import JsonLd from '@/components/seo/JsonLd'
+import ItemListJsonLd from '@/components/seo/ItemListJsonLd'
 import { getCategories, getGlobalStats } from '@/lib/api'
 import { JsonLd as JsonLdSchemas, SITE_CONFIG } from '@/lib/seo'
 import { CategoryGridSkeleton } from '@/components/CategoryGrid'
@@ -124,6 +125,11 @@ export default function HomePage() {
         JsonLdSchemas.organization(),
         JsonLdSchemas.website()
       ]} />
+
+      {/* JSON-LD ItemList для топ промокодов */}
+      <Suspense fallback={null}>
+        <ItemListJsonLd limit={10} />
+      </Suspense>
       
       {/* B2: Приоритетная карусель баннеров - НЕ ленивая для LCP */}
       <section aria-label="Рекламные баннеры">

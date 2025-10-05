@@ -7,6 +7,7 @@ import PromoCard from '@/components/PromoCard'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
+import { SITE_CONFIG } from '@/lib/seo'
 
 interface StorePageProps {
   params: Promise<{
@@ -300,6 +301,21 @@ export default async function StorePage({ params }: StorePageProps) {
 
     return (
       <div className="min-h-screen">
+        {/* JSON-LD Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              'name': store.name,
+              'url': store.url || `${SITE_CONFIG.url}/stores/${store.slug}`,
+              ...(store.logo && { 'logo': store.logo }),
+              ...(store.description && { 'description': store.description })
+            }, null, 0)
+          }}
+        />
+
         {/* Хлебные крошки */}
         <div className="container-main py-6">
           <Breadcrumbs items={breadcrumbItems} />
