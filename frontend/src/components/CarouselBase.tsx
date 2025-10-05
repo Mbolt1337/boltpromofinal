@@ -77,7 +77,7 @@ export default function CarouselBase<T>({
             <div
               key={index}
               className={`snap-start shrink-0`}
-              style={{ width: '300px', height: '420px' }}
+              style={{ width: '310px', height: '460px' }}
             >
               {renderItem(item, index)}
             </div>
