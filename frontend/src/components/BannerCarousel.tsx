@@ -260,8 +260,8 @@ export default function BannerCarousel({
 
   const currentBanner = useMemo(() => banners[currentSlide], [banners, currentSlide]);
 
-  const containerClasses = useMemo(() => 
-    `relative w-full h-[260px] sm:h-[300px] md:h-[360px] lg:h-[420px] overflow-hidden rounded-2xl lg:rounded-3xl bg-white/3 border border-white/8 transition-all duration-300 ${className}`,
+  const containerClasses = useMemo(() =>
+    `relative w-full h-[260px] sm:h-[300px] md:h-[340px] lg:h-[380px] max-h-[400px] overflow-hidden rounded-2xl lg:rounded-3xl bg-white/3 border border-white/8 transition-all duration-300 ${className}`,
     [className]
   );
 
