@@ -333,11 +333,13 @@ REST_FRAMEWORK = {
     'VERSION_PARAM': 'version',
 }
 
-# CORS settings - ИСПРАВЛЕНО: Добавлены домены для продакшена
+# CORS settings - ИСПРАВЛЕНО: Добавлены домены для продакшена и dev порты
 if DEBUG:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
+        "http://localhost:3001",  # альтернативный dev порт
         "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001",
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
