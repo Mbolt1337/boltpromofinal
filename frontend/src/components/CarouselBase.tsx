@@ -72,11 +72,12 @@ export default function CarouselBase<T>({
         ref={scrollContainerRef}
         className={`overflow-x-auto snap-x snap-mandatory scrollbar-hide ${containerClassName}`}
       >
-        <div className={`flex ${gap}`}>
+        <div className={`flex ${gap} min-h-[500px]`}>
           {items.map((item, index) => (
             <div
               key={index}
-              className={`snap-start shrink-0 ${itemWidth} h-full`}
+              className={`snap-start shrink-0 ${itemWidth}`}
+              style={{ height: '500px' }}
             >
               {renderItem(item, index)}
             </div>
