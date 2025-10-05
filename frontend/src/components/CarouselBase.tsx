@@ -109,15 +109,15 @@ export default function CarouselBase<T>({
 
       {/* Dot Indicators */}
       {showDots && items.length > 1 && (
-        <div className="flex justify-center gap-2 mt-6 mb-2">
+        <div className="flex justify-center gap-1.5 mt-4">
           {items.map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToIndex(index)}
               className={`transition-all duration-300 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
                 index === currentIndex
-                  ? 'w-6 h-2 bg-white shadow-lg'
-                  : 'w-2 h-2 bg-white/50 hover:bg-white/70 border border-white/30'
+                  ? 'w-2 h-2 bg-white'
+                  : 'w-2 h-2 bg-white/40 hover:bg-white/60'
               }`}
               aria-label={`Перейти к слайду ${index + 1}`}
               aria-current={index === currentIndex}

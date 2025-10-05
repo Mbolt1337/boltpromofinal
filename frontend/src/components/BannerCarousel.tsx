@@ -508,7 +508,7 @@ export default function BannerCarousel({
               </button>
 
               <div
-                className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-40"
+                className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-40"
                 role="tablist"
                 aria-label="Переключение слайдов баннеров"
               >
@@ -516,18 +516,12 @@ export default function BannerCarousel({
                   <button
                     key={index}
                     onClick={() => goToSlide(index)}
-                    className={`transition-all duration-300 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 shadow-md ${
-                      index === currentSlide 
-                        ? 'w-6 h-2 bg-white shadow-lg' 
-                        : 'w-2 h-2 bg-white/50 hover:bg-white/70 border border-white/30'
+                    className={`transition-all duration-300 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
+                      index === currentSlide
+                        ? 'w-2 h-2 bg-white'
+                        : 'w-2 h-2 bg-white/40 hover:bg-white/60'
                     }`}
                     aria-current={index === currentSlide}
-                    style={{ 
-                      willChange: 'transform',
-                      boxShadow: index === currentSlide 
-                        ? '0 2px 6px rgba(0,0,0,0.4)' 
-                        : '0 1px 3px rgba(0,0,0,0.3)'
-                    }}
                     role="tab"
                     aria-selected={index === currentSlide}
                   />
