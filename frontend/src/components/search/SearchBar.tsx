@@ -242,9 +242,9 @@ export default function SearchBar({
         <button type="submit" className="sr-only">Поиск</button>
       </form>
 
-      {/* ИСПРАВЛЕНО: Выпадающий список с непрозрачным фоном */}
+      {/* Dark theme dropdown */}
       {isExpanded && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-gray-900 border border-white/20 rounded-xl z-50 max-h-96 overflow-hidden shadow-2xl backdrop-blur-sm">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0f1115]/95 border border-white/10 rounded-xl z-50 max-h-96 overflow-hidden shadow-2xl backdrop-blur-md">
           
           {/* Результаты поиска */}
           {query.trim() && suggestions.length > 0 && (

@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getShowcaseBySlug, getShowcasePromos } from '@/lib/api';
@@ -8,6 +7,7 @@ import { SITE_CONFIG } from '@/lib/seo';
 import type { Metadata } from 'next';
 import { Tag } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import ShareButton from '@/components/ui/ShareButton';
 
 interface ShowcasePageProps {
   params: Promise<{
@@ -148,24 +148,31 @@ export default async function ShowcasePage({ params, searchParams }: ShowcasePag
             priority
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          {/* Enhanced gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20" />
 
           {/* Title Overlay */}
           <div className="absolute inset-0 flex items-end">
             <div className="p-8 md:p-12 w-full">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
                 {showcase.title}
               </h1>
               {showcase.description && (
-                <p className="text-lg md:text-xl text-white/90 max-w-3xl mb-4">
+                <p className="text-lg md:text-xl text-white/95 max-w-3xl mb-4 drop-shadow-md">
                   {showcase.description}
                 </p>
               )}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-lg backdrop-blur-sm">
-                <Tag className="w-5 h-5 text-white" />
-                <span className="text-sm md:text-base text-white font-medium">
-                  {showcase.promos_count} {showcase.promos_count === 1 ? 'промокод' : 'промокодов'}
-                </span>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-lg backdrop-blur-sm">
+                  <Tag className="w-5 h-5 text-white" />
+                  <span className="text-sm md:text-base text-white font-medium">
+                    {showcase.promos_count} {showcase.promos_count === 1 ? 'промокод' : 'промокодов'}
+                  </span>
+                </div>
+                <ShareButton
+                  title={showcase.title}
+                  text={showcase.description || `${showcase.promos_count} промокодов в подборке`}
+                />
               </div>
             </div>
           </div>

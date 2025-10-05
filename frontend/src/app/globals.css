@@ -11,18 +11,24 @@
 
   html {
     scroll-behavior: smooth;
+    /* iOS/Safari: использует dvh для корректного отображения на мобильных */
+    min-height: 100dvh;
+    overscroll-behavior: none;
   }
 
   body {
     @apply bg-background text-foreground;
     background: linear-gradient(135deg, #0a0a0a 0%, #111111 25%, #1a1a1a 75%, #222222 100%);
     background-attachment: fixed;
-    min-height: 100vh;
+    /* iOS/Safari: использует dvh вместо vh для корректного отображения */
+    min-height: 100dvh;
     font-family: var(--font-inter), var(--font-manrope), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    /* iOS/Safari: улучшенное управление касанием */
+    touch-action: manipulation;
   }
   
   /* Кастомный скроллбар */
@@ -52,12 +58,26 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* iOS/Safari: Минимальные размеры кнопок для touch (44x44px) */
+  button,
+  a[role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 @layer components {
+  /* Адаптивный контейнер */
+  .container-main {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
   /* Glass эффекты */
   .glass-card {
-    background: rgba(255, 255, 255, 0.03);
+    @apply bg-white/[0.03];
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     @apply rounded-2xl;

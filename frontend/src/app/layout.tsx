@@ -7,6 +7,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import DynamicMetaTags from '@/components/DynamicMetaTags'
 import CookieConsent from '@/components/CookieConsent'
 import { SITE_CONFIG } from '@/lib/seo'
+import { Toaster } from 'sonner'
 
 // B2: Оптимизированные шрифты для лучшей производительности
 const inter = Inter({ 
@@ -201,6 +202,21 @@ export default function RootLayout({
           </main>
           <Footer />
           <CookieConsent />
+          <Toaster
+            position="bottom-center"
+            richColors
+            closeButton
+            theme="dark"
+            toastOptions={{
+              style: {
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                marginBottom: 'env(safe-area-inset-bottom, 0px)',
+              },
+            }}
+          />
         </ErrorBoundary>
 
         {/* B3: Регистрация Service Worker для PWA (только в production) */}
