@@ -9,8 +9,7 @@ export default async function ItemListJsonLd({ limit = 10 }: { limit?: number })
   try {
     const promoResponse = await getPromocodes({
       page_size: limit,
-      ordering: 'popular', // топ промокоды
-      is_active: true
+      ordering: 'popular' // топ промокоды
     });
 
     const promos = promoResponse.results || [];

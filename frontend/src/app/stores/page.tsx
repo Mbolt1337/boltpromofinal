@@ -1,6 +1,7 @@
 import { getStores, getGlobalStats } from '@/lib/api'
 import { Store, ShoppingBag, Star, TrendingUp, Users } from 'lucide-react'
 import { Suspense } from 'react'
+import Link from 'next/link'
 import StoreGrid from '@/components/StoreGrid'
 import StoreFilter from '@/components/filters/StoreFilter'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -174,15 +175,15 @@ async function StoresContent({ searchParams }: { searchParams: any }) {
                 Магазины не найдены
               </h3>
               <p className="text-gray-400 mb-6">
-                По запросу "{filters.search}" ничего не найдено. 
+                По запросу &ldquo;{filters.search}&rdquo; ничего не найдено.
                 Попробуйте изменить поисковый запрос или сбросить фильтры.
               </p>
-              <a 
+              <Link
                 href="/stores"
                 className="inline-flex items-center px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/30 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105"
               >
                 Сбросить фильтры
-              </a>
+              </Link>
             </div>
           </>
         )

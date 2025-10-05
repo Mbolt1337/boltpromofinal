@@ -306,7 +306,7 @@ export default function SearchBar({
           {query.trim() && !isLoading && suggestions.length === 0 && (
             <div className="p-6 text-center">
               <div className="text-gray-400 text-sm mb-3">
-                По запросу "{query}" ничего не найдено
+                По запросу &ldquo;{query}&rdquo; ничего не найдено
               </div>
               <button
                 onClick={() => handleSearch(query)}

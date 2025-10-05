@@ -24,7 +24,7 @@ export default function SearchResults({ query, results, type, sort }: SearchResu
         </div>
         
         <h3 className="text-2xl font-semibold text-white mb-4">
-          По запросу "{query}" ничего не найдено
+          По запросу &ldquo;{query}&rdquo; ничего не найдено
         </h3>
         <p className="text-gray-400 mb-8 max-w-md mx-auto">
           Попробуйте изменить поисковый запрос, проверить правописание или воспользоваться популярными категориями
@@ -326,8 +326,8 @@ export default function SearchResults({ query, results, type, sort }: SearchResu
       {total > 0 && (
         <div className="glass-card p-4 text-center">
           <p className="text-gray-400 text-sm">
-            Показано <span className="text-white font-semibold">{total}</span> {total === 1 ? 'результат' : total < 5 ? 'результата' : 'результатов'} 
-            {' '}по запросу <span className="text-white font-semibold">"{query}"</span>
+            Показано <span className="text-white font-semibold">{total}</span> {total === 1 ? 'результат' : total < 5 ? 'результата' : 'результатов'}
+            {' '}по запросу <span className="text-white font-semibold">&ldquo;{query}&rdquo;</span>
           </p>
         </div>
       )}

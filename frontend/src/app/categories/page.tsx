@@ -1,6 +1,7 @@
 import { getCategories } from '@/lib/api'
 import { Tag, Grid3X3, TrendingUp, Users } from 'lucide-react'
 import { Suspense } from 'react'
+import Link from 'next/link'
 import CategoryGrid, { CategoryGridSkeleton } from '@/components/CategoryGrid'
 import CategoryFilter from '@/components/filters/CategoryFilter'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -217,12 +218,12 @@ async function CategoriesContent({ searchParams }: { searchParams: any }) {
             <p className="text-gray-400 mb-6">
               Попробуйте изменить параметры поиска или сбросить фильтры
             </p>
-            <a 
+            <Link
               href="/categories"
               className="inline-flex items-center px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/30 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105"
             >
               Сбросить фильтры
-            </a>
+            </Link>
           </div>
         ) : (
           <>

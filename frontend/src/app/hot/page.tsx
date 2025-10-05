@@ -1,6 +1,7 @@
 import { getPromocodes } from '@/lib/api'
 import { Flame, Clock, Zap, Timer, AlertTriangle, Filter } from 'lucide-react'
 import { Suspense } from 'react'
+import Link from 'next/link'
 import HotPromoCard from '@/components/HotPromoCard'
 import HotFilters from '@/components/hot/HotFilters'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -292,12 +293,12 @@ async function HotContent({ searchParams }: { searchParams: any }) {
               : 'Попробуйте изменить фильтры или сбросить их'
             }
           </p>
-          <a 
+          <Link
             href="/"
             className="inline-flex items-center px-6 py-3 glass-button-small rounded-xl text-white font-medium transition-all duration-300 hover:scale-105"
           >
             Вернуться на главную
-          </a>
+          </Link>
         </div>
       </>
     )
