@@ -378,25 +378,12 @@ export default function BannerCarousel({
                   )}
                   {banner?.image ? (
                     <div className="absolute inset-0 pointer-events-none">
-                      {/* Background blur layer for desktop */}
-                      <div className="absolute inset-0 hidden lg:block">
-                        <Image
-                          src={banner.image}
-                          alt=""
-                          fill
-                          sizes="(min-width: 1024px) 1024px, 100vw"
-                          className="object-cover blur-xl scale-110 opacity-40"
-                          priority={priority && isFirst}
-                          quality={60}
-                        />
-                      </div>
-                      {/* Main image - cover on mobile, contain on desktop */}
                       <Image
                         src={banner.image}
                         alt={imageAlt}
                         fill
-                        sizes="(min-width: 1024px) 1024px, 100vw"
-                        className="object-cover lg:object-contain rounded-2xl lg:rounded-3xl"
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
+                        className="object-cover rounded-2xl lg:rounded-3xl"
                         priority={priority && isFirst}
                         fetchPriority={priority && isFirst ? "high" : "low"}
                         loading={priority && isFirst ? "eager" : "lazy"}
