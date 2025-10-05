@@ -72,11 +72,11 @@ export default function CarouselBase<T>({
         ref={scrollContainerRef}
         className={`overflow-x-auto snap-x snap-mandatory scrollbar-hide ${containerClassName}`}
       >
-        <div className={`flex ${gap} pb-4`}>
+        <div className={`flex ${gap}`}>
           {items.map((item, index) => (
             <div
               key={index}
-              className={`snap-start shrink-0 ${itemWidth}`}
+              className={`snap-start shrink-0 ${itemWidth} h-full`}
             >
               {renderItem(item, index)}
             </div>
@@ -109,7 +109,7 @@ export default function CarouselBase<T>({
 
       {/* Dot Indicators */}
       {showDots && items.length > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-6 mb-2">
           {items.map((_, index) => (
             <button
               key={index}

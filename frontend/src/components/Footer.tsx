@@ -47,13 +47,15 @@ export default function Footer() {
                 ))}
               </nav>
 
-              {/* Telegram бот */}
+              {/* Telegram канал */}
               <div className="flex items-center">
                 <a
-                  href="#"
+                  href="https://t.me/boltpromomane"
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
                   className="btn-outline flex items-center space-x-2 text-sm px-6 py-3"
                 >
-                  <span>Telegram бот</span>
+                  <span>Телеграм-канал</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
@@ -70,7 +72,7 @@ export default function Footer() {
 
                 {/* Дополнительная информация */}
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
-                  <span>Версия 1.0</span>
+                  <span>Версия 1.2</span>
                   <span className="hidden sm:inline">•</span>
                   <span className="hidden sm:inline">Сделано с ❤️</span>
                 </div>

@@ -23,12 +23,12 @@ export default function ShowcaseCard({ showcase }: ShowcaseCardProps) {
   return (
     <Link
       href={`/showcases/${showcase.slug}`}
-      className="group block"
+      className="group block h-full"
       onClick={handleClick}
     >
-      <BaseCard className="card-pad overflow-hidden">
+      <BaseCard className="card-pad overflow-hidden h-full flex flex-col">
         {/* Banner Image */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <CardImage
             src={bannerUrl}
             alt={showcase.title}
@@ -39,7 +39,7 @@ export default function ShowcaseCard({ showcase }: ShowcaseCardProps) {
         </div>
 
         {/* Content */}
-        <div className="space-y-3 mt-4">
+        <div className="flex flex-col flex-1 space-y-3 mt-4">
           {/* Title */}
           <h3 className="text-base font-semibold text-white line-clamp-1 group-hover:text-purple-300 transition-colors">
             {showcase.title}
@@ -52,8 +52,11 @@ export default function ShowcaseCard({ showcase }: ShowcaseCardProps) {
             </p>
           )}
 
+          {/* Spacer */}
+          <div className="flex-1"></div>
+
           {/* Footer */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-2">
             {/* Promo Count */}
             <div className="flex items-center gap-1.5 text-xs text-white/60">
               <Tag className="w-3.5 h-3.5" />

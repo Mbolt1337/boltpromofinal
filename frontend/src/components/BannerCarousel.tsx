@@ -210,7 +210,10 @@ export default function BannerCarousel({
       banner?.external_link ??
       undefined;
 
-    const buttonText: string = banner?.cta_text ?? banner?.button_text ?? 'Подробнее';
+    // Текст кнопки - только если явно задан, НЕТ дефолтного значения
+    const buttonText: string | undefined =
+      banner?.cta_text?.trim() || banner?.button_text?.trim() || undefined;
+
     return { buttonUrl, buttonText };
   }, []);
 
@@ -375,12 +378,25 @@ export default function BannerCarousel({
                   )}
                   {banner?.image ? (
                     <div className="absolute inset-0 pointer-events-none">
+                      {/* Background blur layer for desktop */}
+                      <div className="absolute inset-0 hidden lg:block">
+                        <Image
+                          src={banner.image}
+                          alt=""
+                          fill
+                          sizes="(min-width: 1024px) 1024px, 100vw"
+                          className="object-cover blur-xl scale-110 opacity-40"
+                          priority={priority && isFirst}
+                          quality={60}
+                        />
+                      </div>
+                      {/* Main image - cover on mobile, contain on desktop */}
                       <Image
                         src={banner.image}
                         alt={imageAlt}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
-                        className="object-cover rounded-2xl lg:rounded-3xl"
+                        sizes="(min-width: 1024px) 1024px, 100vw"
+                        className="object-cover lg:object-contain rounded-2xl lg:rounded-3xl"
                         priority={priority && isFirst}
                         fetchPriority={priority && isFirst ? "high" : "low"}
                         loading={priority && isFirst ? "eager" : "lazy"}
@@ -428,7 +444,7 @@ export default function BannerCarousel({
                             <span className="relative z-10">{banner.description || banner.subtitle}</span>
                           </p>
                         )}
-                        {buttonUrl ? (
+                        {buttonUrl && buttonText ? (
                           isInternalLink(buttonUrl) ? (
                             <Link
                               href={buttonUrl}
@@ -436,7 +452,7 @@ export default function BannerCarousel({
                               aria-label={buttonText}
                               prefetch
                               onClickCapture={(e) => e.stopPropagation()}
-                              style={{ 
+                              style={{
                                 ...textShadowStyles.buttonShadow,
                                 willChange: 'transform',
                                 boxShadow: '0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
@@ -455,7 +471,7 @@ export default function BannerCarousel({
                               className="relative z-40 inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-white/15 hover:bg-white/25 border-2 border-white/30 hover:border-white/50 rounded-xl lg:rounded-2xl text-white font-bold backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 shadow-lg"
                               aria-label={buttonText}
                               onClickCapture={(e) => e.stopPropagation()}
-                              style={{ 
+                              style={{
                                 ...textShadowStyles.buttonShadow,
                                 willChange: 'transform',
                                 boxShadow: '0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
