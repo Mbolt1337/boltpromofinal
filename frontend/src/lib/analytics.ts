@@ -18,7 +18,7 @@ interface TrackEvent {
 class Analytics {
   private queue: TrackEvent[] = [];
   private sessionId: string;
-  private apiUrl = '/api/v1/track/';
+  private apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/v1/track/`;
   private batchSize = 10;
   private flushInterval = 5000; // 5 секунд
 

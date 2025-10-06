@@ -10,15 +10,22 @@ interface ShowcaseCarouselMobileProps {
 
 export default function ShowcaseCarouselMobile({ showcases }: ShowcaseCarouselMobileProps) {
   return (
-    <div className="md:hidden">
+    <div className="md:hidden mb-4 sm:mb-6">
       <CarouselBase
         items={showcases}
-        renderItem={(showcase) => <ShowcaseCard showcase={showcase} />}
-        itemWidth="min-w-[320px] sm:min-w-[360px]"
+        renderItem={(showcase, index) => (
+          <ShowcaseCard
+            showcase={showcase}
+            priority={index === 0}
+          />
+        )}
+        itemWidth="min-w-[320px] sm:min-w-[360px] max-w-[360px]"
+        itemClassName="h-full"
         gap="gap-4 sm:gap-6"
         showDots={true}
         showArrows={false}
         containerClassName="px-4 sm:px-6"
+        fixedSize={null}
       />
     </div>
   );

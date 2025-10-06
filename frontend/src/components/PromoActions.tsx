@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ExternalLink, Copy, Check } from 'lucide-react'
 import { safeExternalUrl } from '@/lib/utils'
 import { trackPromoCopy, trackPromoOpen, trackFinanceOpen, trackDealOpen } from '@/lib/analytics'
-import Toast from './Toast'
+import { showToast } from '@/lib/toast'
 
 interface PromoActionsProps {
   promoId: number
@@ -43,8 +43,6 @@ export default function PromoActions({
   storeName
 }: PromoActionsProps) {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'copied'>('idle')
-  const [showToast, setShowToast] = useState(false)
-  const [toastMessage, setToastMessage] = useState('')
 
   // Функция копирования кода в буфер обмена
   const copyToClipboard = async (codeText: string) => {
@@ -53,9 +51,8 @@ export default function PromoActions({
       await navigator.clipboard.writeText(codeText)
       setCopyStatus('copied')
 
-      // Показываем toast
-      setToastMessage(`Промокод скопирован! Открываем ${storeName || 'магазин'}...`)
-      setShowToast(true)
+      // Показываем унифицированный toast
+      showToast.promoCopied(codeText, storeName || 'магазин')
 
       // Трекаем копирование промокода
       trackPromoCopy(promoId)
@@ -87,9 +84,8 @@ export default function PromoActions({
 
         setCopyStatus('copied')
 
-        // Показываем toast
-        setToastMessage(`Промокод скопирован! Открываем ${storeName || 'магазин'}...`)
-        setShowToast(true)
+        // Показываем унифицированный toast
+        showToast.promoCopied(codeText, storeName || 'магазин')
 
         trackPromoCopy(promoId)
 
@@ -107,8 +103,7 @@ export default function PromoActions({
         setTimeout(() => setCopyStatus('idle'), 2000)
       } catch (fallbackError) {
         console.error('Ошибка fallback копирования:', fallbackError)
-        setToastMessage('Не удалось скопировать промокод')
-        setShowToast(true)
+        showToast.error('Не удалось скопировать промокод')
         setCopyStatus('idle')
       }
     }
@@ -200,16 +195,6 @@ export default function PromoActions({
 
   return (
     <>
-      {/* Toast уведомление */}
-      {showToast && (
-        <Toast
-          message={toastMessage}
-          type="success"
-          onClose={() => setShowToast(false)}
-          duration={3000}
-        />
-      )}
-
       {/* ДЕЙСТВИЯ */}
       <div className="space-y-3">
         {/* Основная кнопка - копирование или ссылка */}

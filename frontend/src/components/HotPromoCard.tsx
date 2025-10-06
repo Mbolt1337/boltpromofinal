@@ -5,7 +5,7 @@ import { Copy, ExternalLink, Store, Calendar, Flame, Check, Star, CreditCard, Gi
 import { type Promocode, incrementPromoView } from '@/lib/api'
 import Image from 'next/image'
 import Link from 'next/link'
-import Toast from './Toast'
+import { showToast } from '@/lib/toast'
 import CountdownTimer from './CountdownTimer'
 
 interface HotPromoCardProps {
@@ -74,8 +74,6 @@ const OFFER_TYPE_STYLES = {
 export default function HotPromoCard({ promo }: HotPromoCardProps) {
   const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [showToast, setShowToast] = useState(false)
-  const [toastMessage, setToastMessage] = useState('')
   const [localViewsCount, setLocalViewsCount] = useState(promo.views_count || 0)
 
   // Мемоизированная модель карточки - ВСЕ деривативные данные в одном useMemo
@@ -198,9 +196,8 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
       await navigator.clipboard.writeText(promo.code)
       setCopied(true)
 
-      // 2. Показываем toast
-      setToastMessage(`Промокод скопирован! Открываем ${cardModel.storeName}...`)
-      setShowToast(true)
+      // 2. Показываем унифицированный toast
+      showToast.promoCopied(promo.code, cardModel.storeName)
 
       // 3. Увеличиваем счётчик локально для мгновенного UI-фидбэка
       setLocalViewsCount(prev => prev + 1)
@@ -228,8 +225,7 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
       }, 2000)
     } catch (error) {
       console.error('Ошибка копирования:', error)
-      setToastMessage('Не удалось скопировать промокод')
-      setShowToast(true)
+      showToast.error('Не удалось скопировать промокод')
       setCopied(false)
       setIsLoading(false)
     }
@@ -478,16 +474,6 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
       {/* Hover эффект */}
       <div className={CARD_HOVER_EFFECT}></div>
     </div>
-
-      {/* Toast уведомление */}
-      {showToast && (
-        <Toast
-          message={toastMessage}
-          type="success"
-          onClose={() => setShowToast(false)}
-          duration={3000}
-        />
-      )}
     </>
   )
 }

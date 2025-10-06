@@ -155,12 +155,25 @@ export default async function PromoPage({ params }: PromoPageProps) {
 
     const primaryCategorySlug = promo.category?.slug ?? promo.categories?.[0]?.slug
 
+    // Debug: проверяем что передаётся в функцию
+    console.log('Getting related promos for:', {
+      promoId,
+      storeSlug: promo.store?.slug,
+      storeName: promo.store?.name,
+      categorySlug: primaryCategorySlug
+    })
+
     const relatedPromos = await getRelatedPromocodes(
       promoId,
       promo.store?.slug,
       primaryCategorySlug,
       6
     )
+
+    console.log(`Found ${relatedPromos.length} related promos`)
+    if (relatedPromos.length > 0) {
+      console.log('Related promos stores:', relatedPromos.map(p => p.store?.name))
+    }
 
     const storeName = promo.store?.name || 'Неизвестный магазин'
     const categoryName = promo.category?.name || 'Общее'

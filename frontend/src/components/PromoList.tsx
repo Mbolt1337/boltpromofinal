@@ -134,7 +134,7 @@ function EmptyState({ offerType, showHeader }: { offerType?: string, showHeader:
 // 🚀 ОПТИМИЗАЦИЯ: Компонент кнопок действий
 function ActionButtons() {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 mt-8 sm:mt-0">
       <Link href="/stores" className={ACTION_BUTTON_CLASSES}>
         <Store className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-300 ease-out" />
         <span>Перейти в магазины</span>

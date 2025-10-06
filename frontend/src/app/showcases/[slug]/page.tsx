@@ -140,16 +140,19 @@ export default async function ShowcasePage({ params, searchParams }: ShowcasePag
 
         {/* Hero Banner with Image */}
         <div className="relative w-full h-[220px] sm:h-[280px] lg:h-[320px] overflow-hidden rounded-2xl mb-8">
+          {/* Blurred background image */}
           <Image
             src={bannerUrl}
             alt={showcase.title}
             fill
-            className="object-cover"
+            className="object-cover blur-md scale-110"
             priority
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
           />
+          {/* Glass effect overlay */}
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
           {/* Enhanced gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
 
           {/* Title Overlay */}
           <div className="absolute inset-0 flex items-end">

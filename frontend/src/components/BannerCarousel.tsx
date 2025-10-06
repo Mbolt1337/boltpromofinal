@@ -4,7 +4,8 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, ExternalLink, Play, Pause } from 'lucide-react';
-import { getBanners, type Banner } from '@/lib/api';
+import { type Banner } from '@/lib/api';
+import { useBanners } from '@/lib/queries';
 
 interface BannerCarouselProps {
   autoplay?: boolean;
@@ -18,9 +19,6 @@ interface BannerCarouselProps {
 const MEDIA_QUERIES = {
   REDUCE_MOTION: '(prefers-reduced-motion: reduce)',
 } as const
-
-const bannersCache = new Map<string, { data: Banner[], timestamp: number }>()
-const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
 function isInternalLink(url: string): boolean {
   try {
@@ -36,21 +34,6 @@ function sortKey(a: any): number {
   return Number.MAX_SAFE_INTEGER;
 }
 
-function getCachedBanners(): Banner[] | null {
-  const cached = bannersCache.get('banners')
-  if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-    return cached.data
-  }
-  return null
-}
-
-function setCachedBanners(banners: Banner[]): void {
-  bannersCache.set('banners', {
-    data: banners,
-    timestamp: Date.now()
-  })
-}
-
 export default function BannerCarousel({
   autoplay = true,
   interval = 6000,
@@ -59,14 +42,25 @@ export default function BannerCarousel({
   priority = false,
   preloadedBanners
 }: BannerCarouselProps) {
-  const [banners, setBanners] = useState<Banner[]>(preloadedBanners || []);
-  const [loading, setLoading] = useState(!preloadedBanners);
+  // Use React Query for banners - автоматическое кэширование и deduplication
+  const { data: bannersData, isLoading } = useBanners()
+
+  // Используем preloadedBanners или данные из React Query
+  const banners = useMemo(() => {
+    const source = preloadedBanners || bannersData || []
+    return source
+      .filter((b: any) => b?.is_active)
+      .sort((a: any, b: any) => sortKey(a) - sortKey(b))
+  }, [preloadedBanners, bannersData])
+
+  const loading = !preloadedBanners && isLoading
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoplay);
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  
+
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -112,68 +106,20 @@ export default function BannerCarousel({
   }, []);
 
   useEffect(() => {
-    if (preloadedBanners && preloadedBanners.length > 0) {
-      const activeSorted = preloadedBanners
-        .filter((b: any) => b?.is_active)
-        .sort((a: any, b: any) => sortKey(a) - sortKey(b));
-      setBanners(activeSorted);
-      setLoading(false);
-      return;
-    }
-
-    const cachedBanners = getCachedBanners();
-    if (cachedBanners) {
-      setBanners(cachedBanners);
-      setLoading(false);
-      return;
-    }
-
-    let mounted = true;
-    const loadBanners = async () => {
-      try {
-        setLoading(true);
-        const data = await getBanners();
-
-        const activeSorted = (data || [])
-          .filter((b: any) => b?.is_active)
-          .sort((a: any, b: any) => sortKey(a) - sortKey(b));
-
-        if (mounted) {
-          setBanners(activeSorted);
-        }
-      } catch (e) {
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    loadBanners();
-    return () => {
-      mounted = false;
-    };
-  }, [preloadedBanners]);
-
-  useEffect(() => {
     if (currentSlide >= banners.length && banners.length > 0) {
       setCurrentSlide(banners.length - 1);
     }
   }, [banners.length, currentSlide]);
 
   const goToNext = useCallback(() => {
-    setBanners((prev) => {
-      const newIndex = prev.length > 0 ? (currentSlide + 1) % prev.length : 0;
-      setCurrentSlide(newIndex);
-      return prev;
-    });
-  }, [currentSlide]);
+    const newIndex = banners.length > 0 ? (currentSlide + 1) % banners.length : 0;
+    setCurrentSlide(newIndex);
+  }, [currentSlide, banners.length]);
 
   const goToPrevious = useCallback(() => {
-    setBanners((prev) => {
-      const newIndex = prev.length > 0 ? (currentSlide === 0 ? prev.length - 1 : currentSlide - 1) : 0;
-      setCurrentSlide(newIndex);
-      return prev;
-    });
-  }, [currentSlide]);
+    const newIndex = banners.length > 0 ? (currentSlide === 0 ? banners.length - 1 : currentSlide - 1) : 0;
+    setCurrentSlide(newIndex);
+  }, [currentSlide, banners.length]);
 
   const goToSlide = useCallback((index: number) => {
     if (index >= 0 && index < banners.length) {
@@ -378,12 +324,30 @@ export default function BannerCarousel({
                   )}
                   {banner?.image ? (
                     <div className="absolute inset-0 pointer-events-none">
+                      {/* Desktop image */}
                       <Image
                         src={banner.image}
                         alt={imageAlt}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
-                        className="object-cover rounded-2xl lg:rounded-3xl"
+                        sizes="(max-width: 640px) 0vw, 100vw"
+                        className="hidden sm:block object-cover rounded-2xl lg:rounded-3xl"
+                        priority={priority && isFirst}
+                        fetchPriority={priority && isFirst ? "high" : "low"}
+                        loading={priority && isFirst ? "eager" : "lazy"}
+                        quality={priority && isFirst ? 75 : 80}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLk4PvXFwjNvhIG"
+                        style={{
+                          willChange: active ? 'transform' : 'auto'
+                        }}
+                      />
+                      {/* Mobile image - use image_mobile if available, fallback to desktop image */}
+                      <Image
+                        src={banner.image_mobile || banner.image}
+                        alt={imageAlt}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 0vw"
+                        className="sm:hidden object-cover rounded-2xl lg:rounded-3xl"
                         priority={priority && isFirst}
                         fetchPriority={priority && isFirst ? "high" : "low"}
                         loading={priority && isFirst ? "eager" : "lazy"}

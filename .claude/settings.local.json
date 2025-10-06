@@ -1,7 +1,23 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix(csp): добавлены CDN в whitelist для админки\n\nПроблема:\n- CSP блокировал загрузку Chart.js из CDN\n- CSP блокировал Google Fonts для Jazzmin админки\n- Графики в админке не отображались (Chart is not defined)\n\nИсправления:\n- Разделены CSP правила для админки и фронтенда\n- Для админки добавлены в whitelist:\n  * https://cdn.jsdelivr.net (Chart.js)\n  * https://fonts.googleapis.com (Google Fonts CSS)\n  * https://fonts.gstatic.com (Google Fonts файлы)\n  * https://r2cdn.perplexity.ai (Perplexity шрифты)\n- Для фронтенда сохранены строгие правила\n\nТеперь статистика в админке загружается корректно.\n\nФайл: backend/core/middleware.py:159-227\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix(csp): добавлены CDN в whitelist для админки\n\nПроблема:\n- CSP блокировал загрузку Chart.js из CDN\n- CSP блокировал Google Fonts для Jazzmin админки\n- Графики в админке не отображались (Chart is not defined)\n\nИсправления:\n- Разделены CSP правила для админки и фронтенда\n- Для админки добавлены в whitelist:\n  * https://cdn.jsdelivr.net (Chart.js)\n  * https://fonts.googleapis.com (Google Fonts CSS)\n  * https://fonts.gstatic.com (Google Fonts файлы)\n  * https://r2cdn.perplexity.ai (Perplexity шрифты)\n- Для фронтенда сохранены строгие правила\n\nТеперь статистика в админке загружается корректно.\n\nФайл: backend/core/middleware.py:159-227\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npm install:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run start:*)",
+      "Bash(netstat:*)",
+      "Bash(npx lhci autorun:*)",
+      "Bash(taskkill:*)",
+      "Bash(pip install:*)",
+      "Bash(timeout:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(git log:*)",
+      "Bash(find:*)",
+      "Bash(if not exist \"E:\\boltpromoFINAL\\BoltPromo-main\\AUDIT_REPORT\" mkdir \"E:\\boltpromoFINAL\\BoltPromo-main\\AUDIT_REPORT\")",
+      "Bash(redis-cli:*)"
     ],
     "deny": [],
     "ask": []

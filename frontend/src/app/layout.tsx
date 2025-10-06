@@ -8,6 +8,7 @@ import DynamicMetaTags from '@/components/DynamicMetaTags'
 import CookieConsent from '@/components/CookieConsent'
 import { SITE_CONFIG } from '@/lib/seo'
 import { Toaster } from 'sonner'
+import QueryProvider from '@/components/QueryProvider'
 
 // B2: Оптимизированные шрифты для лучшей производительности
 const inter = Inter({ 
@@ -138,7 +139,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className={`${inter.variable} ${manrope.variable}`}>
+    <html lang="ru" className={`${inter.variable} ${manrope.variable}`} data-scroll-behavior="smooth">
       <head>
         {/* B2: Критически важный meta description */}
         <meta name="description" content="Лучшие промокоды от 100+ магазинов России. 500+ актуальных предложений. Экономьте на покупках техники, одежды, красоты." />
@@ -167,57 +168,62 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>
-        <ErrorBoundary>
-          {/* B2: Оптимизированный JSON-LD для Organization */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'WebSite',
-                name: SITE_CONFIG.name,
-                url: SITE_CONFIG.url,
-                description: 'Лучшие промокоды и скидки от популярных интернет-магазинов России',
-                potentialAction: {
-                  '@type': 'SearchAction',
-                  target: {
-                    '@type': 'EntryPoint',
-                    urlTemplate: `${SITE_CONFIG.url}/search?q={search_term_string}`
-                  },
-                  'query-input': 'required name=search_term_string'
-                },
-                publisher: {
-                  '@type': 'Organization',
-                  name: 'BoltPromo',
+        <QueryProvider>
+          <ErrorBoundary>
+            {/* B2: Оптимизированный JSON-LD для Organization */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  '@context': 'https://schema.org',
+                  '@type': 'WebSite',
+                  name: SITE_CONFIG.name,
                   url: SITE_CONFIG.url,
-                  logo: `${SITE_CONFIG.url}/logo.png`
-                }
-              })
-            }}
-          />
-          
-          <Header />
-          <main id="main-content" role="main">
-            {children}
-          </main>
-          <Footer />
-          <CookieConsent />
-          <Toaster
-            position="bottom-center"
-            richColors
-            closeButton
-            theme="dark"
-            toastOptions={{
-              style: {
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: 'white',
-                marginBottom: 'env(safe-area-inset-bottom, 0px)',
-              },
-            }}
-          />
-        </ErrorBoundary>
+                  description: 'Лучшие промокоды и скидки от популярных интернет-магазинов России',
+                  potentialAction: {
+                    '@type': 'SearchAction',
+                    target: {
+                      '@type': 'EntryPoint',
+                      urlTemplate: `${SITE_CONFIG.url}/search?q={search_term_string}`
+                    },
+                    'query-input': 'required name=search_term_string'
+                  },
+                  publisher: {
+                    '@type': 'Organization',
+                    name: 'BoltPromo',
+                    url: SITE_CONFIG.url,
+                    logo: `${SITE_CONFIG.url}/logo.png`
+                  }
+                })
+              }}
+            />
+
+            <Header />
+            <main id="main-content" role="main">
+              {children}
+            </main>
+            <Footer />
+            <CookieConsent />
+            <Toaster
+              position="bottom-center"
+              richColors
+              closeButton
+              theme="dark"
+              toastOptions={{
+                style: {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                  marginBottom: 'env(safe-area-inset-bottom, 0px)',
+                },
+                classNames: {
+                  closeButton: 'bg-red-500/20 border-red-500/30 hover:bg-red-500/30 hover:border-red-500/40 text-red-400 hover:text-red-300',
+                },
+              }}
+            />
+          </ErrorBoundary>
+        </QueryProvider>
 
         {/* B3: Регистрация Service Worker для PWA (только в production) */}
         {process.env.NODE_ENV === 'production' && (

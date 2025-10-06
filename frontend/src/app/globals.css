@@ -379,7 +379,7 @@
 
   .category-title {
     font-size: clamp(0.875rem, 2vw, 1rem);
-    @apply font-semibold text-white leading-tight mb-2 group-hover:text-blue-300 transition-colors duration-300 ease-out;
+    @apply font-semibold text-white leading-tight mb-2 transition-colors duration-300 ease-out;
   }
 
   .category-count {
@@ -392,7 +392,7 @@
 
   .category-hover-effect {
     @apply absolute inset-0 opacity-0 transition-opacity duration-300 ease-out;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    background: rgba(255, 255, 255, 0.05);
     pointer-events: none;
   }
 

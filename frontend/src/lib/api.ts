@@ -4,8 +4,9 @@ export interface Banner {
   id: number;
   title: string;
   description?: string;
-  subtitle?: string; 
+  subtitle?: string;
   image?: string;
+  image_mobile?: string;
   link?: string;
   cta_text?: string;
   is_active: boolean;
@@ -111,6 +112,14 @@ export interface PromocodesParams {
   ordering?: string;
   page?: number;
   limit?: number;
+  page_size?: number;
+}
+
+export interface StoreFilters {
+  search?: string;
+  sort?: string;
+  ordering?: string;
+  page?: number;
   page_size?: number;
 }
 
@@ -278,6 +287,23 @@ async function apiRequest<T>(
     }
 
     const response = await fetch(fullUrl, requestOptions);
+
+    // Проверяем maintenance mode (503)
+    if (response.status === 503) {
+      try {
+        const maintenanceData = await response.json();
+        if (maintenanceData.maintenance === true) {
+          // Возвращаем пустые данные для graceful degradation
+          if (process.env.NODE_ENV === 'development' && !silent) {
+            console.warn(`[API] Maintenance mode active: ${maintenanceData.message}`);
+          }
+          // Возвращаем пустой результат вместо ошибки
+          return {} as T;
+        }
+      } catch {
+        // Если не JSON или нет поля maintenance, продолжаем обычную обработку
+      }
+    }
 
     if (!response.ok) {
       if (process.env.NODE_ENV === 'development' && !silent) {
@@ -752,17 +778,18 @@ export async function getRelatedPromocodes(
   promoId: number,
   storeSlug?: string,
   categorySlug?: string,
-  limit: number = 6
+  limit: number = 12
 ): Promise<Promocode[]> {
   const cacheKey = `related-promocodes-${promoId}-${storeSlug}-${categorySlug}-${limit}`;
 
   return debounceRequest(cacheKey, async () => {
     try {
       if (storeSlug) {
+        // Другие предложения от этого магазина
         const storePromos = await getPromocodes({
           store: storeSlug,
           page_size: limit + 1,
-          ordering: '-is_recommended,-views_count'
+          ordering: 'popular'  // badges → usage_7d → freshness
         });
         const filtered = storePromos.results.filter(p => p.id !== promoId);
         if (filtered.length >= 3) {
@@ -773,7 +800,7 @@ export async function getRelatedPromocodes(
           const categoryPromos = await getPromocodes({
             category: categorySlug,
             page_size: remainingCount,
-            ordering: '-is_recommended,-views_count'
+            ordering: 'popular'
           });
           const additionalPromos = categoryPromos.results.filter(p =>
             p.id !== promoId && !filtered.find(fp => fp.id === p.id)
@@ -786,7 +813,7 @@ export async function getRelatedPromocodes(
         const categoryPromos = await getPromocodes({
           category: categorySlug,
           page_size: limit + 1,
-          ordering: '-is_recommended,-views_count'
+          ordering: 'popular'
         });
         return categoryPromos.results
           .filter(p => p.id !== promoId)
@@ -794,7 +821,7 @@ export async function getRelatedPromocodes(
       }
       const popularPromos = await getPromocodes({
         page_size: limit + 1,
-        ordering: '-views_count'
+        ordering: 'popular'
       });
       return popularPromos.results
         .filter(p => p.id !== promoId)
@@ -1029,4 +1056,48 @@ export async function getSiteAssets(): Promise<SiteAssets> {
       };
     }
   });
+}
+
+// ========================================
+// Maintenance Mode API
+// ========================================
+
+export interface MaintenanceStatus {
+  maintenance: boolean;
+  message?: string;
+  retry_after?: string;
+}
+
+/**
+ * Проверка статуса режима техработ
+ * Используется для условного рендеринга страницы maintenance
+ */
+export async function checkMaintenanceMode(): Promise<MaintenanceStatus> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/health/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store'
+    });
+
+    if (response.status === 503) {
+      const data = await response.json();
+      return {
+        maintenance: true,
+        message: data.message || 'Ведутся технические работы',
+        retry_after: data.retry_after
+      };
+    }
+
+    return {
+      maintenance: false
+    };
+  } catch (error) {
+    // В случае ошибки сети возвращаем, что maintenance mode не активен
+    return {
+      maintenance: false
+    };
+  }
 }

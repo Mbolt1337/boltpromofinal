@@ -14,8 +14,12 @@ export default function ShowcaseGrid({ showcases }: ShowcaseGridProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {showcases.map((showcase) => (
-        <ShowcaseCard key={showcase.id} showcase={showcase} />
+      {showcases.map((showcase, index) => (
+        <ShowcaseCard
+          key={showcase.id}
+          showcase={showcase}
+          priority={index === 0}
+        />
       ))}
     </div>
   );

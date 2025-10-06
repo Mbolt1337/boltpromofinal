@@ -7,22 +7,26 @@ interface CarouselBaseProps<T> {
   items: T[];
   renderItem: (item: T, index: number) => ReactNode;
   itemWidth?: string; // Tailwind class: 'min-w-[320px]', 'min-w-[360px]', etc
+  itemClassName?: string; // Additional classes for item wrapper
   gap?: string; // Tailwind class: 'gap-4', 'gap-6', etc
   showDots?: boolean;
   showArrows?: boolean;
   className?: string;
   containerClassName?: string;
+  fixedSize?: { width: string; height: string } | null; // For promo cards
 }
 
 export default function CarouselBase<T>({
   items,
   renderItem,
   itemWidth = 'min-w-[320px] sm:min-w-[360px]',
+  itemClassName = '',
   gap = 'gap-4 sm:gap-6',
   showDots = true,
   showArrows = false,
   className = '',
-  containerClassName = ''
+  containerClassName = '',
+  fixedSize = { width: '310px', height: '460px' }
 }: CarouselBaseProps<T>) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -76,8 +80,8 @@ export default function CarouselBase<T>({
           {items.map((item, index) => (
             <div
               key={index}
-              className={`snap-start shrink-0`}
-              style={{ width: '310px', height: '460px' }}
+              className={`snap-start shrink-0 ${itemClassName} ${itemWidth}`}
+              style={fixedSize ? { width: fixedSize.width, height: fixedSize.height } : undefined}
             >
               {renderItem(item, index)}
             </div>
@@ -110,7 +114,7 @@ export default function CarouselBase<T>({
 
       {/* Dot Indicators */}
       {showDots && items.length > 1 && (
-        <div className="flex justify-center gap-1.5 mt-4" role="tablist">
+        <div className="flex justify-center gap-1.5 mt-2 md:mt-4" role="tablist">
           {items.map((_, index) => (
             <button
               key={index}

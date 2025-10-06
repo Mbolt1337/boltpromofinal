@@ -19,6 +19,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Import cache utilities for API response caching
+from .utils.cache import cache_api_response
+
 from .models import Store, Category, PromoCode, Banner, StaticPage, Partner, ContactMessage, Showcase, ShowcaseItem
 from .serializers import (
     StoreSerializer, StoreDetailSerializer, CategorySerializer,
@@ -51,16 +54,17 @@ class CategoryListView(generics.ListAPIView):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'created_at']
     ordering = ['name']
-    
+
     pagination_class = None
-    
+
     def get_queryset(self):
         return Category.objects.filter(is_active=True).order_by('name')
-    
+
+    @cache_api_response(ttl=3600)  # 60 minutes cache for categories (rarely change)
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        
+
         return Response({
             'count': len(serializer.data),
             'next': None,
@@ -316,14 +320,18 @@ class PromoCodeListView(generics.ListAPIView):
     filterset_class = PromoCodeFilter
     ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot', 'popular']
     ordering = ['-is_recommended', '-is_hot', '-created_at']
-    
+
     search_fields = [
-        'title', 
-        'description', 
-        'store__name', 
+        'title',
+        'description',
+        'store__name',
         'categories__name'
     ]
-    
+
+    @cache_api_response(ttl=900)  # 15 minutes cache for promo codes list
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         queryset = PromoCode.objects.filter(
             is_active=True,
@@ -664,6 +672,10 @@ class ShowcaseViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return ShowcaseDetailSerializer
         return ShowcaseListSerializer
+
+    @cache_api_response(ttl=1800)  # 30 minutes cache for showcases list
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @action(detail=True, methods=['get'], url_path='promos')
     def promos(self, request, slug=None):
