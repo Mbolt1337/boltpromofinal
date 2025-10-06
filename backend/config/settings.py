@@ -247,6 +247,10 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 300  # 5 минут для страниц
 CACHE_MIDDLEWARE_KEY_PREFIX = 'boltpromo'
 
+# django-ratelimit configuration
+RATELIMIT_USE_CACHE = 'default'  # Использовать Redis для rate limiting
+RATELIMIT_ENABLE = True
+
 # ✅ ДОБАВЛЕНО: Настройки кэширования сессий
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_CACHE_ALIAS = 'default'

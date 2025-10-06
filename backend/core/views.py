@@ -11,8 +11,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
 from ipware import get_client_ip as get_client_ip_safe
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .models import Store, Category, PromoCode, Banner, StaticPage, Partner, ContactMessage, Showcase, ShowcaseItem
 from .serializers import (
@@ -446,23 +451,21 @@ def global_search(request):
 
 
 class ContactMessageCreateView(generics.CreateAPIView):
-    
+
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    
+
+    @method_decorator(ratelimit(key='ip', rate='2/m', block=True, method='POST'))
+    @method_decorator(ratelimit(key='ip', rate='10/h', block=True, method='POST'))
+    def post(self, request, *args, **kwargs):
+        # Rate limiting через Redis (2/min и 10/hour)
+        # Если превышен — django-ratelimit вернёт 429 автоматически
+        return self.create(request, *args, **kwargs)
+
     def create(self, request, *args, **kwargs):
-        
+
+        # Логируем попытку отправки
         client_ip = self.get_client_ip(request)
-        recent_messages = ContactMessage.objects.filter(
-            ip_address=client_ip,
-            created_at__gte=timezone.now() - timezone.timedelta(minutes=5)
-        ).count()
-        
-        if recent_messages >= 3:
-            return Response({
-                'success': False,
-                'error_code': 'RATE_LIMIT_EXCEEDED'
-            }, status=status.HTTP_429_TOO_MANY_REQUESTS)
         
         serializer = self.get_serializer(data=request.data)
         
