@@ -31,6 +31,8 @@ class MaintenanceModeMiddleware:
     def __call__(self, request):
         # Импорт здесь чтобы избежать циклических зависимостей
         from .models import SiteSettings
+        import logging
+        logger = logging.getLogger(__name__)
 
         try:
             settings = SiteSettings.objects.first()
@@ -41,14 +43,33 @@ class MaintenanceModeMiddleware:
         if not settings or not settings.maintenance_enabled:
             return self.get_response(request)
 
-        # Проверяем IP whitelist
+        # Логируем для отладки
         client_ip = get_client_ip(request)
-        if client_ip in settings.maintenance_ip_whitelist:
+        logger.info(f"Maintenance mode active. Client IP: {client_ip}, Whitelist: {settings.maintenance_ip_whitelist}")
+
+        # Проверяем IP whitelist (только если список не пустой)
+        whitelist = settings.maintenance_ip_whitelist or []
+        if whitelist and client_ip in whitelist:
+            logger.info(f"IP {client_ip} in whitelist, allowing access")
             return self.get_response(request)
 
         # Проверяем админку (разрешаем доступ к админке всегда)
         if request.path.startswith('/admin/'):
             return self.get_response(request)
+
+        # Разрешаем доступ к health endpoint для мониторинга
+        if request.path.startswith('/api/v1/health/'):
+            # Возвращаем 503 но с индикатором maintenance
+            response_data = {
+                'maintenance': True,
+                'message': settings.maintenance_message or 'Ведутся технические работы',
+                'retry_after': None
+            }
+            if settings.maintenance_expected_end:
+                delta = settings.maintenance_expected_end - timezone.now()
+                if delta.total_seconds() > 0:
+                    response_data['retry_after'] = settings.maintenance_expected_end.isoformat()
+            return JsonResponse(response_data, status=503)
 
         # Для API возвращаем JSON
         if request.path.startswith('/api/'):

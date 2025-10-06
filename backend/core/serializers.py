@@ -142,13 +142,14 @@ class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
         fields = [
-            'id', 'title', 'subtitle', 'image', 'cta_text',
+            'id', 'title', 'subtitle', 'image', 'image_mobile', 'cta_text',
             'cta_url', 'link', 'is_active', 'sort_order', 'created_at'
         ]
         extra_kwargs = {
             'title': {'required': False, 'allow_blank': True},
             'subtitle': {'required': False, 'allow_blank': True},
             'cta_text': {'required': False, 'allow_blank': True},
+            'image_mobile': {'required': False, 'allow_null': True},
         }
 
 

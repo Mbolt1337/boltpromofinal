@@ -17,6 +17,9 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['is_active', 'name'], name='idx_category_active'),
+        ]
 
     def __str__(self):
         return self.name
@@ -45,6 +48,9 @@ class Store(models.Model):
         verbose_name = 'Магазин'
         verbose_name_plural = 'Магазины'
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['is_active', '-rating', 'name'], name='idx_store_active_rating'),
+        ]
 
     def __str__(self):
         return self.name
@@ -198,7 +204,18 @@ class PromoCode(models.Model):
 class Banner(models.Model):
     title = models.CharField(max_length=200, blank=True, verbose_name='Заголовок')
     subtitle = models.CharField(max_length=300, blank=True, verbose_name='Подзаголовок')
-    image = models.ImageField(upload_to='banners/', verbose_name='Изображение')
+    image = models.ImageField(
+        upload_to='banners/',
+        verbose_name='Изображение (Десктоп)',
+        help_text='Рекомендуемый размер: 1200x380px. Для десктопной версии сайта.'
+    )
+    image_mobile = models.ImageField(
+        upload_to='banners/mobile/',
+        blank=True,
+        null=True,
+        verbose_name='Изображение (Мобилка)',
+        help_text='Рекомендуемый размер: 800x600px. Если не загружено, будет использоваться десктопное изображение.'
+    )
     cta_text = models.CharField(max_length=50, blank=True, default='Подробнее', verbose_name='Текст кнопки')
     cta_url = models.URLField(verbose_name='Ссылка')
     is_active = models.BooleanField(default=True, verbose_name='Активен')
@@ -299,6 +316,11 @@ class ContactMessage(models.Model):
         verbose_name = 'Сообщение обратной связи'
         verbose_name_plural = 'Сообщения обратной связи'
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['-created_at'], name='idx_contact_created'),
+            models.Index(fields=['ip_address', 'created_at'], name='idx_contact_ip_date'),
+            models.Index(fields=['is_processed', 'is_spam', '-created_at'], name='idx_contact_status'),
+        ]
 
     def __str__(self):
         return f"{self.name} ({self.email}) - {self.created_at.strftime('%d.%m.%Y %H:%M')}"

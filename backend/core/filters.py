@@ -200,3 +200,46 @@ class PromoCodeOrderingFilter(OrderingFilter):
             mapped_field = self.field_map.get(raw_field, raw_field)
             mapped.append(prefix + mapped_field)
         return mapped
+
+    def filter_queryset(self, request, queryset, view):
+        """Override to handle special 'popular' ordering"""
+        ordering_param = request.query_params.get(self.ordering_param)
+
+        # Специальная обработка для ordering=popular
+        if ordering_param == 'popular' or ordering_param == '-popular':
+            from django.db.models import Sum, Case, When, IntegerField, Value
+            from datetime import timedelta
+            from django.utils import timezone
+
+            week_ago = (timezone.now() - timedelta(days=7)).date()
+
+            # Аннотируем usage_7d (клики + копирования за 7 дней)
+            queryset = queryset.annotate(
+                usage_7d=Sum(
+                    Case(
+                        When(
+                            dailyagg__date__gte=week_ago,
+                            dailyagg__event_type__in=['click', 'copy'],
+                            then='dailyagg__count'
+                        ),
+                        default=Value(0),
+                        output_field=IntegerField()
+                    )
+                )
+            )
+
+            # Аннотируем has_badge (is_hot OR is_recommended)
+            queryset = queryset.annotate(
+                has_badge=Case(
+                    When(models.Q(is_hot=True) | models.Q(is_recommended=True), then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField()
+                )
+            )
+
+            # Сортировка: badges first → usage_7d → freshness
+            queryset = queryset.order_by('-has_badge', '-usage_7d', '-created_at')
+            return queryset
+
+        # Обычная сортировка
+        return super().filter_queryset(request, queryset, view)

@@ -269,3 +269,58 @@ def generate_site_assets(self, asset_id):
     except Exception as e:
         logger.error(f'Error generating site assets: {str(e)}', exc_info=True)
         return {'status': 'error', 'message': str(e)}
+
+
+@shared_task(bind=True, max_retries=2, soft_time_limit=120, time_limit=180)
+def update_auto_hot_promos(self):
+    """
+    Автоматическая установка флага is_hot для промокодов:
+    - Активные и не просроченные
+    - Истекают менее чем через 72 часа
+    - Имеют рост кликов за последние 7 дней
+
+    Запускать каждый час
+    """
+    from .models import PromoCode, DailyAgg
+    from django.db.models import Sum, Q
+
+    try:
+        now = timezone.now()
+        hot_threshold = now + timedelta(hours=72)
+        week_ago = (now - timedelta(days=7)).date()
+
+        # Сбрасываем is_hot у всех, кто больше не соответствует критериям
+        PromoCode.objects.filter(is_hot=True).filter(
+            Q(is_active=False) | Q(expires_at__lte=now) | Q(expires_at__gt=hot_threshold)
+        ).update(is_hot=False)
+
+        # Находим кандидатов на is_hot
+        candidates = PromoCode.objects.filter(
+            is_active=True,
+            expires_at__gt=now,
+            expires_at__lte=hot_threshold
+        )
+
+        updated_count = 0
+
+        for promo in candidates:
+            # Проверяем рост кликов за последние 7 дней
+            clicks_7d = DailyAgg.objects.filter(
+                promo_id=promo.id,
+                event_type='click',
+                date__gte=week_ago
+            ).aggregate(total=Sum('count'))['total'] or 0
+
+            # Если есть хоть какие-то клики за неделю - делаем горячим
+            if clicks_7d > 0:
+                if not promo.is_hot:
+                    promo.is_hot = True
+                    promo.save(update_fields=['is_hot'])
+                    updated_count += 1
+
+        logger.info(f"Auto-hot updated: {updated_count} promos marked as hot")
+        return {'status': 'success', 'updated': updated_count}
+
+    except Exception as e:
+        logger.error(f'Error updating auto-hot promos: {str(e)}')
+        raise self.retry(exc=e, countdown=60 * (2 ** self.request.retries))

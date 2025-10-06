@@ -78,6 +78,12 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
 
+    # Health checks
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+
     # Local apps
     'core',
 ]

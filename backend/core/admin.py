@@ -395,10 +395,11 @@ class BannerAdminForm(AntiMojibakeModelForm):
 class BannerAdmin(ExportMixin, admin.ModelAdmin):
     form = BannerAdminForm
     list_display = ['title', 'subtitle_short', 'image_preview', 'cta_text', 'cta_link', 'is_active', 'sort_order']
+    list_display_links = ['title', 'image_preview']  # Делаем title и превью кликабельными
     list_filter = ['is_active', 'created_at']
     search_fields = ['title', 'subtitle', 'cta_text']
     list_editable = ['is_active', 'sort_order']
-    fields = ('image', 'cta_url', 'title', 'subtitle', 'cta_text', 'is_active', 'sort_order')
+    fields = ('image', 'image_mobile', 'cta_url', 'title', 'subtitle', 'cta_text', 'is_active', 'sort_order')
     
     def subtitle_short(self, obj):
         if obj.subtitle and len(obj.subtitle) > 40:

@@ -74,7 +74,7 @@ class CategoryPromocodesView(generics.ListAPIView):
     serializer_class = PromoCodeSerializer
     filter_backends = [DjangoFilterBackend, PromoCodeOrderingFilter, filters.SearchFilter]
     filterset_class = PromoCodeFilter
-    ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot']
+    ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot', 'popular']
     ordering = ['-is_recommended', '-is_hot', '-created_at']
     
     search_fields = [
@@ -191,7 +191,7 @@ class StorePromocodesView(generics.ListAPIView):
     serializer_class = PromoCodeSerializer
     filter_backends = [DjangoFilterBackend, PromoCodeOrderingFilter, filters.SearchFilter]
     filterset_class = PromoCodeFilter
-    ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot']
+    ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot', 'popular']
     ordering = ['-is_recommended', '-is_hot', '-created_at']
     
     search_fields = [
@@ -309,7 +309,7 @@ class PromoCodeListView(generics.ListAPIView):
     serializer_class = PromoCodeSerializer
     filter_backends = [DjangoFilterBackend, PromoCodeOrderingFilter, filters.SearchFilter]
     filterset_class = PromoCodeFilter
-    ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot']
+    ordering_fields = ['created_at', 'views_count', 'expires_at', 'is_recommended', 'is_hot', 'popular']
     ordering = ['-is_recommended', '-is_hot', '-created_at']
     
     search_fields = [

@@ -111,10 +111,9 @@ def stats_top_promos(request):
         # Топ-10 промокодов по кликам
         from django.db.models import Sum
 
-        # Проверяем, есть ли агрегированные данные
-        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
-
-        if has_agg_data:
+        # Всегда используем свежие данные из Event для актуальности
+        # (особенно важно для сегодняшних событий)
+        if False:  # Отключаем агрегированные данные, всегда берем свежие
             # Используем агрегированные данные из DailyAgg
             CLICK_EVENT_TYPES = [
                 'copy', 'open',                   # основные типы
@@ -178,10 +177,9 @@ def stats_top_stores(request):
 
         from django.db.models import Sum
 
-        # Проверяем, есть ли агрегированные данные
-        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
-
-        if has_agg_data:
+        # Всегда используем свежие данные из Event для актуальности
+        # (особенно важно для сегодняшних событий)
+        if False:  # Отключаем агрегированные данные, всегда берем свежие
             top = DailyAgg.objects.filter(
                 date__gte=start_date,
                 store__isnull=False
@@ -226,10 +224,9 @@ def stats_types_share(request):
 
         from django.db.models import Sum
 
-        # Проверяем, есть ли агрегированные данные
-        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
-
-        if has_agg_data:
+        # Всегда используем свежие данные из Event для актуальности
+        # (особенно важно для сегодняшних событий)
+        if False:  # Отключаем агрегированные данные, всегда берем свежие
             types = DailyAgg.objects.filter(
                 date__gte=start_date,
                 promo__isnull=False
@@ -274,10 +271,9 @@ def stats_showcases_ctr(request):
 
         from django.db.models import Sum
 
-        # Проверяем, есть ли агрегированные данные
-        has_agg_data = DailyAgg.objects.filter(date__gte=start_date).exists()
-
-        if has_agg_data:
+        # Всегда используем свежие данные из Event для актуальности
+        # (особенно важно для сегодняшних событий)
+        if False:  # Отключаем агрегированные данные, всегда берем свежие
             views = DailyAgg.objects.filter(
                 date__gte=start_date,
                 event_type='showcase_view',
@@ -299,7 +295,7 @@ def stats_showcases_ctr(request):
                 created_at__date__gte=start_date,
                 event_type='showcase_view',
                 showcase__isnull=False
-            ).values('showcase_id', 'showcase__name').annotate(
+            ).values('showcase_id', 'showcase__title').annotate(
                 views_count=Count('id')
             )
 
@@ -323,7 +319,7 @@ def stats_showcases_ctr(request):
 
             data.append({
                 'showcase_id': showcase_id,
-                'title': view_item.get('showcase__title') or view_item.get('showcase__name', 'Unknown'),
+                'title': view_item.get('showcase__title', 'Unknown'),
                 'views': views_count,
                 'clicks': clicks_count,
                 'ctr': round(ctr, 2)
