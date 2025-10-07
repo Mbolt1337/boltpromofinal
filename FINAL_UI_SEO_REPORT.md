@@ -176,31 +176,73 @@
 
 ---
 
-## ЭТАП 3: Lighthouse Mobile ≥90 (TODO)
+## ЭТАП 3: Lighthouse Mobile ≥90 + SiteAssets Валидация
 
-### 🎯 Задачи:
+### 📊 Baseline Audit (Existing Optimizations)
 
-1. **Images Optimization**:
+**Уже реализованные оптимизации**:
+
+1. **Lazy Imports** ✅ (page.tsx:14-18):
+   - PromoList - ленивая загрузка
+   - StoreGrid - ленивая загрузка
+   - CategoryGrid - ленивая загрузка
+   - PartnersCarousel - ленивая загрузка
+   - Все с Suspense + Skeleton fallbacks
+
+2. **SiteAssets API Integration** ✅:
+   - DynamicMetaTags.tsx (lines 1-79) - favicons из API с fallback
+   - manifest.webmanifest/route.ts - динамический manifest из API
+   - theme_color и background_color из API
+   - Безопасные fallbacks если API недоступен
+
+3. **Image Optimization** (требует проверки):
+   - Next.js Image component используется
+   - Нужно проверить width/height и sizes атрибуты
+
+### 🎯 Задачи для улучшения:
+
+1. **Lighthouse Mobile Audit**:
+   - [ ] Добавить mobile preset в lighthouserc.json
+   - [ ] Запустить audit на ключевых страницах
+   - [ ] Проверить Performance, SEO, Best Practices, Accessibility ≥ 90
+
+2. **Images Optimization**:
    - [ ] Проверить width/height на всех next/image
    - [ ] Проверить sizes атрибуты
-   - [ ] Добавить lazy loading где нужно
-
-2. **Performance**:
-   - [ ] Проверить что lazy imports работают (PromoList, CategoryGrid, etc)
-   - [ ] Убрать неиспользуемый код
-   - [ ] Оптимизировать bundle size
+   - [ ] Убедиться в правильном lazy loading
 
 3. **Audit Results**:
-   - [ ] Run Lighthouse на `/` (home)
-   - [ ] Run Lighthouse на `/showcases/[slug]`
-   - [ ] Run Lighthouse на `/promo/[id]`
-   - [ ] Run Lighthouse на `/stores/[slug]`
+   - [ ] Lighthouse на `/` (home)
+   - [ ] Lighthouse на `/showcases/[slug]`
+   - [ ] Lighthouse на `/promo/[id]`
+   - [ ] Lighthouse на `/stores/[slug]`
 
 ---
 
-## ЭТАП 4: SiteAssets Verification (TODO)
+## ЭТАП 4: SiteAssets Verification ✅ ПОЛНОСТЬЮ ИНТЕГРИРОВАН
 
-✅ **ALREADY DONE** - SiteAssets API уже корректно интегрирован
+**Проверка интеграции SiteAssets API**:
+
+✅ **DynamicMetaTags.tsx** (frontend/src/components/DynamicMetaTags.tsx):
+- Вызывает `getSiteAssets()` из API
+- Генерирует favicon теги из API (favicon_ico, favicon_16, favicon_32)
+- Генерирует apple-touch-icon из API
+- Генерирует safari pinned tab из API
+- Устанавливает theme_color из API
+- **Безопасные fallbacks**: при ошибке использует дефолтные значения (#0b1020)
+
+✅ **Manifest** (frontend/src/app/manifest.webmanifest/route.ts):
+- Динамически генерирует manifest.json из SiteAssets API
+- PWA иконки (192x192, 512x512, maskable) из API
+- theme_color и background_color из API
+- Кэшируется на 1 час (revalidate: 3600)
+- **Безопасные fallbacks**: при ошибке возвращает минимальный manifest
+
+✅ **OG Images**:
+- generateMetadata использует `createOgImageObject()` из lib/og-utils
+- Поддержка динамических OG изображений через SiteAssets
+
+**Результат**: SiteAssets API полностью интегрирован с безопасными fallbacks. Никакие favicons/manifest/theme не хардкодны.
 
 ---
 
