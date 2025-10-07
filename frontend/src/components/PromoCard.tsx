@@ -314,7 +314,7 @@ export default function PromoCard({ promo }: PromoCardProps) {
 
   return (
     <>
-      <div className={cardClasses} tabIndex={0}>
+      <div className={cardClasses} tabIndex={0} data-testid="promo-card">
 
         {/* КОНТЕЙНЕР С ЕДИНЫМ PADDING (минимум p-5) */}
         <div className="p-5 flex flex-col h-full">
@@ -413,6 +413,7 @@ export default function PromoCard({ promo }: PromoCardProps) {
             disabled={actionButtonConfig.disabled || isLoading}
             className={actionButtonConfig.className}
             aria-label={buttonAriaLabel}
+            data-testid="promo-activate-button"
           >
             <ActionIcon className="w-4 h-4 flex-shrink-0 transition-transform duration-300 ease-out" />
             <span className="truncate">
@@ -428,6 +429,7 @@ export default function PromoCard({ promo }: PromoCardProps) {
             href={`/promo/${promo.id}`}
             className={SECONDARY_BUTTON}
             aria-label={`Подробнее о предложении ${promo.title}`}
+            data-testid="promo-details-button"
           >
             <Info className="w-4 h-4 flex-shrink-0" />
             <span>Подробнее</span>

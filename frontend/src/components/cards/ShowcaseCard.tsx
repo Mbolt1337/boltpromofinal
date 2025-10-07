@@ -26,6 +26,7 @@ export default function ShowcaseCard({ showcase, priority = false }: ShowcaseCar
       href={`/showcases/${showcase.slug}`}
       className="group block h-full"
       onClick={handleClick}
+      data-testid="showcase-card"
     >
       <BaseCard className="h-full overflow-hidden flex flex-col p-0">
         {/* Banner 16:9 */}

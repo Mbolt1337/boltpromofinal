@@ -17,7 +17,10 @@
       "Bash(git log:*)",
       "Bash(find:*)",
       "Bash(if not exist \"E:\\boltpromoFINAL\\BoltPromo-main\\AUDIT_REPORT\" mkdir \"E:\\boltpromoFINAL\\BoltPromo-main\\AUDIT_REPORT\")",
-      "Bash(redis-cli:*)"
+      "Bash(redis-cli:*)",
+      "Bash(npx playwright install:*)",
+      "Bash(if not exist \"E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\tests\" mkdir \"E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\tests\")",
+      "Bash(if not exist:*)"
     ],
     "deny": [],
     "ask": []

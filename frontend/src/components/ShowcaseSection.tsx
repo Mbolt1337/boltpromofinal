@@ -16,7 +16,7 @@ export default async function ShowcaseSection() {
   }
 
   return (
-    <SectionContainer>
+    <SectionContainer data-testid="showcase-section">
       <SectionHeader
         title="Найдите лучшие промокоды в подборках BoltPromo"
         subtitle="Специально подобранные коллекции промокодов для разных категорий"
@@ -33,7 +33,7 @@ export default async function ShowcaseSection() {
 
       {/* View All Link */}
       <div className="mt-4 md:mt-12 flex justify-center">
-        <Link href="/showcases" className={ACTION_BUTTON_CLASSES}>
+        <Link href="/showcases" className={ACTION_BUTTON_CLASSES} data-testid="showcases-view-all-button">
           <Layers className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-300 ease-out" />
           <span>Перейти к подборкам</span>
           <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300 ease-out" />
