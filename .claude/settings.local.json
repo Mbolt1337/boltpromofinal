@@ -20,7 +20,8 @@
       "Bash(redis-cli:*)",
       "Bash(npx playwright install:*)",
       "Bash(if not exist \"E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\tests\" mkdir \"E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\tests\")",
-      "Bash(if not exist:*)"
+      "Bash(if not exist:*)",
+      "Bash(BASE_URL=http://localhost:3004 npx playwright test --project=chromium)"
     ],
     "deny": [],
     "ask": []

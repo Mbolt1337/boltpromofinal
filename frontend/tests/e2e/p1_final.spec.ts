@@ -74,29 +74,29 @@ test.describe('BoltPromo P1 Final Smoke Tests', () => {
   test('Search: dark popover opens and closes correctly', async ({ page }) => {
     await page.goto(BASE_URL);
 
-    // Находим search button (может быть лупа, кнопка Search и т.д.)
-    const searchButton = page.locator('[data-testid="search-button"], button:has([aria-label*="search"i]), button:has-text("Поиск")').first();
+    // Находим search input
+    const searchInput = page.locator('[data-testid="search-input"]').first();
 
-    if (await searchButton.isVisible({ timeout: 5000 })) {
-      // Открываем popover
-      await searchButton.click();
+    if (await searchInput.isVisible({ timeout: 5000 })) {
+      // Фокусируемся на input чтобы открыть dropdown
+      await searchInput.click();
 
-      // Проверяем, что popover виден
-      const searchPopover = page.locator('[data-testid="search-popover"], [role="dialog"], [class*="search-popover"]').first();
-      await expect(searchPopover).toBeVisible({ timeout: 3000 });
+      // Проверяем, что dropdown виден
+      const searchDropdown = page.locator('[data-testid="search-dropdown"]').first();
+      await expect(searchDropdown).toBeVisible({ timeout: 3000 });
 
-      // Проверяем, что popover тёмный (background-color содержит rgb с малыми значениями)
-      const bgColor = await searchPopover.evaluate(el => window.getComputedStyle(el).backgroundColor);
+      // Проверяем, что dropdown тёмный (background-color содержит rgb с малыми значениями)
+      const bgColor = await searchDropdown.evaluate(el => window.getComputedStyle(el).backgroundColor);
       // Примерная проверка темноты: rgb(r, g, b) где r+g+b < 150
-      const isDark = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      const isDark = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
       if (isDark) {
         const sum = parseInt(isDark[1]) + parseInt(isDark[2]) + parseInt(isDark[3]);
         expect(sum).toBeLessThan(200); // Тёмный background
       }
 
-      // Закрываем popover (ESC или клик вне)
+      // Закрываем dropdown (ESC)
       await page.keyboard.press('Escape');
-      await expect(searchPopover).toBeHidden({ timeout: 2000 });
+      await expect(searchDropdown).toBeHidden({ timeout: 2000 });
     }
   });
 

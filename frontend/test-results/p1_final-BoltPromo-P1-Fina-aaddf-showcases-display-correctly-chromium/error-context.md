@@ -7,947 +7,435 @@
       - link "BoltPromo" [ref=e6] [cursor=pointer]:
         - /url: /
         - img [ref=e8]
-        - text: BoltPromo
-      - navigation [ref=e10]:
-        - link "Категории" [ref=e11] [cursor=pointer]:
+        - generic [ref=e10]: BoltPromo
+      - navigation [ref=e11]:
+        - link "Категории" [ref=e12] [cursor=pointer]:
           - /url: /categories
-        - link "Магазины" [ref=e12] [cursor=pointer]:
+        - link "Магазины" [ref=e13] [cursor=pointer]:
           - /url: /stores
-        - link "Горячие" [ref=e13] [cursor=pointer]:
+        - link "Горячие" [ref=e14] [cursor=pointer]:
           - /url: /hot
-        - link "FAQ" [ref=e14] [cursor=pointer]:
+        - link "FAQ" [ref=e15] [cursor=pointer]:
           - /url: /faq
-        - link "Контакты" [ref=e15] [cursor=pointer]:
+        - link "Контакты" [ref=e16] [cursor=pointer]:
           - /url: /contacts
-      - generic [ref=e16]:
-        - generic [ref=e19]:
-          - generic [ref=e20]:
-            - img [ref=e21]
-            - textbox "Поиск промокодов, магазинов, категорий..." [ref=e24]
-            - generic [ref=e25]:
-              - img [ref=e26]
-              - text: K
-          - button "Поиск" [ref=e28]
-        - button [ref=e29]:
-          - img [ref=e30]
-        - button [ref=e33]:
-          - img [ref=e34]
-  - main [ref=e35]:
-    - region "Рекламные баннеры" [ref=e36]:
-      - paragraph [ref=e42]: Загрузка баннеров...
-    - region "Подборки промокодов"
-    - region "Популярные промокоды" [ref=e43]:
-      - generic [ref=e45]:
-        - generic [ref=e46]:
-          - heading "Популярные промокоды" [level=2] [ref=e47]
-          - paragraph [ref=e48]: Лучшие предложения от проверенных магазинов
-        - generic [ref=e50]:
-          - generic [ref=e52]:
-            - generic [ref=e55]:
-              - generic [ref=e56]:
-                - generic [ref=e57]:
-                  - img "Яндекс Афиша" [ref=e59]
-                  - generic [ref=e60]:
-                    - heading "Яндекс Афиша" [level=3] [ref=e61]
-                    - paragraph [ref=e62]: Игры и развлечения
-                - generic [ref=e64]:
-                  - img [ref=e65]
-                  - generic [ref=e67]: до 30 нояб.
-              - heading "Скидка 100 ₽" [level=4] [ref=e68]
-              - paragraph [ref=e69]: Скидка 100 ₽ на все повторные покупки билетов от 1000 ₽
-              - generic [ref=e70]: Скидка 100 ₽ на все повторные покупки билетов от 1000 ₽
-              - generic [ref=e71]:
-                - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e72]:
-                  - img [ref=e73]
-                  - text: I69372
-                - link "Подробнее о предложении Скидка 100 ₽" [ref=e76] [cursor=pointer]:
-                  - /url: /promo/88
-                  - img [ref=e77]
-                  - text: Подробнее
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - img [ref=e22]
+          - textbox "Поиск промокодов, магазинов, категорий..." [ref=e25]
+          - generic [ref=e26]:
+            - img [ref=e27]
+            - generic [ref=e29]: K
+        - button "Поиск" [ref=e30] [cursor=pointer]
+  - main [ref=e31]:
+    - region "Рекламные баннеры" [ref=e32]:
+      - paragraph [ref=e39]: Загрузка баннеров...
+    - region "Подборки промокодов" [ref=e40]:
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - heading "Найдите лучшие промокоды в подборках BoltPromo" [level=2] [ref=e44]
+          - paragraph [ref=e45]: Специально подобранные коллекции промокодов для разных категорий
+        - generic [ref=e47]:
+          - link "BoltPromo рекомендует BoltPromo рекомендует Персональные рекомендации от нас ❤️ 2 промокодов Смотреть" [ref=e48] [cursor=pointer]:
+            - /url: /showcases/novogodnyaya-rasprodazha
+            - generic [ref=e49]:
+              - img "BoltPromo рекомендует" [ref=e51]
+              - generic [ref=e52]:
+                - heading "BoltPromo рекомендует" [level=3] [ref=e53]
+                - paragraph [ref=e54]: Персональные рекомендации от нас ❤️
+                - generic [ref=e56]:
+                  - img [ref=e57]
+                  - text: 2 промокодов
+                - button "Смотреть" [ref=e61]
+          - link "Распродажа Яндекс Маркет Распродажа Яндекс Маркет Осенняя распродажа на Яндекс Маркет 2 промокодов Смотреть" [ref=e62] [cursor=pointer]:
+            - /url: /showcases/rasprodazha-yandeks-market
+            - generic [ref=e63]:
+              - img "Распродажа Яндекс Маркет" [ref=e65]
+              - generic [ref=e66]:
+                - heading "Распродажа Яндекс Маркет" [level=3] [ref=e67]
+                - paragraph [ref=e68]: Осенняя распродажа на Яндекс Маркет
+                - generic [ref=e70]:
+                  - img [ref=e71]
+                  - text: 2 промокодов
+                - button "Смотреть" [ref=e74]
+          - link "Распродажа 11.11 Распродажа 11.11 Самые выгодные предложения в честь 11.11 3 промокодов Смотреть" [ref=e75] [cursor=pointer]:
+            - /url: /showcases/rasprodazha-1111
+            - generic [ref=e76]:
+              - img "Распродажа 11.11" [ref=e78]
               - generic [ref=e79]:
-                - generic [ref=e80]: "Использовали: 2"
-                - generic [ref=e81]: Промокод
-            - generic [ref=e84]:
-              - generic [ref=e85]:
-                - generic [ref=e86]:
-                  - img "Яндекс Афиша" [ref=e88]
-                  - generic [ref=e89]:
-                    - heading "Яндекс Афиша" [level=3] [ref=e90]
-                    - paragraph [ref=e91]: Игры и развлечения
-                - generic [ref=e93]:
-                  - img [ref=e94]
-                  - generic [ref=e96]: до 30 нояб.
-              - heading "Скидка 10%" [level=4] [ref=e97]
-              - paragraph [ref=e98]: Скидка 10% на первую и все повторные покупки от 5000 ₽
-              - generic [ref=e99]: Скидка 10% на первую и все повторные покупки от 5000 ₽
-              - generic [ref=e100]:
-                - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e101]:
-                  - img [ref=e102]
-                  - text: C12063
-                - link "Подробнее о предложении Скидка 10%" [ref=e105] [cursor=pointer]:
-                  - /url: /promo/87
-                  - img [ref=e106]
-                  - text: Подробнее
+                - heading "Распродажа 11.11" [level=3] [ref=e80]
+                - paragraph [ref=e81]: Самые выгодные предложения в честь 11.11
+                - generic [ref=e83]:
+                  - img [ref=e84]
+                  - text: 3 промокодов
+                - button "Смотреть" [ref=e88]
+        - link "Перейти к подборкам" [ref=e90] [cursor=pointer]:
+          - /url: /showcases
+          - img [ref=e91]
+          - generic [ref=e95]: Перейти к подборкам
+          - img [ref=e96]
+    - region "Популярные промокоды" [ref=e98]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - heading "Популярные промокоды" [level=2] [ref=e102]
+          - paragraph [ref=e103]: Лучшие предложения от проверенных магазинов
+        - generic [ref=e104]:
+          - generic [ref=e106] [cursor=pointer]:
+            - generic [ref=e107]:
               - generic [ref=e108]:
-                - generic [ref=e109]: "Использовали: 0"
-                - generic [ref=e110]: Промокод
-            - generic [ref=e113]:
-              - generic [ref=e114]:
-                - generic [ref=e115]:
-                  - img "Яндекс Афиша" [ref=e117]
-                  - generic [ref=e118]:
-                    - heading "Яндекс Афиша" [level=3] [ref=e119]
-                    - paragraph [ref=e120]: Игры и развлечения
-                - generic [ref=e122]:
-                  - img [ref=e123]
-                  - generic [ref=e125]: до 30 нояб.
-              - heading "Скидка 400 ₽" [level=4] [ref=e126]
-              - paragraph [ref=e127]: Скидка 400 ₽ на первую покупку билетов от 3000 ₽
-              - generic [ref=e128]: Скидка 400 ₽ на первую покупку билетов от 3000 ₽
-              - generic [ref=e129]:
-                - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e130]:
-                  - img [ref=e131]
-                  - text: C07948
-                - link "Подробнее о предложении Скидка 400 ₽" [ref=e134] [cursor=pointer]:
-                  - /url: /promo/86
-                  - img [ref=e135]
-                  - text: Подробнее
-              - generic [ref=e137]:
-                - generic [ref=e138]: "Использовали: 0"
-                - generic [ref=e139]: Промокод
+                - img "Ozon" [ref=e110]
+                - generic [ref=e111]:
+                  - heading "Ozon" [level=3] [ref=e112]
+                  - paragraph [ref=e113]: Одежда
+              - generic [ref=e115]:
+                - img [ref=e116]
+                - generic [ref=e118]: до 29 окт.
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - img [ref=e121]
+                - generic [ref=e123]: BoltPromo рекомендует
+              - generic [ref=e124]:
+                - img [ref=e125]
+                - generic [ref=e127]: Горячий
+            - heading "Спортивная экипировка -35%" [level=4] [ref=e128]
+            - paragraph [ref=e129]: Одежда для фитнеса, кроссовки, спортивный инвентарь
+            - generic [ref=e131]: Скидка 35%
+            - generic [ref=e132]:
+              - button "Скопировать промокод и открыть магазин Ozon" [ref=e133]:
+                - img [ref=e134]
+                - generic [ref=e137]: SPORT35
+              - link "Подробнее о предложении Спортивная экипировка -35%" [ref=e138]:
+                - /url: /promo/7
+                - img [ref=e139]
+                - generic [ref=e141]: Подробнее
             - generic [ref=e142]:
-              - generic [ref=e143]:
-                - generic [ref=e144]:
-                  - img "Яндекс Афиша" [ref=e146]
-                  - generic [ref=e147]:
-                    - heading "Яндекс Афиша" [level=3] [ref=e148]
-                    - paragraph [ref=e149]: Игры и развлечения
-                - generic [ref=e151]:
-                  - img [ref=e152]
-                  - generic [ref=e154]: до 30 нояб.
-              - heading "Скидка 300 ₽" [level=4] [ref=e155]
-              - paragraph [ref=e156]: Скидка 300 ₽ на первую покупку билетов от 2000 ₽
-              - generic [ref=e157]: Скидка 300 ₽ на первую покупку билетов от 2000 ₽
-              - generic [ref=e158]:
-                - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e159]:
-                  - img [ref=e160]
-                  - text: B94237
-                - link "Подробнее о предложении Скидка 300 ₽" [ref=e163] [cursor=pointer]:
-                  - /url: /promo/85
-                  - img [ref=e164]
-                  - text: Подробнее
-              - generic [ref=e166]:
-                - generic [ref=e167]: "Использовали: 0"
-                - generic [ref=e168]: Промокод
-            - generic [ref=e171]:
-              - generic [ref=e172]:
-                - generic [ref=e173]:
-                  - img "Яндекс Афиша" [ref=e175]
-                  - generic [ref=e176]:
-                    - heading "Яндекс Афиша" [level=3] [ref=e177]
-                    - paragraph [ref=e178]: Игры и развлечения
-                - generic [ref=e180]:
-                  - img [ref=e181]
-                  - generic [ref=e183]: до 30 нояб.
-              - heading "Скидка 500 ₽" [level=4] [ref=e184]
-              - paragraph [ref=e185]: Скидка 500 ₽ на первую и все повторные покупки билетов от 3000 ₽
-              - generic [ref=e186]: Скидка 500 ₽ на первую и все повторные покупки билетов от 3000 ₽
-              - generic [ref=e187]:
-                - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e188]:
-                  - img [ref=e189]
-                  - text: D12748
-                - link "Подробнее о предложении Скидка 500 ₽" [ref=e192] [cursor=pointer]:
-                  - /url: /promo/84
-                  - img [ref=e193]
-                  - text: Подробнее
-              - generic [ref=e195]:
-                - generic [ref=e196]: "Использовали: 0"
-                - generic [ref=e197]: Промокод
-            - generic [ref=e200]:
-              - generic [ref=e201]:
-                - generic [ref=e202]:
-                  - img "Столото" [ref=e204]
-                  - generic [ref=e205]:
-                    - heading "Столото" [level=3] [ref=e206]
-                    - paragraph [ref=e207]: Игры и развлечения
-                - generic [ref=e209]:
-                  - img [ref=e210]
-                  - generic [ref=e212]: до 31 дек.
-              - heading "600 бонусов при первой покупке билетов от 200 ₽" [level=4] [ref=e213]
-              - paragraph [ref=e214]: 600 бонусов при первой покупке билетов от 200 ₽ и введении промокода при регистрации по ссылке
-              - generic [ref=e215]: 600 бонусов при первой покупке билетов от 200 ₽ и введении промокода при регистрации по ссылке
-              - generic [ref=e216]:
-                - button "Скопировать промокод и открыть магазин Столото" [ref=e217]:
-                  - img [ref=e218]
-                  - text: RISKFREE30
-                - link "Подробнее о предложении 600 бонусов при первой покупке билетов от 200 ₽" [ref=e221] [cursor=pointer]:
-                  - /url: /promo/79
-                  - img [ref=e222]
-                  - text: Подробнее
+              - generic [ref=e143]: "Использовали: 469"
+              - generic [ref=e145]: Промокод
+          - generic [ref=e147] [cursor=pointer]:
+            - generic [ref=e148]:
+              - generic [ref=e149]:
+                - img "М.Видео" [ref=e151]
+                - generic [ref=e152]:
+                  - heading "М.Видео" [level=3] [ref=e153]
+                  - paragraph [ref=e154]: Технологии
+              - generic [ref=e156]:
+                - img [ref=e157]
+                - generic [ref=e159]: до 29 окт.
+            - generic [ref=e161]:
+              - img [ref=e162]
+              - generic [ref=e164]: Горячий
+            - heading "Распродажа техники до 50%" [level=4] [ref=e165]
+            - paragraph [ref=e166]: Телевизоры, холодильники, стиральные машины
+            - generic [ref=e168]: До 50%
+            - generic [ref=e169]:
+              - button "Скопировать промокод и открыть магазин М.Видео" [ref=e170]:
+                - img [ref=e171]
+                - generic [ref=e174]: ПОКУПКА610
+              - link "Подробнее о предложении Распродажа техники до 50%" [ref=e175]:
+                - /url: /promo/5
+                - img [ref=e176]
+                - generic [ref=e178]: Подробнее
+            - generic [ref=e179]:
+              - generic [ref=e180]: "Использовали: 386"
+              - generic [ref=e182]: Промокод
+          - generic [ref=e184] [cursor=pointer]:
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - img "AliExpress" [ref=e188]
+                - generic [ref=e189]:
+                  - heading "AliExpress" [level=3] [ref=e190]
+                  - paragraph [ref=e191]: Дом и сад
+              - generic [ref=e193]:
+                - img [ref=e194]
+                - generic [ref=e196]: до 29 окт.
+            - generic [ref=e198]:
+              - img [ref=e199]
+              - generic [ref=e201]: Горячий
+            - heading "Скидка 40% на первый заказ" [level=4] [ref=e202]
+            - paragraph [ref=e203]: Максимальная скидка для новых покупателей
+            - generic [ref=e205]: Скидка 40%
+            - generic [ref=e207]:
+              - button "Скопировать промокод и открыть магазин AliExpress" [ref=e208]:
+                - img [ref=e209]
+                - generic [ref=e212]: NEWBIE40
+              - link "Подробнее о предложении Скидка 40% на первый заказ" [ref=e213]:
+                - /url: /promo/3
+                - img [ref=e214]
+                - generic [ref=e216]: Подробнее
+            - generic [ref=e217]:
+              - generic [ref=e218]: "Использовали: 256"
+              - generic [ref=e220]: Промокод
+          - generic [ref=e222] [cursor=pointer]:
+            - generic [ref=e223]:
               - generic [ref=e224]:
-                - generic [ref=e225]: "Использовали: 0"
-                - generic [ref=e226]: Промокод
-            - generic [ref=e229]:
-              - generic [ref=e230]:
-                - generic [ref=e231]:
-                  - img "Zotman" [ref=e233]
-                  - generic [ref=e234]:
-                    - heading "Zotman" [level=3] [ref=e235]
-                    - paragraph [ref=e236]: Продукты и доставка еды
-                - generic [ref=e238]:
-                  - img [ref=e239]
-                  - generic [ref=e241]: до 30 нояб.
-              - heading "Скидка 12% от 2999 ₽" [level=4] [ref=e242]
-              - paragraph [ref=e243]: Скидка 12% от 2999 ₽ для всех, кто не делал заказы более 90 дней, в том числе для новых пользователей
-              - generic [ref=e244]: Скидка 12% от 2999 ₽ для всех, кто не делал заказы более 90 дней, в том числе для новых пользовател
-              - generic [ref=e245]:
-                - button "Скопировать промокод и открыть магазин Zotman" [ref=e246]:
-                  - img [ref=e247]
-                  - text: Q724
-                - link "Подробнее о предложении Скидка 12% от 2999 ₽" [ref=e250] [cursor=pointer]:
-                  - /url: /promo/78
-                  - img [ref=e251]
-                  - text: Подробнее
-              - generic [ref=e253]:
-                - generic [ref=e254]: "Использовали: 0"
-                - generic [ref=e255]: Промокод
-            - generic [ref=e258]:
-              - generic [ref=e259]:
-                - generic [ref=e260]:
-                  - img "Zotman" [ref=e262]
-                  - generic [ref=e263]:
-                    - heading "Zotman" [level=3] [ref=e264]
-                    - paragraph [ref=e265]: Продукты и доставка еды
-                - generic [ref=e267]:
-                  - img [ref=e268]
-                  - generic [ref=e270]: до 30 нояб.
-              - heading "Пицца \"Цыплёнок ранч\" в подарок" [level=4] [ref=e271]
-              - paragraph [ref=e272]: Пицца "Цыплёнок ранч" в подарок при первом и повторном заказе от 3199 ₽
-              - generic [ref=e273]: Пицца "Цыплёнок ранч" в подарок при первом и повторном заказе от 3199 ₽
-              - generic [ref=e274]:
-                - button "Скопировать промокод и открыть магазин Zotman" [ref=e275]:
-                  - img [ref=e276]
-                  - text: R379
-                - link "Подробнее о предложении Пицца \"Цыплёнок ранч\" в подарок" [ref=e279] [cursor=pointer]:
-                  - /url: /promo/77
-                  - img [ref=e280]
-                  - text: Подробнее
-              - generic [ref=e282]:
-                - generic [ref=e283]: "Использовали: 0"
-                - generic [ref=e284]: Промокод
-            - generic [ref=e287]:
-              - generic [ref=e288]:
-                - generic [ref=e289]:
-                  - img "Zotman" [ref=e291]
-                  - generic [ref=e292]:
-                    - heading "Zotman" [level=3] [ref=e293]
-                    - paragraph [ref=e294]: Продукты и доставка еды
-                - generic [ref=e296]:
-                  - img [ref=e297]
-                  - generic [ref=e299]: до 30 нояб.
-              - heading "Пицца \"Баварская мясная\" в подарок" [level=4] [ref=e300]
-              - paragraph [ref=e301]: Пицца "Баварская мясная" в подарок при первом и повторном заказе от 3499 ₽
-              - generic [ref=e302]: Пицца "Баварская мясная" в подарок при первом и повторном заказе от 3499 ₽
-              - generic [ref=e303]:
-                - button "Скопировать промокод и открыть магазин Zotman" [ref=e304]:
-                  - img [ref=e305]
-                  - text: J140
-                - link "Подробнее о предложении Пицца \"Баварская мясная\" в подарок" [ref=e308] [cursor=pointer]:
-                  - /url: /promo/76
-                  - img [ref=e309]
-                  - text: Подробнее
-              - generic [ref=e311]:
-                - generic [ref=e312]: "Использовали: 1"
-                - generic [ref=e313]: Промокод
-            - generic [ref=e316]:
-              - generic [ref=e317]:
-                - generic [ref=e318]:
-                  - img "Zotman" [ref=e320]
-                  - generic [ref=e321]:
-                    - heading "Zotman" [level=3] [ref=e322]
-                    - paragraph [ref=e323]: Продукты и доставка еды
-                - generic [ref=e325]:
-                  - img [ref=e326]
-                  - generic [ref=e328]: до 30 нояб.
-              - heading "Пицца \"Груша и горгонзола\" в подарок" [level=4] [ref=e329]
-              - paragraph [ref=e330]: Пицца "Груша и горгонзола" в подарок при первом и повторном заказе от 3699 ₽
-              - generic [ref=e331]: Пицца "Груша и горгонзола" в подарок при первом и повторном заказе от 3699 ₽
-              - generic [ref=e332]:
-                - button "Скопировать промокод и открыть магазин Zotman" [ref=e333]:
-                  - img [ref=e334]
-                  - text: G508
-                - link "Подробнее о предложении Пицца \"Груша и горгонзола\" в подарок" [ref=e337] [cursor=pointer]:
-                  - /url: /promo/75
-                  - img [ref=e338]
-                  - text: Подробнее
-              - generic [ref=e340]:
-                - generic [ref=e341]: "Использовали: 0"
-                - generic [ref=e342]: Промокод
-            - generic [ref=e345]:
-              - generic [ref=e346]:
-                - generic [ref=e347]:
-                  - img "Zotman" [ref=e349]
-                  - generic [ref=e350]:
-                    - heading "Zotman" [level=3] [ref=e351]
-                    - paragraph [ref=e352]: Продукты и доставка еды
-                - generic [ref=e354]:
-                  - img [ref=e355]
-                  - generic [ref=e357]: до 30 нояб.
-              - heading "Пицца \"Четыре сыра\" в подарок" [level=4] [ref=e358]
-              - paragraph [ref=e359]: Пицца "Четыре сыра" в подарок при первом и повторном заказе от 3999 ₽
-              - generic [ref=e360]: Пицца "Четыре сыра" в подарок при первом и повторном заказе от 3999 ₽
-              - generic [ref=e361]:
-                - button "Скопировать промокод и открыть магазин Zotman" [ref=e362]:
-                  - img [ref=e363]
-                  - text: S107
-                - link "Подробнее о предложении Пицца \"Четыре сыра\" в подарок" [ref=e366] [cursor=pointer]:
-                  - /url: /promo/74
-                  - img [ref=e367]
-                  - text: Подробнее
-              - generic [ref=e369]:
-                - generic [ref=e370]: "Использовали: 0"
-                - generic [ref=e371]: Промокод
-            - generic [ref=e374]:
-              - generic [ref=e375]:
-                - generic [ref=e376]:
-                  - img "Zotman" [ref=e378]
-                  - generic [ref=e379]:
-                    - heading "Zotman" [level=3] [ref=e380]
-                    - paragraph [ref=e381]: Продукты и доставка еды
-                - generic [ref=e383]:
-                  - img [ref=e384]
-                  - generic [ref=e386]: до 30 нояб.
-              - heading "Пицца с пармской ветчиной в подарок" [level=4] [ref=e387]
-              - paragraph [ref=e388]: Пицца с пармской ветчиной в подарок при первом и повторном заказе от 4999 ₽
-              - generic [ref=e389]: Пицца с пармской ветчиной в подарок при первом и повторном заказе от 4999 ₽
-              - generic [ref=e390]:
-                - button "Скопировать промокод и открыть магазин Zotman" [ref=e391]:
-                  - img [ref=e392]
-                  - text: W692
-                - link "Подробнее о предложении Пицца с пармской ветчиной в подарок" [ref=e395] [cursor=pointer]:
-                  - /url: /promo/73
-                  - img [ref=e396]
-                  - text: Подробнее
-              - generic [ref=e398]:
-                - generic [ref=e399]: "Использовали: 0"
-                - generic [ref=e400]: Промокод
-          - tablist [ref=e401]:
-            - tab "Перейти к слайду 1" [selected] [ref=e402]
-            - tab "Перейти к слайду 2" [ref=e403]
-            - tab "Перейти к слайду 3" [ref=e404]
-            - tab "Перейти к слайду 4" [ref=e405]
-            - tab "Перейти к слайду 5" [ref=e406]
-            - tab "Перейти к слайду 6" [ref=e407]
-            - tab "Перейти к слайду 7" [ref=e408]
-            - tab "Перейти к слайду 8" [ref=e409]
-            - tab "Перейти к слайду 9" [ref=e410]
-            - tab "Перейти к слайду 10" [ref=e411]
-            - tab "Перейти к слайду 11" [ref=e412]
-            - tab "Перейти к слайду 12" [ref=e413]
-        - generic [ref=e415]:
-          - link "Перейти в магазины" [ref=e416] [cursor=pointer]:
+                - img "Ozon" [ref=e226]
+                - generic [ref=e227]:
+                  - heading "Ozon" [level=3] [ref=e228]
+                  - paragraph [ref=e229]: Технологии
+              - generic [ref=e231]:
+                - img [ref=e232]
+                - generic [ref=e234]: до 29 окт.
+            - generic [ref=e236]:
+              - img [ref=e237]
+              - generic [ref=e239]: Горячий
+            - heading "Скидка 25% на технику" [level=4] [ref=e240]
+            - paragraph [ref=e241]: Большая скидка на смартфоны, ноутбуки и планшеты
+            - generic [ref=e243]: Скидка 25%
+            - generic [ref=e244]:
+              - button "Скопировать промокод и открыть магазин Ozon" [ref=e245]:
+                - img [ref=e246]
+                - generic [ref=e249]: TECH25
+              - link "Подробнее о предложении Скидка 25% на технику" [ref=e250]:
+                - /url: /promo/1
+                - img [ref=e251]
+                - generic [ref=e253]: Подробнее
+            - generic [ref=e254]:
+              - generic [ref=e255]: "Использовали: 153"
+              - generic [ref=e257]: Промокод
+          - generic [ref=e259] [cursor=pointer]:
+            - generic [ref=e260]:
+              - generic [ref=e261]:
+                - img "Wildberries" [ref=e263]
+                - generic [ref=e264]:
+                  - heading "Wildberries" [level=3] [ref=e265]
+                  - paragraph [ref=e266]: Дом и сад
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e271]: до 30 нояб.
+            - heading "Тест Финансовое" [level=4] [ref=e272]
+            - paragraph [ref=e273]: Описание финансовое
+            - generic [ref=e275]: бесплатное обслуживание
+            - generic [ref=e277]:
+              - button "Оформить финансовую услугу в Wildberries" [ref=e278]:
+                - img [ref=e279]
+                - generic [ref=e281]: Оформить
+                - img [ref=e282]
+              - link "Подробнее о предложении Тест Финансовое" [ref=e286]:
+                - /url: /promo/9
+                - img [ref=e287]
+                - generic [ref=e289]: Подробнее
+            - generic [ref=e290]:
+              - generic [ref=e291]: "Использовали: 9"
+              - generic [ref=e293]: Финансы
+          - generic [ref=e295] [cursor=pointer]:
+            - generic [ref=e296]:
+              - generic [ref=e297]:
+                - img "Ozon" [ref=e299]
+                - generic [ref=e300]:
+                  - heading "Ozon" [level=3] [ref=e301]
+                  - paragraph [ref=e302]: Дом и сад
+              - generic [ref=e304]:
+                - img [ref=e305]
+                - generic [ref=e307]: до 29 окт.
+            - heading "Товары для дома -25%" [level=4] [ref=e308]
+            - paragraph [ref=e309]: Мебель, декор, кухонные принадлежности
+            - generic [ref=e311]: Скидка 25%
+            - generic [ref=e313]:
+              - button "Скопировать промокод и открыть магазин Ozon" [ref=e314]:
+                - img [ref=e315]
+                - generic [ref=e318]: HOME25
+              - link "Подробнее о предложении Товары для дома -25%" [ref=e319]:
+                - /url: /promo/8
+                - img [ref=e320]
+                - generic [ref=e322]: Подробнее
+            - generic [ref=e323]:
+              - generic [ref=e324]: "Использовали: 509"
+              - generic [ref=e326]: Промокод
+        - generic [ref=e328]:
+          - link "Перейти в магазины" [ref=e329] [cursor=pointer]:
             - /url: /stores
-            - img [ref=e417]
-            - text: Перейти в магазины
-            - img [ref=e422]
-          - link "Перейти в категории" [ref=e424] [cursor=pointer]:
+            - img [ref=e330]
+            - generic [ref=e335]: Перейти в магазины
+            - img [ref=e336]
+          - link "Перейти в категории" [ref=e338] [cursor=pointer]:
             - /url: /categories
-            - img [ref=e425]
-            - text: Перейти в категории
-            - img [ref=e427]
-        - generic [ref=e429]:
-          - generic [ref=e431]:
-            - generic [ref=e432]:
-              - generic [ref=e433]:
-                - img "Яндекс Афиша" [ref=e435]
-                - generic [ref=e436]:
-                  - heading "Яндекс Афиша" [level=3] [ref=e437]
-                  - paragraph [ref=e438]: Игры и развлечения
-              - generic [ref=e440]:
-                - img [ref=e441]
-                - generic [ref=e443]: до 30 нояб.
-            - heading "Скидка 100 ₽" [level=4] [ref=e444]
-            - paragraph [ref=e445]: Скидка 100 ₽ на все повторные покупки билетов от 1000 ₽
-            - generic [ref=e446]: Скидка 100 ₽ на все повторные покупки билетов от 1000 ₽
-            - generic [ref=e447]:
-              - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e448]:
-                - img [ref=e449]
-                - text: I69372
-              - link "Подробнее о предложении Скидка 100 ₽" [ref=e452] [cursor=pointer]:
-                - /url: /promo/88
-                - img [ref=e453]
-                - text: Подробнее
-            - generic [ref=e455]:
-              - generic [ref=e456]: "Использовали: 2"
-              - generic [ref=e457]: Промокод
-          - generic [ref=e459]:
-            - generic [ref=e460]:
-              - generic [ref=e461]:
-                - img "Яндекс Афиша" [ref=e463]
-                - generic [ref=e464]:
-                  - heading "Яндекс Афиша" [level=3] [ref=e465]
-                  - paragraph [ref=e466]: Игры и развлечения
-              - generic [ref=e468]:
-                - img [ref=e469]
-                - generic [ref=e471]: до 30 нояб.
-            - heading "Скидка 10%" [level=4] [ref=e472]
-            - paragraph [ref=e473]: Скидка 10% на первую и все повторные покупки от 5000 ₽
-            - generic [ref=e474]: Скидка 10% на первую и все повторные покупки от 5000 ₽
-            - generic [ref=e475]:
-              - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e476]:
-                - img [ref=e477]
-                - text: C12063
-              - link "Подробнее о предложении Скидка 10%" [ref=e480] [cursor=pointer]:
-                - /url: /promo/87
-                - img [ref=e481]
-                - text: Подробнее
-            - generic [ref=e483]:
-              - generic [ref=e484]: "Использовали: 0"
-              - generic [ref=e485]: Промокод
-          - generic [ref=e487]:
-            - generic [ref=e488]:
-              - generic [ref=e489]:
-                - img "Яндекс Афиша" [ref=e491]
-                - generic [ref=e492]:
-                  - heading "Яндекс Афиша" [level=3] [ref=e493]
-                  - paragraph [ref=e494]: Игры и развлечения
-              - generic [ref=e496]:
-                - img [ref=e497]
-                - generic [ref=e499]: до 30 нояб.
-            - heading "Скидка 400 ₽" [level=4] [ref=e500]
-            - paragraph [ref=e501]: Скидка 400 ₽ на первую покупку билетов от 3000 ₽
-            - generic [ref=e502]: Скидка 400 ₽ на первую покупку билетов от 3000 ₽
-            - generic [ref=e503]:
-              - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e504]:
-                - img [ref=e505]
-                - text: C07948
-              - link "Подробнее о предложении Скидка 400 ₽" [ref=e508] [cursor=pointer]:
-                - /url: /promo/86
-                - img [ref=e509]
-                - text: Подробнее
-            - generic [ref=e511]:
-              - generic [ref=e512]: "Использовали: 0"
-              - generic [ref=e513]: Промокод
-          - generic [ref=e515]:
-            - generic [ref=e516]:
-              - generic [ref=e517]:
-                - img "Яндекс Афиша" [ref=e519]
-                - generic [ref=e520]:
-                  - heading "Яндекс Афиша" [level=3] [ref=e521]
-                  - paragraph [ref=e522]: Игры и развлечения
-              - generic [ref=e524]:
-                - img [ref=e525]
-                - generic [ref=e527]: до 30 нояб.
-            - heading "Скидка 300 ₽" [level=4] [ref=e528]
-            - paragraph [ref=e529]: Скидка 300 ₽ на первую покупку билетов от 2000 ₽
-            - generic [ref=e530]: Скидка 300 ₽ на первую покупку билетов от 2000 ₽
-            - generic [ref=e531]:
-              - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e532]:
-                - img [ref=e533]
-                - text: B94237
-              - link "Подробнее о предложении Скидка 300 ₽" [ref=e536] [cursor=pointer]:
-                - /url: /promo/85
-                - img [ref=e537]
-                - text: Подробнее
-            - generic [ref=e539]:
-              - generic [ref=e540]: "Использовали: 0"
-              - generic [ref=e541]: Промокод
-          - generic [ref=e543]:
-            - generic [ref=e544]:
-              - generic [ref=e545]:
-                - img "Яндекс Афиша" [ref=e547]
-                - generic [ref=e548]:
-                  - heading "Яндекс Афиша" [level=3] [ref=e549]
-                  - paragraph [ref=e550]: Игры и развлечения
-              - generic [ref=e552]:
-                - img [ref=e553]
-                - generic [ref=e555]: до 30 нояб.
-            - heading "Скидка 500 ₽" [level=4] [ref=e556]
-            - paragraph [ref=e557]: Скидка 500 ₽ на первую и все повторные покупки билетов от 3000 ₽
-            - generic [ref=e558]: Скидка 500 ₽ на первую и все повторные покупки билетов от 3000 ₽
-            - generic [ref=e559]:
-              - button "Скопировать промокод и открыть магазин Яндекс Афиша" [ref=e560]:
-                - img [ref=e561]
-                - text: D12748
-              - link "Подробнее о предложении Скидка 500 ₽" [ref=e564] [cursor=pointer]:
-                - /url: /promo/84
-                - img [ref=e565]
-                - text: Подробнее
-            - generic [ref=e567]:
-              - generic [ref=e568]: "Использовали: 0"
-              - generic [ref=e569]: Промокод
-          - generic [ref=e571]:
-            - generic [ref=e572]:
-              - generic [ref=e573]:
-                - img "Столото" [ref=e575]
-                - generic [ref=e576]:
-                  - heading "Столото" [level=3] [ref=e577]
-                  - paragraph [ref=e578]: Игры и развлечения
-              - generic [ref=e580]:
-                - img [ref=e581]
-                - generic [ref=e583]: до 31 дек.
-            - heading "600 бонусов при первой покупке билетов от 200 ₽" [level=4] [ref=e584]
-            - paragraph [ref=e585]: 600 бонусов при первой покупке билетов от 200 ₽ и введении промокода при регистрации по ссылке
-            - generic [ref=e586]: 600 бонусов при первой покупке билетов от 200 ₽ и введении промокода при регистрации по ссылке
-            - generic [ref=e587]:
-              - button "Скопировать промокод и открыть магазин Столото" [ref=e588]:
-                - img [ref=e589]
-                - text: RISKFREE30
-              - link "Подробнее о предложении 600 бонусов при первой покупке билетов от 200 ₽" [ref=e592] [cursor=pointer]:
-                - /url: /promo/79
-                - img [ref=e593]
-                - text: Подробнее
-            - generic [ref=e595]:
-              - generic [ref=e596]: "Использовали: 0"
-              - generic [ref=e597]: Промокод
-          - generic [ref=e599]:
-            - generic [ref=e600]:
-              - generic [ref=e601]:
-                - img "Zotman" [ref=e603]
-                - generic [ref=e604]:
-                  - heading "Zotman" [level=3] [ref=e605]
-                  - paragraph [ref=e606]: Продукты и доставка еды
-              - generic [ref=e608]:
-                - img [ref=e609]
-                - generic [ref=e611]: до 30 нояб.
-            - heading "Скидка 12% от 2999 ₽" [level=4] [ref=e612]
-            - paragraph [ref=e613]: Скидка 12% от 2999 ₽ для всех, кто не делал заказы более 90 дней, в том числе для новых пользователей
-            - generic [ref=e614]: Скидка 12% от 2999 ₽ для всех, кто не делал заказы более 90 дней, в том числе для новых пользовател
-            - generic [ref=e615]:
-              - button "Скопировать промокод и открыть магазин Zotman" [ref=e616]:
-                - img [ref=e617]
-                - text: Q724
-              - link "Подробнее о предложении Скидка 12% от 2999 ₽" [ref=e620] [cursor=pointer]:
-                - /url: /promo/78
-                - img [ref=e621]
-                - text: Подробнее
-            - generic [ref=e623]:
-              - generic [ref=e624]: "Использовали: 0"
-              - generic [ref=e625]: Промокод
-          - generic [ref=e627]:
-            - generic [ref=e628]:
-              - generic [ref=e629]:
-                - img "Zotman" [ref=e631]
-                - generic [ref=e632]:
-                  - heading "Zotman" [level=3] [ref=e633]
-                  - paragraph [ref=e634]: Продукты и доставка еды
-              - generic [ref=e636]:
-                - img [ref=e637]
-                - generic [ref=e639]: до 30 нояб.
-            - heading "Пицца \"Цыплёнок ранч\" в подарок" [level=4] [ref=e640]
-            - paragraph [ref=e641]: Пицца "Цыплёнок ранч" в подарок при первом и повторном заказе от 3199 ₽
-            - generic [ref=e642]: Пицца "Цыплёнок ранч" в подарок при первом и повторном заказе от 3199 ₽
-            - generic [ref=e643]:
-              - button "Скопировать промокод и открыть магазин Zotman" [ref=e644]:
-                - img [ref=e645]
-                - text: R379
-              - link "Подробнее о предложении Пицца \"Цыплёнок ранч\" в подарок" [ref=e648] [cursor=pointer]:
-                - /url: /promo/77
-                - img [ref=e649]
-                - text: Подробнее
-            - generic [ref=e651]:
-              - generic [ref=e652]: "Использовали: 0"
-              - generic [ref=e653]: Промокод
-          - generic [ref=e655]:
-            - generic [ref=e656]:
-              - generic [ref=e657]:
-                - img "Zotman" [ref=e659]
-                - generic [ref=e660]:
-                  - heading "Zotman" [level=3] [ref=e661]
-                  - paragraph [ref=e662]: Продукты и доставка еды
-              - generic [ref=e664]:
-                - img [ref=e665]
-                - generic [ref=e667]: до 30 нояб.
-            - heading "Пицца \"Баварская мясная\" в подарок" [level=4] [ref=e668]
-            - paragraph [ref=e669]: Пицца "Баварская мясная" в подарок при первом и повторном заказе от 3499 ₽
-            - generic [ref=e670]: Пицца "Баварская мясная" в подарок при первом и повторном заказе от 3499 ₽
-            - generic [ref=e671]:
-              - button "Скопировать промокод и открыть магазин Zotman" [ref=e672]:
-                - img [ref=e673]
-                - text: J140
-              - link "Подробнее о предложении Пицца \"Баварская мясная\" в подарок" [ref=e676] [cursor=pointer]:
-                - /url: /promo/76
-                - img [ref=e677]
-                - text: Подробнее
-            - generic [ref=e679]:
-              - generic [ref=e680]: "Использовали: 1"
-              - generic [ref=e681]: Промокод
-          - generic [ref=e683]:
-            - generic [ref=e684]:
-              - generic [ref=e685]:
-                - img "Zotman" [ref=e687]
-                - generic [ref=e688]:
-                  - heading "Zotman" [level=3] [ref=e689]
-                  - paragraph [ref=e690]: Продукты и доставка еды
-              - generic [ref=e692]:
-                - img [ref=e693]
-                - generic [ref=e695]: до 30 нояб.
-            - heading "Пицца \"Груша и горгонзола\" в подарок" [level=4] [ref=e696]
-            - paragraph [ref=e697]: Пицца "Груша и горгонзола" в подарок при первом и повторном заказе от 3699 ₽
-            - generic [ref=e698]: Пицца "Груша и горгонзола" в подарок при первом и повторном заказе от 3699 ₽
-            - generic [ref=e699]:
-              - button "Скопировать промокод и открыть магазин Zotman" [ref=e700]:
-                - img [ref=e701]
-                - text: G508
-              - link "Подробнее о предложении Пицца \"Груша и горгонзола\" в подарок" [ref=e704] [cursor=pointer]:
-                - /url: /promo/75
-                - img [ref=e705]
-                - text: Подробнее
-            - generic [ref=e707]:
-              - generic [ref=e708]: "Использовали: 0"
-              - generic [ref=e709]: Промокод
-          - generic [ref=e711]:
-            - generic [ref=e712]:
-              - generic [ref=e713]:
-                - img "Zotman" [ref=e715]
-                - generic [ref=e716]:
-                  - heading "Zotman" [level=3] [ref=e717]
-                  - paragraph [ref=e718]: Продукты и доставка еды
-              - generic [ref=e720]:
-                - img [ref=e721]
-                - generic [ref=e723]: до 30 нояб.
-            - heading "Пицца \"Четыре сыра\" в подарок" [level=4] [ref=e724]
-            - paragraph [ref=e725]: Пицца "Четыре сыра" в подарок при первом и повторном заказе от 3999 ₽
-            - generic [ref=e726]: Пицца "Четыре сыра" в подарок при первом и повторном заказе от 3999 ₽
-            - generic [ref=e727]:
-              - button "Скопировать промокод и открыть магазин Zotman" [ref=e728]:
-                - img [ref=e729]
-                - text: S107
-              - link "Подробнее о предложении Пицца \"Четыре сыра\" в подарок" [ref=e732] [cursor=pointer]:
-                - /url: /promo/74
-                - img [ref=e733]
-                - text: Подробнее
-            - generic [ref=e735]:
-              - generic [ref=e736]: "Использовали: 0"
-              - generic [ref=e737]: Промокод
-          - generic [ref=e739]:
-            - generic [ref=e740]:
-              - generic [ref=e741]:
-                - img "Zotman" [ref=e743]
-                - generic [ref=e744]:
-                  - heading "Zotman" [level=3] [ref=e745]
-                  - paragraph [ref=e746]: Продукты и доставка еды
-              - generic [ref=e748]:
-                - img [ref=e749]
-                - generic [ref=e751]: до 30 нояб.
-            - heading "Пицца с пармской ветчиной в подарок" [level=4] [ref=e752]
-            - paragraph [ref=e753]: Пицца с пармской ветчиной в подарок при первом и повторном заказе от 4999 ₽
-            - generic [ref=e754]: Пицца с пармской ветчиной в подарок при первом и повторном заказе от 4999 ₽
-            - generic [ref=e755]:
-              - button "Скопировать промокод и открыть магазин Zotman" [ref=e756]:
-                - img [ref=e757]
-                - text: W692
-              - link "Подробнее о предложении Пицца с пармской ветчиной в подарок" [ref=e760] [cursor=pointer]:
-                - /url: /promo/73
-                - img [ref=e761]
-                - text: Подробнее
-            - generic [ref=e763]:
-              - generic [ref=e764]: "Использовали: 0"
-              - generic [ref=e765]: Промокод
-        - generic [ref=e767]:
-          - link "Перейти в магазины" [ref=e768] [cursor=pointer]:
-            - /url: /stores
-            - img [ref=e769]
-            - text: Перейти в магазины
-            - img [ref=e774]
-          - link "Перейти в категории" [ref=e776] [cursor=pointer]:
-            - /url: /categories
-            - img [ref=e777]
-            - text: Перейти в категории
-            - img [ref=e779]
-        - generic [ref=e781]:
-          - generic [ref=e783]:
-            - img [ref=e785]
-            - generic [ref=e788]: "27"
-            - generic [ref=e789]: Активных предложений
-          - generic [ref=e791]:
-            - img [ref=e793]
-            - generic [ref=e796]: "27"
-            - generic [ref=e797]: Промокодов
-          - generic [ref=e799]:
-            - img [ref=e801]
-            - generic [ref=e806]: "76"
-            - generic [ref=e807]: Магазинов-партнеров
-    - region "Топ магазины" [ref=e808]:
-      - generic [ref=e810]:
-        - generic [ref=e811]:
-          - heading "Популярные магазины" [level=2] [ref=e812]
-          - paragraph [ref=e813]: Лучшие предложения от проверенных партнеров
-        - generic [ref=e814]:
-          - link "Пятёрочка Пятёрочка Пятёрочка — одна из крупнейших российских сетей супермаркетов, предлагающая широкий ассортимент продуктов питания, товаров для дома и бытовой химии по доступным ценам. Сеть известна своими акциями, программой лояльности и удобным расположением магазинов, что делает её популярным выбором для ежедневных покупок. 0промокодов Активен" [ref=e815] [cursor=pointer]:
-            - /url: /stores/pyatyorochka
-            - generic [ref=e816]:
-              - img "Пятёрочка" [ref=e818]
-              - heading "Пятёрочка" [level=3] [ref=e820]
-            - paragraph [ref=e822]: Пятёрочка — одна из крупнейших российских сетей супермаркетов, предлагающая широкий ассортимент продуктов питания, товаров для дома и бытовой химии по доступным ценам. Сеть известна своими акциями, программой лояльности и удобным расположением магазинов, что делает её популярным выбором для ежедневных покупок.
-            - generic [ref=e823]:
-              - generic [ref=e824]:
-                - img [ref=e825]
-                - text: 0промокодов
-              - generic [ref=e828]: Активен
-          - link "Т-Банк Т-Банк Т-Банк — ведущий российский онлайн-банк, предлагающий кредитные и дебетовые карты, вклады, инвестиции и услуги для бизнеса. Известен инновационными цифровыми решениями, удобным мобильным приложением, кешбэком и быстрой доставкой карт. Работает без отделений, обслуживая более 50 млн клиентов. 0промокодов Активен" [ref=e829] [cursor=pointer]:
-            - /url: /stores/t-bank
-            - generic [ref=e830]:
-              - img "Т-Банк" [ref=e832]
-              - heading "Т-Банк" [level=3] [ref=e834]
-            - paragraph [ref=e836]: Т-Банк — ведущий российский онлайн-банк, предлагающий кредитные и дебетовые карты, вклады, инвестиции и услуги для бизнеса. Известен инновационными цифровыми решениями, удобным мобильным приложением, кешбэком и быстрой доставкой карт. Работает без отделений, обслуживая более 50 млн клиентов.
-            - generic [ref=e837]:
-              - generic [ref=e838]:
-                - img [ref=e839]
-                - text: 0промокодов
-              - generic [ref=e842]: Активен
-          - link "Metro Metro Metro — международная сеть гипермаркетов, специализирующаяся на оптовой и розничной торговле продуктами питания, товарами для дома и профессионального использования. Предлагает широкий ассортимент, выгодные цены и акции, особенно для держателей карт лояльности, ориентирована на семьи и бизнес. 0промокодов Активен" [ref=e843] [cursor=pointer]:
-            - /url: /stores/metro
-            - generic [ref=e844]:
-              - img "Metro" [ref=e846]
-              - heading "Metro" [level=3] [ref=e848]
-            - paragraph [ref=e850]: Metro — международная сеть гипермаркетов, специализирующаяся на оптовой и розничной торговле продуктами питания, товарами для дома и профессионального использования. Предлагает широкий ассортимент, выгодные цены и акции, особенно для держателей карт лояльности, ориентирована на семьи и бизнес.
-            - generic [ref=e851]:
-              - generic [ref=e852]:
-                - img [ref=e853]
-                - text: 0промокодов
-              - generic [ref=e856]: Активен
-          - 'link "OZON OZON OZON — одна из крупнейших онлайн-площадок в России, предлагающая миллионы товаров: от электроники и одежды до продуктов и товаров для дома. Известен быстрой доставкой, удобным интерфейсом, программой лояльности и регулярными скидками, что делает шопинг доступным и комфортным. 0промокодов Активен" [ref=e857] [cursor=pointer]':
+            - img [ref=e339]
+            - generic [ref=e341]: Перейти в категории
+            - img [ref=e342]
+        - generic [ref=e344]:
+          - generic [ref=e346] [cursor=pointer]:
+            - img [ref=e348]
+            - generic [ref=e351]: "9"
+            - generic [ref=e352]: Активных предложений
+          - generic [ref=e355] [cursor=pointer]:
+            - img [ref=e357]
+            - generic [ref=e360]: "9"
+            - generic [ref=e361]: Промокодов
+          - generic [ref=e364] [cursor=pointer]:
+            - img [ref=e366]
+            - generic [ref=e371]: "5"
+            - generic [ref=e372]: Магазинов-партнеров
+    - region "Топ магазины" [ref=e374]:
+      - generic [ref=e376]:
+        - generic [ref=e377]:
+          - heading "Популярные магазины" [level=2] [ref=e378]
+          - paragraph [ref=e379]: Лучшие предложения от проверенных партнеров
+        - generic [ref=e380]:
+          - link "Ozon Ozon 4.7 рейтинг Крупнейший интернет-магазин 3 промокода Активен" [ref=e381] [cursor=pointer]:
             - /url: /stores/ozon
-            - generic [ref=e858]:
-              - img "OZON" [ref=e860]
-              - heading "OZON" [level=3] [ref=e862]
-            - paragraph [ref=e864]: "OZON — одна из крупнейших онлайн-площадок в России, предлагающая миллионы товаров: от электроники и одежды до продуктов и товаров для дома. Известен быстрой доставкой, удобным интерфейсом, программой лояльности и регулярными скидками, что делает шопинг доступным и комфортным."
-            - generic [ref=e865]:
-              - generic [ref=e866]:
-                - img [ref=e867]
-                - text: 0промокодов
-              - generic [ref=e870]: Активен
-          - link "ROSTIC’S ROSTIC’S ROSTIC’S — сеть ресторанов быстрого питания в России, специализирующаяся на блюдах из курицы, таких как бургеры, роллы, крылышки и наггетсы. Известна качественными продуктами, доступными ценами и быстрой доставкой. После ребрендинга KFC в 2023 году сохранила знакомый вкус и добавила новые блюда в меню. 0промокодов Активен" [ref=e871] [cursor=pointer]:
-            - /url: /stores/rostics
-            - generic [ref=e872]:
-              - img "ROSTIC’S" [ref=e874]
-              - heading "ROSTIC’S" [level=3] [ref=e876]
-            - paragraph [ref=e878]: ROSTIC’S — сеть ресторанов быстрого питания в России, специализирующаяся на блюдах из курицы, таких как бургеры, роллы, крылышки и наггетсы. Известна качественными продуктами, доступными ценами и быстрой доставкой. После ребрендинга KFC в 2023 году сохранила знакомый вкус и добавила новые блюда в меню.
-            - generic [ref=e879]:
-              - generic [ref=e880]:
-                - img [ref=e881]
-                - text: 0промокодов
-              - generic [ref=e884]: Активен
-          - link "аптека 36,6 аптека 36,6 Аптека 36,6 — ведущая российская сеть аптек, предлагающая широкий выбор лекарств, витаминов, косметики и товаров для здоровья. Известна удобным сервисом онлайн-заказа, программой лояльности и акциями. Сеть насчитывает более 2600 точек по всей стране, обеспечивая доступность и качество. 0промокодов Активен" [ref=e885] [cursor=pointer]:
-            - /url: /stores/apteka-366
-            - generic [ref=e886]:
-              - img "аптека 36,6" [ref=e888]
-              - heading "аптека 36,6" [level=3] [ref=e890]
-            - paragraph [ref=e892]: Аптека 36,6 — ведущая российская сеть аптек, предлагающая широкий выбор лекарств, витаминов, косметики и товаров для здоровья. Известна удобным сервисом онлайн-заказа, программой лояльности и акциями. Сеть насчитывает более 2600 точек по всей стране, обеспечивая доступность и качество.
-            - generic [ref=e893]:
-              - generic [ref=e894]:
-                - img [ref=e895]
-                - text: 0промокодов
-              - generic [ref=e898]: Активен
-          - link "Ашан Ашан Ашан — международная сеть гипермаркетов, предлагающая широкий ассортимент продуктов питания, товаров для дома, электроники и одежды по доступным ценам. Известна своими акциями, собственной маркой товаров и удобными форматами магазинов, подходящими для семейных покупок. 0промокодов Активен" [ref=e899] [cursor=pointer]:
-            - /url: /stores/ashan
-            - generic [ref=e900]:
-              - img "Ашан" [ref=e902]
-              - heading "Ашан" [level=3] [ref=e904]
-            - paragraph [ref=e906]: Ашан — международная сеть гипермаркетов, предлагающая широкий ассортимент продуктов питания, товаров для дома, электроники и одежды по доступным ценам. Известна своими акциями, собственной маркой товаров и удобными форматами магазинов, подходящими для семейных покупок.
-            - generic [ref=e907]:
-              - generic [ref=e908]:
-                - img [ref=e909]
-                - text: 0промокодов
-              - generic [ref=e912]: Активен
-          - link "ВкусВилл ВкусВилл ВкусВилл — российская сеть магазинов здорового питания, предлагающая натуральные продукты, свежие овощи, фрукты, молочную продукцию и товары без искусственных добавок. Известна качеством, экологичным подходом, программой лояльности и удобной доставкой через приложение или сайт. 0промокодов Активен" [ref=e913] [cursor=pointer]:
-            - /url: /stores/vkusvill
-            - generic [ref=e914]:
-              - img "ВкусВилл" [ref=e916]
-              - heading "ВкусВилл" [level=3] [ref=e918]
-            - paragraph [ref=e920]: ВкусВилл — российская сеть магазинов здорового питания, предлагающая натуральные продукты, свежие овощи, фрукты, молочную продукцию и товары без искусственных добавок. Известна качеством, экологичным подходом, программой лояльности и удобной доставкой через приложение или сайт.
-            - generic [ref=e921]:
-              - generic [ref=e922]:
-                - img [ref=e923]
-                - text: 0промокодов
-              - generic [ref=e926]: Активен
-          - link "Самокат Самокат Самокат — популярный сервис доставки продуктов и товаров для дома, работающий в формате экспресс-доставки. Предлагает широкий выбор продуктов, бытовой химии и товаров для ежедневных нужд с доставкой за 15-30 минут. Удобное приложение и регулярные промокоды делают покупки быстрыми и выгодными. 0промокодов Активен" [ref=e927] [cursor=pointer]:
-            - /url: /stores/samokat
-            - generic [ref=e928]:
-              - img "Самокат" [ref=e930]
-              - heading "Самокат" [level=3] [ref=e932]
-            - paragraph [ref=e934]: Самокат — популярный сервис доставки продуктов и товаров для дома, работающий в формате экспресс-доставки. Предлагает широкий выбор продуктов, бытовой химии и товаров для ежедневных нужд с доставкой за 15-30 минут. Удобное приложение и регулярные промокоды делают покупки быстрыми и выгодными.
-            - generic [ref=e935]:
-              - generic [ref=e936]:
-                - img [ref=e937]
-                - text: 0промокодов
-              - generic [ref=e940]: Активен
-          - 'link "Яндекс Маркет Яндекс Маркет Яндекс Маркет — один из крупнейших российских маркетплейсов, предлагающий миллионы товаров: от электроники и бытовой техники до одежды и товаров для дома. Известен удобным поиском, сравнением цен, быстрой доставкой и программой лояльности с бонусами и кешбэком. 0промокодов Активен" [ref=e941] [cursor=pointer]':
-            - /url: /stores/yandeks-market
-            - generic [ref=e942]:
-              - img "Яндекс Маркет" [ref=e944]
-              - heading "Яндекс Маркет" [level=3] [ref=e946]
-            - paragraph [ref=e948]: "Яндекс Маркет — один из крупнейших российских маркетплейсов, предлагающий миллионы товаров: от электроники и бытовой техники до одежды и товаров для дома. Известен удобным поиском, сравнением цен, быстрой доставкой и программой лояльности с бонусами и кешбэком."
-            - generic [ref=e949]:
-              - generic [ref=e950]:
-                - img [ref=e951]
-                - text: 0промокодов
-              - generic [ref=e954]: Активен
-          - link "Купер Купер Купер — российский сервис доставки продуктов, еды из ресторанов и товаров для дома, ранее известный как СберМаркет. Работает в 360 городах России, предлагая быструю доставку от 20 минут, широкий ассортимент из 100+ торговых сетей и 35 000+ ресторанов. Известен удобным приложением, промокодами и акцентом на качество. 0промокодов Активен" [ref=e955] [cursor=pointer]:
-            - /url: /stores/kuper
-            - generic [ref=e956]:
-              - img "Купер" [ref=e958]
-              - heading "Купер" [level=3] [ref=e960]
-            - paragraph [ref=e962]: Купер — российский сервис доставки продуктов, еды из ресторанов и товаров для дома, ранее известный как СберМаркет. Работает в 360 городах России, предлагая быструю доставку от 20 минут, широкий ассортимент из 100+ торговых сетей и 35 000+ ресторанов. Известен удобным приложением, промокодами и акцентом на качество.
-            - generic [ref=e963]:
-              - generic [ref=e964]:
-                - img [ref=e965]
-                - text: 0промокодов
-              - generic [ref=e968]: Активен
-          - link "ВинЛаб ВинЛаб ВинЛаб — крупная российская сеть супермаркетов напитков, входящая в Novabev Group, с более чем 2100 магазинами в 12 регионах. Предлагает свыше 5000 видов алкогольных и безалкогольных напитков, а также продукты питания и товары для дома. Известна низкими ценами, программой лояльности для 5 млн клиентов и удобным онлайн-сервисом с доставкой. 0промокодов Активен" [ref=e969] [cursor=pointer]:
-            - /url: /stores/vinlab
-            - generic [ref=e970]:
-              - img "ВинЛаб" [ref=e972]
-              - heading "ВинЛаб" [level=3] [ref=e974]
-            - paragraph [ref=e976]: ВинЛаб — крупная российская сеть супермаркетов напитков, входящая в Novabev Group, с более чем 2100 магазинами в 12 регионах. Предлагает свыше 5000 видов алкогольных и безалкогольных напитков, а также продукты питания и товары для дома. Известна низкими ценами, программой лояльности для 5 млн клиентов и удобным онлайн-сервисом с доставкой.
-            - generic [ref=e977]:
-              - generic [ref=e978]:
-                - img [ref=e979]
-                - text: 0промокодов
-              - generic [ref=e982]: Активен
-    - region "Популярные категории" [ref=e983]:
-      - generic [ref=e985]:
-        - generic [ref=e986]:
-          - heading "Популярные категории" [level=2] [ref=e987]
-          - paragraph [ref=e988]: Найдите скидки в интересующих вас категориях
-        - generic [ref=e989]:
-          - link "Авто и запчасти 0 промокодов Автозапчасти, аксессуары и товары для ухода за автомобилем." [ref=e990] [cursor=pointer]:
-            - /url: /categories/avto-i-zapchasti
-            - generic [ref=e991]:
-              - img [ref=e993]
-              - generic [ref=e997]:
-                - heading "Авто и запчасти" [level=3] [ref=e998]
-                - paragraph [ref=e999]: 0 промокодов
-                - paragraph [ref=e1000]: Автозапчасти, аксессуары и товары для ухода за автомобилем.
-          - link "Аптеки и медицина 0 промокодов Лекарства, БАДы, медтехника и онлайн-аптеки." [ref=e1001] [cursor=pointer]:
-            - /url: /categories/apteki-i-medicina
-            - generic [ref=e1002]:
-              - img [ref=e1004]
-              - generic [ref=e1007]:
-                - heading "Аптеки и медицина" [level=3] [ref=e1008]
-                - paragraph [ref=e1009]: 0 промокодов
-                - paragraph [ref=e1010]: Лекарства, БАДы, медтехника и онлайн-аптеки.
-          - link "Детские товары 0 промокодов Игрушки, одежда и товары для детей." [ref=e1011] [cursor=pointer]:
-            - /url: /categories/detskie-tovary
-            - generic [ref=e1012]:
-              - img [ref=e1014]
-              - generic [ref=e1017]:
-                - heading "Детские товары" [level=3] [ref=e1018]
-                - paragraph [ref=e1019]: 0 промокодов
-                - paragraph [ref=e1020]: Игрушки, одежда и товары для детей.
-          - link "Дом и ремонт 0 промокодов Мебель, интерьер, товары для дома и дачи, инструменты." [ref=e1021] [cursor=pointer]:
-            - /url: /categories/dom-i-remont
-            - generic [ref=e1022]:
-              - img [ref=e1024]
-              - generic [ref=e1027]:
-                - heading "Дом и ремонт" [level=3] [ref=e1028]
-                - paragraph [ref=e1029]: 0 промокодов
-                - paragraph [ref=e1030]: Мебель, интерьер, товары для дома и дачи, инструменты.
-          - link "Зоотовары 0 промокодов Корма, аксессуары и игрушки для домашних животных." [ref=e1031] [cursor=pointer]:
-            - /url: /categories/zootovary
-            - generic [ref=e1032]:
-              - img [ref=e1034]
-              - generic [ref=e1038]:
-                - heading "Зоотовары" [level=3] [ref=e1039]
-                - paragraph [ref=e1040]: 0 промокодов
-                - paragraph [ref=e1041]: Корма, аксессуары и игрушки для домашних животных.
-          - link "Игры и развлечения 6 промокодов Компьютерные игры, консоли, онлайн-сервисы, кино и подписки." [ref=e1042] [cursor=pointer]:
-            - /url: /categories/igry-i-razvlecheniya
-            - generic [ref=e1043]:
-              - img [ref=e1045]
-              - generic [ref=e1047]:
-                - heading "Игры и развлечения" [level=3] [ref=e1048]
-                - paragraph [ref=e1049]: 6 промокодов
-                - paragraph [ref=e1050]: Компьютерные игры, консоли, онлайн-сервисы, кино и подписки.
-          - link "Книги и образование 0 промокодов Учебные материалы, художественная литература, онлайн-курсы и вебинары." [ref=e1051] [cursor=pointer]:
-            - /url: /categories/knigi-i-obrazovanie
-            - generic [ref=e1052]:
-              - img [ref=e1054]
-              - generic [ref=e1056]:
-                - heading "Книги и образование" [level=3] [ref=e1057]
-                - paragraph [ref=e1058]: 0 промокодов
-                - paragraph [ref=e1059]: Учебные материалы, художественная литература, онлайн-курсы и вебинары.
-          - link "Красота и здоровье 5 промокодов Косметика, парфюмерия, уход за собой, товары для здоровья." [ref=e1060] [cursor=pointer]:
-            - /url: /categories/krasota-i-zdorove
-            - generic [ref=e1061]:
-              - img [ref=e1063]
-              - generic [ref=e1065]:
-                - heading "Красота и здоровье" [level=3] [ref=e1066]
-                - paragraph [ref=e1067]: 5 промокодов
-                - paragraph [ref=e1068]: Косметика, парфюмерия, уход за собой, товары для здоровья.
-          - link "Красота и уход за домом 5 промокодов Бытовая химия, косметика для дома, товары для уборки." [ref=e1069] [cursor=pointer]:
-            - /url: /categories/krasota-i-uhod-za-domom
-            - generic [ref=e1070]:
-              - img [ref=e1072]
-              - generic [ref=e1074]:
-                - heading "Красота и уход за домом" [level=3] [ref=e1075]
-                - paragraph [ref=e1076]: 5 промокодов
-                - paragraph [ref=e1077]: Бытовая химия, косметика для дома, товары для уборки.
-          - link "Маркетплейсы 0 промокодов Крупные онлайн-площадки с огромным выбором товаров — от электроники до одежды и товаров для дома" [ref=e1078] [cursor=pointer]:
-            - /url: /categories/marketplejsy
-            - generic [ref=e1079]:
-              - img [ref=e1081]
-              - generic [ref=e1086]:
-                - heading "Маркетплейсы" [level=3] [ref=e1087]
-                - paragraph [ref=e1088]: 0 промокодов
-                - paragraph [ref=e1089]: Крупные онлайн-площадки с огромным выбором товаров — от электроники до одежды и товаров для дома
-          - link "Одежда и обувь 0 промокодов Стильная одежда, обувь и аксессуары для мужчин, женщин и детей." [ref=e1090] [cursor=pointer]:
-            - /url: /categories/odezhda-i-obuv
-            - generic [ref=e1091]:
-              - img [ref=e1093]
-              - generic [ref=e1095]:
-                - heading "Одежда и обувь" [level=3] [ref=e1096]
-                - paragraph [ref=e1097]: 0 промокодов
-                - paragraph [ref=e1098]: Стильная одежда, обувь и аксессуары для мужчин, женщин и детей.
-          - link "Онлайн-сервисы 5 промокодов Подписки, софт, онлайн-сервисы и облачные решения." [ref=e1099] [cursor=pointer]:
-            - /url: /categories/onlajn-servisy
-            - generic [ref=e1100]:
-              - img [ref=e1102]
-              - generic [ref=e1106]:
-                - heading "Онлайн-сервисы" [level=3] [ref=e1107]
-                - paragraph [ref=e1108]: 5 промокодов
-                - paragraph [ref=e1109]: Подписки, софт, онлайн-сервисы и облачные решения.
-        - link "Все категории" [ref=e1111] [cursor=pointer]:
-          - /url: /categories
-          - text: Все категории
-          - img [ref=e1112]
-    - region "Наши партнеры"
-    - generic [ref=e1114]:
-      - heading "BoltPromo - Промокоды и скидки от интернет-магазинов" [level=1] [ref=e1115]
-      - paragraph [ref=e1116]: BoltPromo предлагает актуальные промокоды, купоны и скидки от популярных интернет-магазинов. Экономьте на покупках техники, одежды, красоты, еды и других товаров. Все предложения проверены и регулярно обновляются.
-      - list [ref=e1117]:
-        - listitem [ref=e1118]: Актуальные промокоды от 100+ магазинов
-        - listitem [ref=e1119]: Проверенные скидки и купоны
-        - listitem [ref=e1120]: Удобный поиск по категориям
-        - listitem [ref=e1121]: Регулярные обновления предложений
-        - listitem [ref=e1122]: Бесплатное использование сервиса
-  - contentinfo [ref=e1123]:
-    - generic [ref=e1126]:
-      - generic [ref=e1127]:
-        - generic [ref=e1128]:
-          - link "BoltPromo" [ref=e1129] [cursor=pointer]:
+            - generic [ref=e382]:
+              - img "Ozon" [ref=e384]
+              - generic [ref=e385]:
+                - heading "Ozon" [level=3] [ref=e386]
+                - generic [ref=e387]:
+                  - img [ref=e388]
+                  - generic [ref=e390]: "4.7"
+                  - generic [ref=e391]: рейтинг
+            - paragraph [ref=e393]: Крупнейший интернет-магазин
+            - generic [ref=e394]:
+              - generic [ref=e395]:
+                - img [ref=e396]
+                - generic [ref=e399]: "3"
+                - generic [ref=e400]: промокода
+              - generic [ref=e403]: Активен
+          - link "Lamoda Lamoda 4.6 рейтинг Модная одежда и обувь 1 промокод Активен" [ref=e404] [cursor=pointer]:
+            - /url: /stores/lamoda
+            - generic [ref=e405]:
+              - img "Lamoda" [ref=e407]
+              - generic [ref=e408]:
+                - heading "Lamoda" [level=3] [ref=e409]
+                - generic [ref=e410]:
+                  - img [ref=e411]
+                  - generic [ref=e413]: "4.6"
+                  - generic [ref=e414]: рейтинг
+            - paragraph [ref=e416]: Модная одежда и обувь
+            - generic [ref=e417]:
+              - generic [ref=e418]:
+                - img [ref=e419]
+                - generic [ref=e422]: "1"
+                - generic [ref=e423]: промокод
+              - generic [ref=e426]: Активен
+          - link "Wildberries Wildberries 4.5 рейтинг Маркетплейс одежды и товаров 3 промокода Активен" [ref=e427] [cursor=pointer]:
+            - /url: /stores/wildberries
+            - generic [ref=e428]:
+              - img "Wildberries" [ref=e430]
+              - generic [ref=e431]:
+                - heading "Wildberries" [level=3] [ref=e432]
+                - generic [ref=e433]:
+                  - img [ref=e434]
+                  - generic [ref=e436]: "4.5"
+                  - generic [ref=e437]: рейтинг
+            - paragraph [ref=e439]: Маркетплейс одежды и товаров
+            - generic [ref=e440]:
+              - generic [ref=e441]:
+                - img [ref=e442]
+                - generic [ref=e445]: "3"
+                - generic [ref=e446]: промокода
+              - generic [ref=e449]: Активен
+          - link "М.Видео М.Видео 4.4 рейтинг Бытовая техника и электроника 1 промокод Активен" [ref=e450] [cursor=pointer]:
+            - /url: /stores/mvideo
+            - generic [ref=e451]:
+              - img "М.Видео" [ref=e453]
+              - generic [ref=e454]:
+                - heading "М.Видео" [level=3] [ref=e455]
+                - generic [ref=e456]:
+                  - img [ref=e457]
+                  - generic [ref=e459]: "4.4"
+                  - generic [ref=e460]: рейтинг
+            - paragraph [ref=e462]: Бытовая техника и электроника
+            - generic [ref=e463]:
+              - generic [ref=e464]:
+                - img [ref=e465]
+                - generic [ref=e468]: "1"
+                - generic [ref=e469]: промокод
+              - generic [ref=e472]: Активен
+          - link "AliExpress AliExpress 4.3 рейтинг Товары из Китая 1 промокод Активен" [ref=e473] [cursor=pointer]:
+            - /url: /stores/aliexpress
+            - generic [ref=e474]:
+              - img "AliExpress" [ref=e476]
+              - generic [ref=e477]:
+                - heading "AliExpress" [level=3] [ref=e478]
+                - generic [ref=e479]:
+                  - img [ref=e480]
+                  - generic [ref=e482]: "4.3"
+                  - generic [ref=e483]: рейтинг
+            - paragraph [ref=e485]: Товары из Китая
+            - generic [ref=e486]:
+              - generic [ref=e487]:
+                - img [ref=e488]
+                - generic [ref=e491]: "1"
+                - generic [ref=e492]: промокод
+              - generic [ref=e495]: Активен
+    - region "Популярные категории" [ref=e496]:
+      - generic [ref=e498]:
+        - generic [ref=e499]:
+          - heading "Популярные категории" [level=2] [ref=e500]
+          - paragraph [ref=e501]: Найдите скидки в интересующих вас категориях
+        - generic [ref=e502]:
+          - link "Дом и сад 3 промокодов" [ref=e503] [cursor=pointer]:
+            - /url: /categories/dom-i-sad
+            - generic [ref=e504]:
+              - img [ref=e506]
+              - generic [ref=e509]:
+                - heading "Дом и сад" [level=3] [ref=e510]
+                - paragraph [ref=e511]: 3 промокодов
+          - link "Красота 1 промокод" [ref=e512] [cursor=pointer]:
+            - /url: /categories/krasota
+            - generic [ref=e513]:
+              - img [ref=e515]
+              - generic [ref=e517]:
+                - heading "Красота" [level=3] [ref=e518]
+                - paragraph [ref=e519]: 1 промокод
+          - link "Одежда 3 промокодов" [ref=e520] [cursor=pointer]:
+            - /url: /categories/odezhda
+            - generic [ref=e521]:
+              - img [ref=e523]
+              - generic [ref=e526]:
+                - heading "Одежда" [level=3] [ref=e527]
+                - paragraph [ref=e528]: 3 промокодов
+          - link "Спорт 1 промокод" [ref=e529] [cursor=pointer]:
+            - /url: /categories/sport
+            - generic [ref=e530]:
+              - img [ref=e532]
+              - generic [ref=e538]:
+                - heading "Спорт" [level=3] [ref=e539]
+                - paragraph [ref=e540]: 1 промокод
+          - link "Технологии 3 промокодов" [ref=e541] [cursor=pointer]:
+            - /url: /categories/tehnologii
+            - generic [ref=e542]:
+              - img [ref=e544]
+              - generic [ref=e546]:
+                - heading "Технологии" [level=3] [ref=e547]
+                - paragraph [ref=e548]: 3 промокодов
+    - region "Наши партнеры" [ref=e549]
+    - generic [ref=e575]:
+      - heading "BoltPromo - Промокоды и скидки от интернет-магазинов" [level=1] [ref=e576]
+      - paragraph [ref=e577]: BoltPromo предлагает актуальные промокоды, купоны и скидки от популярных интернет-магазинов. Экономьте на покупках техники, одежды, красоты, еды и других товаров. Все предложения проверены и регулярно обновляются.
+      - list [ref=e578]:
+        - listitem [ref=e579]: Актуальные промокоды от 100+ магазинов
+        - listitem [ref=e580]: Проверенные скидки и купоны
+        - listitem [ref=e581]: Удобный поиск по категориям
+        - listitem [ref=e582]: Регулярные обновления предложений
+        - listitem [ref=e583]: Бесплатное использование сервиса
+  - contentinfo [ref=e584]:
+    - generic [ref=e587]:
+      - generic [ref=e588]:
+        - generic [ref=e589]:
+          - link "BoltPromo" [ref=e590] [cursor=pointer]:
             - /url: /
-            - img [ref=e1130]
-            - text: BoltPromo
-          - paragraph [ref=e1132]: Платформа промокодов и скидок
-        - navigation [ref=e1133]:
-          - link "О проекте" [ref=e1134] [cursor=pointer]:
+            - img [ref=e591]
+            - generic [ref=e593]: BoltPromo
+          - paragraph [ref=e594]: Платформа промокодов и скидок
+        - navigation [ref=e595]:
+          - link "О проекте" [ref=e596] [cursor=pointer]:
             - /url: /about
-          - link "Контакты" [ref=e1135] [cursor=pointer]:
+          - link "Контакты" [ref=e597] [cursor=pointer]:
             - /url: /contacts
-          - link "FAQ" [ref=e1136] [cursor=pointer]:
+          - link "FAQ" [ref=e598] [cursor=pointer]:
             - /url: /faq
-          - link "Политика конфиденциальности" [ref=e1137] [cursor=pointer]:
+          - link "Политика конфиденциальности" [ref=e599] [cursor=pointer]:
             - /url: /privacy
-          - link "Пользовательское соглашение" [ref=e1138] [cursor=pointer]:
+          - link "Пользовательское соглашение" [ref=e600] [cursor=pointer]:
             - /url: /terms
-        - link "Телеграм-канал" [ref=e1140] [cursor=pointer]:
+        - link "Телеграм-канал" [ref=e602] [cursor=pointer]:
           - /url: https://t.me/boltpromomane
-          - text: Телеграм-канал
-          - img [ref=e1141]
-      - generic [ref=e1146]:
-        - paragraph [ref=e1147]: © 2025 BoltPromo. Все права защищены.
-        - generic [ref=e1148]: Версия 1.2•Сделано с ❤️
+          - generic [ref=e603]: Телеграм-канал
+          - img [ref=e604]
+      - generic [ref=e609]:
+        - paragraph [ref=e610]: © 2025 BoltPromo. Все права защищены.
+        - generic [ref=e611]:
+          - generic [ref=e612]: Версия 1.2
+          - generic [ref=e613]: •
+          - generic [ref=e614]: Сделано с ❤️
   - region "Notifications alt+T"
 ```
