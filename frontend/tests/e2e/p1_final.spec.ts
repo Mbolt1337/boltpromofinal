@@ -28,9 +28,17 @@ test.describe('BoltPromo P1 Final Smoke Tests', () => {
     const showcaseSection = page.locator('[data-testid="showcase-section"]').first();
     await expect(showcaseSection).toBeVisible({ timeout: 10000 });
 
-    // Проверяем, что есть хотя бы одна карточка промокода
-    const promoCards = page.locator('[data-testid="promo-card"]');
-    await expect(promoCards.first()).toBeVisible({ timeout: 5000 });
+    // Скроллим страницу чтобы загрузить промокарточки
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(1000);
+
+    // Проверяем, что есть хотя бы одна карточка промокода (hot-promo-card или promo-card)
+    const promoCards = page.locator('[data-testid="hot-promo-card"], [data-testid="promo-card"]');
+    const firstCard = promoCards.first();
+
+    // Скроллим к карточке и ждём её видимости
+    await firstCard.scrollIntoViewIfNeeded();
+    await expect(firstCard).toBeVisible({ timeout: 10000 });
 
     // Проверяем, что carousel работает (есть кнопки навигации)
     const carouselButton = page.locator('button[aria-label*="next"], button[aria-label*="Next"]').first();
@@ -44,8 +52,13 @@ test.describe('BoltPromo P1 Final Smoke Tests', () => {
   test('Promo copy: click → toast → redirect works', async ({ page }) => {
     await page.goto(BASE_URL);
 
-    // Находим первую карточку с кодом
-    const promoCard = page.locator('[data-testid="promo-card"]').first();
+    // Скроллим вниз чтобы загрузить промокарточки
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(1000);
+
+    // Находим первую карточку с кодом (hot-promo-card или promo-card)
+    const promoCard = page.locator('[data-testid="hot-promo-card"], [data-testid="promo-card"]').first();
+    await promoCard.scrollIntoViewIfNeeded();
     await promoCard.waitFor({ state: 'visible', timeout: 10000 });
 
     // Клик по кнопке "Скопировать код" или "Получить промокод"
