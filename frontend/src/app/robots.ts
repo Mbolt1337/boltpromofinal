@@ -8,10 +8,9 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: [
           '/api/',
-          '/admin/', 
+          '/admin/',
           '/_next/',
           '/private/',
-          '/*?*', // Блокируем URL с параметрами
         ],
       },
       {
