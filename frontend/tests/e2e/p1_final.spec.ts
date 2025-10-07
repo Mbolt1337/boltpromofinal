@@ -132,14 +132,18 @@ test.describe('BoltPromo P1 Final Smoke Tests', () => {
     }
   });
 
-  test('Mobile (iPhone 12): showcase cards stable without layout shift', async ({ page }) => {
+  test('Mobile (iPhone 12): showcase carousel stable without layout shift', async ({ page }) => {
     // Эмулируем iPhone 12
     await page.setViewportSize({ width: 390, height: 844 });
 
     await page.goto(BASE_URL);
 
-    // Ждём загрузки первой showcase карточки
-    const firstCard = page.locator('[data-testid="showcase-card"]').first();
+    // Ждём загрузки carousel на мобилке
+    const carousel = page.locator('[data-testid="showcase-carousel-mobile"]').first();
+    await carousel.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Ждём загрузки первой showcase карточки внутри carousel
+    const firstCard = carousel.locator('[data-testid="showcase-card"]').first();
     await firstCard.waitFor({ state: 'visible', timeout: 10000 });
 
     // Измеряем начальную позицию
@@ -160,13 +164,13 @@ test.describe('BoltPromo P1 Final Smoke Tests', () => {
     const yDiff = Math.abs((finalBox?.y || 0) - (initialBox?.y || 0));
     expect(yDiff).toBeLessThan(5);
 
-    // Проверяем, что carousel работает на мобилке
-    const carouselMobile = page.locator('[data-testid="showcase-carousel-mobile"]').first();
-    if (await carouselMobile.isVisible({ timeout: 3000 })) {
-      // Свайп
-      await carouselMobile.hover();
+    // Проверяем, что carousel работает - делаем свайп
+    await carousel.hover();
+    const box = await carousel.boundingBox();
+    if (box) {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await page.mouse.down();
-      await page.mouse.move(100, 0);
+      await page.mouse.move(box.x + 100, box.y + box.height / 2);
       await page.mouse.up();
       await page.waitForTimeout(500);
     }
