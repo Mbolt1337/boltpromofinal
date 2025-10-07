@@ -5,6 +5,7 @@ import Link from 'next/link'
 import StoreGrid from '@/components/StoreGrid'
 import StoreFilter from '@/components/filters/StoreFilter'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import PillLink from '@/components/ui/PillLink'
 import Pagination from '@/components/ui/Pagination'
 import type { Store as StoreType, GlobalStats } from '@/lib/api'
 import type { StoreFilters, PaginationInfo, FilteredResult } from '@/types'
@@ -178,12 +179,12 @@ async function StoresContent({ searchParams }: { searchParams: any }) {
                 По запросу &ldquo;{filters.search}&rdquo; ничего не найдено.
                 Попробуйте изменить поисковый запрос или сбросить фильтры.
               </p>
-              <Link
+              <PillLink
                 href="/stores"
-                className="inline-flex items-center px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/30 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105"
+                variant="secondary"
               >
                 Сбросить фильтры
-              </Link>
+              </PillLink>
             </div>
           </>
         )

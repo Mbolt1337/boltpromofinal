@@ -21,7 +21,14 @@
       "Bash(npx playwright install:*)",
       "Bash(if not exist \"E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\tests\" mkdir \"E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\tests\")",
       "Bash(if not exist:*)",
-      "Bash(BASE_URL=http://localhost:3004 npx playwright test --project=chromium)"
+      "Bash(BASE_URL=http://localhost:3004 npx playwright test --project=chromium)",
+      "Bash(BASE_URL=http://localhost:3004 npx playwright test --project=chromium --reporter=list)",
+      "Bash(for f in page.tsx showcases/[slug]/page.tsx categories/[slug]/page.tsx stores/[slug]/page.tsx promo/[id]/page.tsx maintenance/page.tsx showcases/page.tsx)",
+      "Bash(do if [ -f \"$f\" ])",
+      "Bash(then if ! grep -q \"generateMetadata\" \"$f\")",
+      "Bash(then echo \"NO META: $f\")",
+      "Bash(fi)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

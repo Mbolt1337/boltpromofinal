@@ -1,462 +1,78 @@
 # Page snapshot
 
 ```yaml
-- generic [active] [ref=e1]:
-  - banner [ref=e2]:
-    - generic [ref=e5]:
-      - link "BoltPromo" [ref=e6] [cursor=pointer]:
-        - /url: /
-        - img [ref=e8]
-        - generic [ref=e10]: BoltPromo
-      - navigation [ref=e11]:
-        - link "Категории" [ref=e12] [cursor=pointer]:
-          - /url: /categories
-        - link "Магазины" [ref=e13] [cursor=pointer]:
-          - /url: /stores
-        - link "Горячие" [ref=e14] [cursor=pointer]:
-          - /url: /hot
-        - link "FAQ" [ref=e15] [cursor=pointer]:
-          - /url: /faq
-        - link "Контакты" [ref=e16] [cursor=pointer]:
-          - /url: /contacts
-      - generic [ref=e20]:
-        - generic [ref=e21]:
-          - img [ref=e22]
-          - textbox "Поиск промокодов, магазинов, категорий..." [ref=e25]
-          - generic [ref=e26]:
-            - img [ref=e27]
-            - generic [ref=e29]: K
-        - button "Поиск" [ref=e30] [cursor=pointer]
-  - main [ref=e31]:
-    - region "Рекламные баннеры" [ref=e32]:
-      - generic [ref=e37]:
-        - heading "Баннеры пока не добавлены" [level=3] [ref=e38]
-        - paragraph [ref=e39]: Добавьте активные баннеры в админке, чтобы показывать их пользователям.
-    - region "Подборки промокодов" [ref=e40]:
-      - generic [ref=e42]:
-        - generic [ref=e43]:
-          - heading "Найдите лучшие промокоды в подборках BoltPromo" [level=2] [ref=e44]
-          - paragraph [ref=e45]: Специально подобранные коллекции промокодов для разных категорий
-        - generic [ref=e47]:
-          - link "BoltPromo рекомендует BoltPromo рекомендует Персональные рекомендации от нас ❤️ 2 промокодов Смотреть" [ref=e48] [cursor=pointer]:
-            - /url: /showcases/novogodnyaya-rasprodazha
-            - generic [ref=e49]:
-              - img "BoltPromo рекомендует" [ref=e51]
-              - generic [ref=e52]:
-                - heading "BoltPromo рекомендует" [level=3] [ref=e53]
-                - paragraph [ref=e54]: Персональные рекомендации от нас ❤️
-                - generic [ref=e56]:
-                  - img [ref=e57]
-                  - text: 2 промокодов
-                - button "Смотреть" [ref=e61]
-          - link "Распродажа Яндекс Маркет Распродажа Яндекс Маркет Осенняя распродажа на Яндекс Маркет 2 промокодов Смотреть" [ref=e62] [cursor=pointer]:
-            - /url: /showcases/rasprodazha-yandeks-market
-            - generic [ref=e63]:
-              - img "Распродажа Яндекс Маркет" [ref=e65]
-              - generic [ref=e66]:
-                - heading "Распродажа Яндекс Маркет" [level=3] [ref=e67]
-                - paragraph [ref=e68]: Осенняя распродажа на Яндекс Маркет
-                - generic [ref=e70]:
-                  - img [ref=e71]
-                  - text: 2 промокодов
-                - button "Смотреть" [ref=e74]
-          - link "Распродажа 11.11 Распродажа 11.11 Самые выгодные предложения в честь 11.11 3 промокодов Смотреть" [ref=e75] [cursor=pointer]:
-            - /url: /showcases/rasprodazha-1111
-            - generic [ref=e76]:
-              - img "Распродажа 11.11" [ref=e78]
-              - generic [ref=e79]:
-                - heading "Распродажа 11.11" [level=3] [ref=e80]
-                - paragraph [ref=e81]: Самые выгодные предложения в честь 11.11
-                - generic [ref=e83]:
-                  - img [ref=e84]
-                  - text: 3 промокодов
-                - button "Смотреть" [ref=e88]
-        - link "Перейти к подборкам" [ref=e90] [cursor=pointer]:
-          - /url: /showcases
-          - img [ref=e91]
-          - generic [ref=e95]: Перейти к подборкам
-          - img [ref=e96]
-    - region "Популярные промокоды" [ref=e98]:
-      - generic [ref=e100]:
-        - generic [ref=e101]:
-          - heading "Популярные промокоды" [level=2] [ref=e102]
-          - paragraph [ref=e103]: Лучшие предложения от проверенных магазинов
-        - generic [ref=e104]:
-          - generic [ref=e106] [cursor=pointer]:
-            - generic [ref=e107]:
-              - generic [ref=e108]:
-                - img "Ozon" [ref=e110]
-                - generic [ref=e111]:
-                  - heading "Ozon" [level=3] [ref=e112]
-                  - paragraph [ref=e113]: Одежда
-              - generic [ref=e115]:
-                - img [ref=e116]
-                - generic [ref=e118]: до 29 окт.
-            - generic [ref=e119]:
-              - generic [ref=e120]:
-                - img [ref=e121]
-                - generic [ref=e123]: BoltPromo рекомендует
-              - generic [ref=e124]:
-                - img [ref=e125]
-                - generic [ref=e127]: Горячий
-            - heading "Спортивная экипировка -35%" [level=4] [ref=e128]
-            - paragraph [ref=e129]: Одежда для фитнеса, кроссовки, спортивный инвентарь
-            - generic [ref=e131]: Скидка 35%
-            - generic [ref=e132]:
-              - button "Скопировать промокод и открыть магазин Ozon" [ref=e133]:
-                - img [ref=e134]
-                - generic [ref=e137]: SPORT35
-              - link "Подробнее о предложении Спортивная экипировка -35%" [ref=e138]:
-                - /url: /promo/7
-                - img [ref=e139]
-                - generic [ref=e141]: Подробнее
-            - generic [ref=e142]:
-              - generic [ref=e143]: "Использовали: 469"
-              - generic [ref=e145]: Промокод
-          - generic [ref=e147] [cursor=pointer]:
-            - generic [ref=e148]:
-              - generic [ref=e149]:
-                - img "М.Видео" [ref=e151]
-                - generic [ref=e152]:
-                  - heading "М.Видео" [level=3] [ref=e153]
-                  - paragraph [ref=e154]: Технологии
-              - generic [ref=e156]:
-                - img [ref=e157]
-                - generic [ref=e159]: до 29 окт.
-            - generic [ref=e161]:
-              - img [ref=e162]
-              - generic [ref=e164]: Горячий
-            - heading "Распродажа техники до 50%" [level=4] [ref=e165]
-            - paragraph [ref=e166]: Телевизоры, холодильники, стиральные машины
-            - generic [ref=e168]: До 50%
-            - generic [ref=e169]:
-              - button "Скопировать промокод и открыть магазин М.Видео" [ref=e170]:
-                - img [ref=e171]
-                - generic [ref=e174]: ПОКУПКА610
-              - link "Подробнее о предложении Распродажа техники до 50%" [ref=e175]:
-                - /url: /promo/5
-                - img [ref=e176]
-                - generic [ref=e178]: Подробнее
-            - generic [ref=e179]:
-              - generic [ref=e180]: "Использовали: 386"
-              - generic [ref=e182]: Промокод
-          - generic [ref=e184] [cursor=pointer]:
-            - generic [ref=e185]:
-              - generic [ref=e186]:
-                - img "AliExpress" [ref=e188]
-                - generic [ref=e189]:
-                  - heading "AliExpress" [level=3] [ref=e190]
-                  - paragraph [ref=e191]: Дом и сад
-              - generic [ref=e193]:
-                - img [ref=e194]
-                - generic [ref=e196]: до 29 окт.
-            - generic [ref=e198]:
-              - img [ref=e199]
-              - generic [ref=e201]: Горячий
-            - heading "Скидка 40% на первый заказ" [level=4] [ref=e202]
-            - paragraph [ref=e203]: Максимальная скидка для новых покупателей
-            - generic [ref=e205]: Скидка 40%
-            - generic [ref=e207]:
-              - button "Скопировать промокод и открыть магазин AliExpress" [ref=e208]:
-                - img [ref=e209]
-                - generic [ref=e212]: NEWBIE40
-              - link "Подробнее о предложении Скидка 40% на первый заказ" [ref=e213]:
-                - /url: /promo/3
-                - img [ref=e214]
-                - generic [ref=e216]: Подробнее
-            - generic [ref=e217]:
-              - generic [ref=e218]: "Использовали: 256"
-              - generic [ref=e220]: Промокод
-          - generic [ref=e222] [cursor=pointer]:
-            - generic [ref=e223]:
-              - generic [ref=e224]:
-                - img "Ozon" [ref=e226]
-                - generic [ref=e227]:
-                  - heading "Ozon" [level=3] [ref=e228]
-                  - paragraph [ref=e229]: Технологии
-              - generic [ref=e231]:
-                - img [ref=e232]
-                - generic [ref=e234]: до 29 окт.
-            - generic [ref=e236]:
-              - img [ref=e237]
-              - generic [ref=e239]: Горячий
-            - heading "Скидка 25% на технику" [level=4] [ref=e240]
-            - paragraph [ref=e241]: Большая скидка на смартфоны, ноутбуки и планшеты
-            - generic [ref=e243]: Скидка 25%
-            - generic [ref=e244]:
-              - button "Скопировать промокод и открыть магазин Ozon" [ref=e245]:
-                - img [ref=e246]
-                - generic [ref=e249]: TECH25
-              - link "Подробнее о предложении Скидка 25% на технику" [ref=e250]:
-                - /url: /promo/1
-                - img [ref=e251]
-                - generic [ref=e253]: Подробнее
-            - generic [ref=e254]:
-              - generic [ref=e255]: "Использовали: 153"
-              - generic [ref=e257]: Промокод
-          - generic [ref=e259] [cursor=pointer]:
-            - generic [ref=e260]:
-              - generic [ref=e261]:
-                - img "Wildberries" [ref=e263]
-                - generic [ref=e264]:
-                  - heading "Wildberries" [level=3] [ref=e265]
-                  - paragraph [ref=e266]: Дом и сад
-              - generic [ref=e268]:
-                - img [ref=e269]
-                - generic [ref=e271]: до 30 нояб.
-            - heading "Тест Финансовое" [level=4] [ref=e272]
-            - paragraph [ref=e273]: Описание финансовое
-            - generic [ref=e275]: бесплатное обслуживание
-            - generic [ref=e277]:
-              - button "Оформить финансовую услугу в Wildberries" [ref=e278]:
-                - img [ref=e279]
-                - generic [ref=e281]: Оформить
-                - img [ref=e282]
-              - link "Подробнее о предложении Тест Финансовое" [ref=e286]:
-                - /url: /promo/9
-                - img [ref=e287]
-                - generic [ref=e289]: Подробнее
-            - generic [ref=e290]:
-              - generic [ref=e291]: "Использовали: 9"
-              - generic [ref=e293]: Финансы
-          - generic [ref=e295] [cursor=pointer]:
-            - generic [ref=e296]:
-              - generic [ref=e297]:
-                - img "Ozon" [ref=e299]
-                - generic [ref=e300]:
-                  - heading "Ozon" [level=3] [ref=e301]
-                  - paragraph [ref=e302]: Дом и сад
-              - generic [ref=e304]:
-                - img [ref=e305]
-                - generic [ref=e307]: до 29 окт.
-            - heading "Товары для дома -25%" [level=4] [ref=e308]
-            - paragraph [ref=e309]: Мебель, декор, кухонные принадлежности
-            - generic [ref=e311]: Скидка 25%
-            - generic [ref=e313]:
-              - button "Скопировать промокод и открыть магазин Ozon" [ref=e314]:
-                - img [ref=e315]
-                - generic [ref=e318]: HOME25
-              - link "Подробнее о предложении Товары для дома -25%" [ref=e319]:
-                - /url: /promo/8
-                - img [ref=e320]
-                - generic [ref=e322]: Подробнее
-            - generic [ref=e323]:
-              - generic [ref=e324]: "Использовали: 509"
-              - generic [ref=e326]: Промокод
-        - generic [ref=e328]:
-          - link "Перейти в магазины" [ref=e329] [cursor=pointer]:
-            - /url: /stores
-            - img [ref=e330]
-            - generic [ref=e335]: Перейти в магазины
-            - img [ref=e336]
-          - link "Перейти в категории" [ref=e338] [cursor=pointer]:
-            - /url: /categories
-            - img [ref=e339]
-            - generic [ref=e341]: Перейти в категории
-            - img [ref=e342]
-        - generic [ref=e344]:
-          - generic [ref=e346] [cursor=pointer]:
-            - img [ref=e348]
-            - generic [ref=e351]: "9"
-            - generic [ref=e352]: Активных предложений
-          - generic [ref=e355] [cursor=pointer]:
-            - img [ref=e357]
-            - generic [ref=e360]: "9"
-            - generic [ref=e361]: Промокодов
-          - generic [ref=e364] [cursor=pointer]:
-            - img [ref=e366]
-            - generic [ref=e371]: "5"
-            - generic [ref=e372]: Магазинов-партнеров
-    - region "Топ магазины" [ref=e374]:
-      - generic [ref=e376]:
-        - generic [ref=e377]:
-          - heading "Популярные магазины" [level=2] [ref=e378]
-          - paragraph [ref=e379]: Лучшие предложения от проверенных партнеров
-        - generic [ref=e380]:
-          - link "Ozon Ozon 4.7 рейтинг Крупнейший интернет-магазин 3 промокода Активен" [ref=e381] [cursor=pointer]:
-            - /url: /stores/ozon
-            - generic [ref=e382]:
-              - img "Ozon" [ref=e384]
-              - generic [ref=e385]:
-                - heading "Ozon" [level=3] [ref=e386]
-                - generic [ref=e387]:
-                  - img [ref=e388]
-                  - generic [ref=e390]: "4.7"
-                  - generic [ref=e391]: рейтинг
-            - paragraph [ref=e393]: Крупнейший интернет-магазин
-            - generic [ref=e394]:
-              - generic [ref=e395]:
-                - img [ref=e396]
-                - generic [ref=e399]: "3"
-                - generic [ref=e400]: промокода
-              - generic [ref=e403]: Активен
-          - link "Lamoda Lamoda 4.6 рейтинг Модная одежда и обувь 1 промокод Активен" [ref=e404] [cursor=pointer]:
-            - /url: /stores/lamoda
-            - generic [ref=e405]:
-              - img "Lamoda" [ref=e407]
-              - generic [ref=e408]:
-                - heading "Lamoda" [level=3] [ref=e409]
-                - generic [ref=e410]:
-                  - img [ref=e411]
-                  - generic [ref=e413]: "4.6"
-                  - generic [ref=e414]: рейтинг
-            - paragraph [ref=e416]: Модная одежда и обувь
-            - generic [ref=e417]:
-              - generic [ref=e418]:
-                - img [ref=e419]
-                - generic [ref=e422]: "1"
-                - generic [ref=e423]: промокод
-              - generic [ref=e426]: Активен
-          - link "Wildberries Wildberries 4.5 рейтинг Маркетплейс одежды и товаров 3 промокода Активен" [ref=e427] [cursor=pointer]:
-            - /url: /stores/wildberries
-            - generic [ref=e428]:
-              - img "Wildberries" [ref=e430]
-              - generic [ref=e431]:
-                - heading "Wildberries" [level=3] [ref=e432]
-                - generic [ref=e433]:
-                  - img [ref=e434]
-                  - generic [ref=e436]: "4.5"
-                  - generic [ref=e437]: рейтинг
-            - paragraph [ref=e439]: Маркетплейс одежды и товаров
-            - generic [ref=e440]:
-              - generic [ref=e441]:
-                - img [ref=e442]
-                - generic [ref=e445]: "3"
-                - generic [ref=e446]: промокода
-              - generic [ref=e449]: Активен
-          - link "М.Видео М.Видео 4.4 рейтинг Бытовая техника и электроника 1 промокод Активен" [ref=e450] [cursor=pointer]:
-            - /url: /stores/mvideo
-            - generic [ref=e451]:
-              - img "М.Видео" [ref=e453]
-              - generic [ref=e454]:
-                - heading "М.Видео" [level=3] [ref=e455]
-                - generic [ref=e456]:
-                  - img [ref=e457]
-                  - generic [ref=e459]: "4.4"
-                  - generic [ref=e460]: рейтинг
-            - paragraph [ref=e462]: Бытовая техника и электроника
-            - generic [ref=e463]:
-              - generic [ref=e464]:
-                - img [ref=e465]
-                - generic [ref=e468]: "1"
-                - generic [ref=e469]: промокод
-              - generic [ref=e472]: Активен
-          - link "AliExpress AliExpress 4.3 рейтинг Товары из Китая 1 промокод Активен" [ref=e473] [cursor=pointer]:
-            - /url: /stores/aliexpress
-            - generic [ref=e474]:
-              - img "AliExpress" [ref=e476]
-              - generic [ref=e477]:
-                - heading "AliExpress" [level=3] [ref=e478]
-                - generic [ref=e479]:
-                  - img [ref=e480]
-                  - generic [ref=e482]: "4.3"
-                  - generic [ref=e483]: рейтинг
-            - paragraph [ref=e485]: Товары из Китая
-            - generic [ref=e486]:
-              - generic [ref=e487]:
-                - img [ref=e488]
-                - generic [ref=e491]: "1"
-                - generic [ref=e492]: промокод
-              - generic [ref=e495]: Активен
-    - region "Популярные категории" [ref=e496]:
-      - generic [ref=e498]:
-        - generic [ref=e499]:
-          - heading "Популярные категории" [level=2] [ref=e500]
-          - paragraph [ref=e501]: Найдите скидки в интересующих вас категориях
-        - generic [ref=e502]:
-          - link "Дом и сад 3 промокодов" [ref=e503] [cursor=pointer]:
-            - /url: /categories/dom-i-sad
-            - generic [ref=e504]:
-              - img [ref=e506]
-              - generic [ref=e509]:
-                - heading "Дом и сад" [level=3] [ref=e510]
-                - paragraph [ref=e511]: 3 промокодов
-          - link "Красота 1 промокод" [ref=e512] [cursor=pointer]:
-            - /url: /categories/krasota
-            - generic [ref=e513]:
-              - img [ref=e515]
-              - generic [ref=e517]:
-                - heading "Красота" [level=3] [ref=e518]
-                - paragraph [ref=e519]: 1 промокод
-          - link "Одежда 3 промокодов" [ref=e520] [cursor=pointer]:
-            - /url: /categories/odezhda
-            - generic [ref=e521]:
-              - img [ref=e523]
-              - generic [ref=e526]:
-                - heading "Одежда" [level=3] [ref=e527]
-                - paragraph [ref=e528]: 3 промокодов
-          - link "Спорт 1 промокод" [ref=e529] [cursor=pointer]:
-            - /url: /categories/sport
-            - generic [ref=e530]:
-              - img [ref=e532]
-              - generic [ref=e538]:
-                - heading "Спорт" [level=3] [ref=e539]
-                - paragraph [ref=e540]: 1 промокод
-          - link "Технологии 3 промокодов" [ref=e541] [cursor=pointer]:
-            - /url: /categories/tehnologii
-            - generic [ref=e542]:
-              - img [ref=e544]
-              - generic [ref=e546]:
-                - heading "Технологии" [level=3] [ref=e547]
-                - paragraph [ref=e548]: 3 промокодов
-    - region "Наши партнеры"
-    - generic [ref=e549]:
-      - heading "BoltPromo - Промокоды и скидки от интернет-магазинов" [level=1] [ref=e550]
-      - paragraph [ref=e551]: BoltPromo предлагает актуальные промокоды, купоны и скидки от популярных интернет-магазинов. Экономьте на покупках техники, одежды, красоты, еды и других товаров. Все предложения проверены и регулярно обновляются.
-      - list [ref=e552]:
-        - listitem [ref=e553]: Актуальные промокоды от 100+ магазинов
-        - listitem [ref=e554]: Проверенные скидки и купоны
-        - listitem [ref=e555]: Удобный поиск по категориям
-        - listitem [ref=e556]: Регулярные обновления предложений
-        - listitem [ref=e557]: Бесплатное использование сервиса
-  - contentinfo [ref=e558]:
-    - generic [ref=e561]:
-      - generic [ref=e562]:
-        - generic [ref=e563]:
-          - link "BoltPromo" [ref=e564] [cursor=pointer]:
-            - /url: /
-            - img [ref=e565]
-            - generic [ref=e567]: BoltPromo
-          - paragraph [ref=e568]: Платформа промокодов и скидок
-        - navigation [ref=e569]:
-          - link "О проекте" [ref=e570] [cursor=pointer]:
-            - /url: /about
-          - link "Контакты" [ref=e571] [cursor=pointer]:
-            - /url: /contacts
-          - link "FAQ" [ref=e572] [cursor=pointer]:
-            - /url: /faq
-          - link "Политика конфиденциальности" [ref=e573] [cursor=pointer]:
-            - /url: /privacy
-          - link "Пользовательское соглашение" [ref=e574] [cursor=pointer]:
-            - /url: /terms
-        - link "Телеграм-канал" [ref=e576] [cursor=pointer]:
-          - /url: https://t.me/boltpromomane
-          - generic [ref=e577]: Телеграм-канал
-          - img [ref=e578]
-      - generic [ref=e583]:
-        - paragraph [ref=e584]: © 2025 BoltPromo. Все права защищены.
-        - generic [ref=e585]:
-          - generic [ref=e586]: Версия 1.2
-          - generic [ref=e587]: •
-          - generic [ref=e588]: Сделано с ❤️
-  - generic [ref=e592]:
-    - generic [ref=e593]:
-      - generic [ref=e594]:
-        - img [ref=e596]
-        - generic [ref=e598]:
-          - heading "Мы используем cookies" [level=3] [ref=e599]
-          - paragraph [ref=e600]:
-            - text: Мы используем необходимые cookies для работы сайта и аналитические cookies для улучшения вашего опыта. Подробнее о том, как мы обрабатываем ваши данные, читайте в
-            - link "Политике конфиденциальности" [ref=e601] [cursor=pointer]:
-              - /url: /privacy
-            - text: .
-      - generic [ref=e602]:
-        - button "Только необходимые" [ref=e603] [cursor=pointer]
-        - button "Принять все" [ref=e604] [cursor=pointer]
-    - button "Закрыть" [ref=e605] [cursor=pointer]:
-      - img [ref=e606]
-  - region "Notifications alt+T"
-  - button "Open Next.js Dev Tools" [ref=e614] [cursor=pointer]:
-    - img [ref=e615]
-  - alert [ref=e618]
+- generic:
+  - generic [active]:
+    - generic [ref=e5] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e6]:
+        - img [ref=e7]
+      - generic [ref=e10]:
+        - button "Open issues overlay" [ref=e11]:
+          - generic [ref=e12]:
+            - generic [ref=e13]: "0"
+            - generic [ref=e14]: "1"
+          - generic [ref=e15]: Issue
+        - button "Collapse issues badge" [ref=e16]:
+          - img [ref=e17]
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - navigation [ref=e24]:
+            - button "previous" [disabled] [ref=e25]:
+              - img "previous" [ref=e26]
+            - generic [ref=e28]:
+              - generic [ref=e29]: 1/
+              - text: "1"
+            - button "next" [disabled] [ref=e30]:
+              - img "next" [ref=e31]
+          - img
+        - generic [ref=e33]:
+          - link "Next.js 15.4.6 (stale) Webpack" [ref=e34] [cursor=pointer]:
+            - /url: https://nextjs.org/docs/messages/version-staleness
+            - img [ref=e35]
+            - generic "There is a newer version (15.5.4) available, upgrade recommended!" [ref=e37]: Next.js 15.4.6 (stale)
+            - generic [ref=e38]: Webpack
+          - img
+      - generic [ref=e39]:
+        - dialog "Runtime Error" [ref=e40]:
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]:
+                - generic [ref=e47]: Runtime Error
+                - generic [ref=e48]:
+                  - button "Copy Stack Trace" [ref=e49] [cursor=pointer]:
+                    - img [ref=e50]
+                  - button "No related documentation found" [disabled] [ref=e52]:
+                    - img [ref=e53]
+                  - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e55] [cursor=pointer]:
+                    - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
+                    - img [ref=e56]
+              - paragraph [ref=e65]: "ENOENT: no such file or directory, open 'E:\\boltpromoFINAL\\BoltPromo-main\\frontend\\.next\\server\\vendor-chunks\\lucide-react.js'"
+            - generic [ref=e67]:
+              - generic [ref=e68]:
+                - paragraph [ref=e69]:
+                  - text: Call Stack
+                  - generic [ref=e70]: "44"
+                - button "Show 42 ignore-listed frame(s)" [ref=e71] [cursor=pointer]:
+                  - text: Show 42 ignore-listed frame(s)
+                  - img [ref=e72]
+              - generic [ref=e74]:
+                - generic [ref=e75]: <unknown>
+                - text: .next\server\app\page.js (1028:47)
+              - generic [ref=e76]:
+                - generic [ref=e77]: Object.<anonymous>
+                - text: .next\server\app\page.js (1031:3)
+          - generic [ref=e78]:
+            - generic [ref=e79]: "1"
+            - generic [ref=e80]: "2"
+        - contentinfo [ref=e81]:
+          - region "Error feedback" [ref=e82]:
+            - paragraph [ref=e83]:
+              - link "Was this helpful?" [ref=e84] [cursor=pointer]:
+                - /url: https://nextjs.org/telemetry#error-feedback
+            - button "Mark as helpful" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+            - button "Mark as not helpful" [ref=e89] [cursor=pointer]:
+              - img [ref=e90]
+  - alert [ref=e92]
 ```

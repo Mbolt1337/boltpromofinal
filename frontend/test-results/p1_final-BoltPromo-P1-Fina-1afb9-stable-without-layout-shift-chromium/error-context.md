@@ -16,23 +16,19 @@
           - img [ref=e17]
     - generic [ref=e21]:
       - generic [ref=e22]:
-        - generic [ref=e23]:
-          - navigation [ref=e24]:
-            - button "previous" [disabled] [ref=e25]:
-              - img "previous" [ref=e26]
-            - generic [ref=e28]:
-              - generic [ref=e29]: 1/
-              - text: "1"
-            - button "next" [disabled] [ref=e30]:
-              - img "next" [ref=e31]
-          - img
-        - generic [ref=e33]:
-          - link "Next.js 15.4.6 (stale) Webpack" [ref=e34] [cursor=pointer]:
-            - /url: https://nextjs.org/docs/messages/version-staleness
-            - img [ref=e35]
-            - generic "There is a newer version (15.5.4) available, upgrade recommended!" [ref=e37]: Next.js 15.4.6 (stale)
-            - generic [ref=e38]: Webpack
-          - img
+        - navigation [ref=e24]:
+          - button "previous" [disabled] [ref=e25]:
+            - img "previous" [ref=e26]
+          - generic [ref=e28]:
+            - generic [ref=e29]: 1/
+            - text: "1"
+          - button "next" [disabled] [ref=e30]:
+            - img "next" [ref=e31]
+        - link "Next.js 15.4.6 (stale) Webpack" [ref=e34] [cursor=pointer]:
+          - /url: https://nextjs.org/docs/messages/version-staleness
+          - img [ref=e35]
+          - generic "There is a newer version (15.5.4) available, upgrade recommended!" [ref=e37]: Next.js 15.4.6 (stale)
+          - generic [ref=e38]: Webpack
       - generic [ref=e39]:
         - dialog "Runtime Error" [ref=e40]:
           - generic [ref=e43]:

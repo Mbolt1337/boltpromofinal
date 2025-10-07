@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import { 
-  Zap, 
-  Shield, 
-  Users, 
-  Sparkles, 
-  TrendingUp, 
+import {
+  Zap,
+  Shield,
+  Users,
+  Sparkles,
+  TrendingUp,
   Heart,
   CheckCircle,
   Star,
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import PillLink from '@/components/ui/PillLink'
 import JsonLd from '@/components/seo/JsonLd'
 
 // ✅ ИСПРАВЛЕНО: Принудительно делаем страницу динамической
@@ -317,23 +318,24 @@ function AboutContent() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link 
-                href="/hot" 
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              <PillLink
+                href="/hot"
+                variant="primary"
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 border-0"
               >
-                <Sparkles className="w-5 h-5 mr-2" />
+                <Sparkles className="w-5 h-5" />
                 <span>Горячие промокоды</span>
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
+                <ArrowRight className="w-5 h-5" />
+              </PillLink>
 
-              <Link 
-                href="/stores" 
-                className="inline-flex items-center px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 rounded-xl text-white font-semibold transition-all duration-300 hover:scale-105"
+              <PillLink
+                href="/stores"
+                variant="secondary"
               >
-                <Shield className="w-5 h-5 mr-2" />
+                <Shield className="w-5 h-5" />
                 <span>Все магазины</span>
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
+                <ArrowRight className="w-5 h-5" />
+              </PillLink>
             </div>
           </div>
         </div>
