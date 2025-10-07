@@ -35,7 +35,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full pt-4">
+    <header className="sticky top-0 z-50 w-full pt-4" data-testid="header">
       {/* Основной хедер с отступами */}
       <div className="container-main">
         <div className="glass-header-rounded">
@@ -73,9 +73,10 @@ export default function Header() {
               </div>
 
               {/* Кнопка поиска - Mobile */}
-              <button 
+              <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="md:hidden glass-button-small p-3"
+                data-testid="mobile-search-button"
               >
                 <Search className="w-5 h-5 text-white" />
               </button>
@@ -84,6 +85,7 @@ export default function Header() {
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="lg:hidden glass-button-small p-3"
+                data-testid="mobile-menu-button"
               >
                 {isMenuOpen ? (
                   <X className="w-5 h-5 text-white" />

@@ -139,7 +139,7 @@ export default async function ShowcasePage({ params, searchParams }: ShowcasePag
         <Breadcrumbs items={breadcrumbItems} className="mb-6" />
 
         {/* Hero Banner with Image */}
-        <div className="relative w-full h-[220px] sm:h-[280px] lg:h-[320px] overflow-hidden rounded-2xl mb-8">
+        <div className="relative w-full h-[220px] sm:h-[280px] lg:h-[320px] overflow-hidden rounded-2xl mb-8" data-testid="showcase-banner">
           {/* Blurred background image */}
           <Image
             src={bannerUrl}
@@ -150,7 +150,7 @@ export default async function ShowcasePage({ params, searchParams }: ShowcasePag
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
           />
           {/* Glass effect overlay */}
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" data-testid="banner-overlay" />
           {/* Enhanced gradient overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
 

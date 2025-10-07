@@ -315,7 +315,7 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
 
   return (
     <>
-      <div className={cardClasses} tabIndex={0}>
+      <div className={cardClasses} tabIndex={0} data-testid="hot-promo-card">
 
         {/* КОНТЕЙНЕР С ЕДИНЫМ PADDING (минимум p-5) */}
         <div className="p-5 flex flex-col h-full">

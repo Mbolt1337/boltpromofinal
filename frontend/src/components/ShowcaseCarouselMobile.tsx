@@ -10,7 +10,7 @@ interface ShowcaseCarouselMobileProps {
 
 export default function ShowcaseCarouselMobile({ showcases }: ShowcaseCarouselMobileProps) {
   return (
-    <div className="md:hidden mb-4 sm:mb-6">
+    <div className="md:hidden mb-4 sm:mb-6" data-testid="showcase-carousel-mobile">
       <CarouselBase
         items={showcases}
         renderItem={(showcase, index) => (

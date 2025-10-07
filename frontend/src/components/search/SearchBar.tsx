@@ -182,7 +182,7 @@ export default function SearchBar({
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} data-testid="search-bar">
       <form onSubmit={handleSubmit}>
         <div className={`relative transition-all duration-300 ease-out ${
           isExpanded && !isMobile ? 'scale-105' : ''
@@ -200,7 +200,7 @@ export default function SearchBar({
             onBlur={handleBlur}
             placeholder={placeholder}
             className={`
-              pl-12 pr-20 py-3 w-full glass-input rounded-xl text-white 
+              pl-12 pr-20 py-3 w-full glass-input rounded-xl text-white
               placeholder:text-gray-400 transition-all duration-300 ease-out
               focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none
               ${isMobile ? 'w-full' : 'w-64 focus:w-80'}
@@ -208,6 +208,7 @@ export default function SearchBar({
             `}
             autoComplete="off"
             spellCheck={false}
+            data-testid="search-input"
           />
 
           {/* Индикатор загрузки */}
@@ -244,7 +245,7 @@ export default function SearchBar({
 
       {/* Dark theme dropdown */}
       {isExpanded && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0f1115]/95 border border-white/10 rounded-xl z-50 max-h-96 overflow-hidden shadow-2xl backdrop-blur-md">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0f1115]/95 border border-white/10 rounded-xl z-50 max-h-96 overflow-hidden shadow-2xl backdrop-blur-md" data-testid="search-dropdown">
           
           {/* Результаты поиска */}
           {query.trim() && suggestions.length > 0 && (
