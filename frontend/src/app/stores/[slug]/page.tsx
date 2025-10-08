@@ -282,11 +282,12 @@ export default async function StorePage({ params }: StorePageProps) {
     // Добавлен правильный тип Promocode[]
     let promocodes: Promocode[] = []
     try {
-      const response = await getPromocodes({ page_size: 100 })
-      promocodes = response.results.filter(promo => 
-        promo.store?.slug === slug || 
-        promo.store?.name === store.name
-      )
+      // Загружаем промокоды ТОЛЬКО для этого магазина
+      const response = await getPromocodes({
+        store: slug,
+        page_size: 999  // Загружаем все промокоды магазина
+      })
+      promocodes = response.results
     } catch (error) {
       // Тихо обрабатываем ошибку загрузки промокодов
       promocodes = []
