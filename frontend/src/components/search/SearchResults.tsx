@@ -2,8 +2,9 @@
 'use client'
 
 import Link from 'next/link'
-import { Tag, Store, Grid3X3, Flame, ExternalLink, AlertCircle, ArrowRight, TrendingUp, Search } from 'lucide-react'
+import { Store, Grid3X3, ExternalLink, ArrowRight, TrendingUp, Search, Flame, Tag } from 'lucide-react'
 import type { SearchResult } from '@/lib/search'
+import PromoCard from '@/components/PromoCard'
 
 interface SearchResultsProps {
   query: string
@@ -133,39 +134,10 @@ export default function SearchResults({ query, results, type, sort }: SearchResu
             )}
           </div>
 
+          {/* ✅ ИСПРАВЛЕНО: Используем стандартный PromoCard компонент */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {promocodes.map((promo) => (
-              <Link
-                key={promo.id}
-                href={promo.href}
-                // unified hover/focus - исправил hover scale + добавил focus
-                className="glass-card p-6 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 ease-out group relative overflow-hidden focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <Tag className="w-5 h-5 text-green-400 transition-all duration-300 ease-out group-hover:scale-110" />
-                    {promo.isHot && <Flame className="w-4 h-4 text-orange-400 transition-all duration-300 ease-out group-hover:scale-110" />}
-                  </div>
-                  <div className="text-gray-500 text-xs bg-white/5 px-2 py-1 rounded">промокод</div>
-                </div>
-                
-                <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-green-400 transition-colors duration-300 ease-out">
-                  {promo.title}
-                </h3>
-                
-                {promo.subtitle && (
-                  <p className="text-gray-400 text-sm line-clamp-2 mb-4 group-hover:text-gray-300 transition-colors duration-300 ease-out">
-                    {promo.subtitle}
-                  </p>
-                )}
-
-                <div className="flex items-center justify-between mt-auto">
-                  <span className="text-green-400 text-sm font-medium transition-colors duration-300 ease-out">Получить промокод</span>
-                  <ExternalLink className="w-4 h-4 text-green-400 group-hover:translate-x-1 transition-transform duration-300 ease-out" />
-                </div>
-
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/3 to-emerald-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out pointer-events-none"></div>
-              </Link>
+              <PromoCard key={promo.id} promo={promo} />
             ))}
           </div>
         </section>

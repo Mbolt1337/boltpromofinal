@@ -11,8 +11,9 @@ export interface SearchSuggestion {
   relevance: number
 }
 
+// ✅ ИСПРАВЛЕНО: SearchResult теперь возвращает полные Promocode объекты
 export interface SearchResult {
-  promocodes: SearchSuggestion[]
+  promocodes: Promocode[]  // Полные данные вместо SearchSuggestion[]
   stores: SearchSuggestion[]
   categories: SearchSuggestion[]
   total: number
@@ -276,16 +277,8 @@ export async function searchAll(
     if (type === 'all' || type === 'promocodes') {
       const promocodes = searchData.promocodes || []
 
-      // ✅ ИСПРАВЛЕНО: Добавлен явный тип для параметра promo
-      results.promocodes = promocodes.map((promo: any) => ({
-        id: `promo-${promo.id}`,
-        type: 'promocode' as const,
-        title: promo.title,
-        subtitle: `${promo.store?.name || 'Магазин'} • ${promo.discount_label || 'Скидка'}`,
-        href: `/search?q=${encodeURIComponent(promo.title)}`,
-        isHot: promo.is_hot,
-        relevance: calculateRelevance(promo.title, normalizedQuery) + (promo.is_recommended ? 20 : 0)
-      })).slice(0, type === 'promocodes' ? page_size : 10)
+      // ✅ ИСПРАВЛЕНО: Возвращаем полные Promocode объекты напрямую
+      results.promocodes = promocodes.slice(0, type === 'promocodes' ? page_size : 10)
     }
 
     // Обрабатываем магазины
@@ -370,18 +363,10 @@ async function fallbackSearchAll(query: string, filters: any): Promise<SearchRes
     if (type === 'all' || type === 'promocodes') {
       const promocodesResponse = responses[responseIndex++]
       const promocodes = promocodesResponse.results || []
-      
-      // ✅ ИСПРАВЛЕНО: Добавлен явный тип для параметра promo
-      results.promocodes = promocodes.map((promo: Promocode) => ({
-        id: `promo-${promo.id}`,
-        type: 'promocode' as const,
-        title: promo.title,
-        subtitle: `${promo.store?.name || 'Магазин'} • ${promo.discount_text || 'Скидка'}`,
-        href: `/search?q=${encodeURIComponent(promo.title)}`,
-        isHot: promo.is_hot,
-        relevance: calculateRelevance(promo.title, normalizedQuery)
-      }))
-      
+
+      // ✅ ИСПРАВЛЕНО: Возвращаем полные Promocode объекты напрямую
+      results.promocodes = promocodes
+
       results.total += promocodesResponse.count || 0
     }
 
