@@ -10,7 +10,7 @@ class PromoCodeFilter(django_filters.FilterSet):
     
     # Базовые фильтры
     q = django_filters.CharFilter(method='search_filter', label='Поиск')
-    store = django_filters.ModelChoiceFilter(queryset=Store.objects.filter(is_active=True), field_name='store__slug', to_field_name='slug')
+    store = django_filters.ModelChoiceFilter(queryset=Store.objects.filter(is_active=True), field_name='store', to_field_name='slug')
     category = django_filters.CharFilter(field_name='categories__slug', lookup_expr='exact')
     
     # Булевые фильтры
