@@ -109,17 +109,24 @@ export default function PromoActions({
     }
   }
 
-  // Функция трекинга клика по ссылке
-  const handleLinkClick = (linkType: 'promo' | 'finance' | 'deal') => {
+  // Функция трекинга клика по ссылке + toast уведомления
+  const handleLinkClick = (linkType: 'promo' | 'finance' | 'deal' | 'cashback') => {
+    // Показываем toast в зависимости от типа
     switch (linkType) {
       case 'promo':
         trackPromoOpen(promoId, storeId)
         break
       case 'finance':
         trackFinanceOpen(promoId, storeId)
+        showToast.success('Переходим к оформлению', `${storeName || 'Магазин'}`)
         break
       case 'deal':
         trackDealOpen(promoId, storeId)
+        showToast.success('Переходим к скидке!', `Открываем ${storeName || 'магазин'}`)
+        break
+      case 'cashback':
+        trackPromoOpen(promoId, storeId)
+        showToast.success('Активируем кэшбэк!', `Переход в ${storeName || 'магазин'}`)
         break
     }
   }
@@ -220,6 +227,8 @@ export default function PromoActions({
                 handleLinkClick('finance')
               } else if (offerType === 'deal') {
                 handleLinkClick('deal')
+              } else if (offerType === 'cashback') {
+                handleLinkClick('cashback')
               } else {
                 handleLinkClick('promo')
               }
