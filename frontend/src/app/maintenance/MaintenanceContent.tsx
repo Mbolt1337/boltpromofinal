@@ -4,7 +4,7 @@ import { Clock, Wrench, RefreshCw } from 'lucide-react'
 
 export default function MaintenanceContent() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <div className="max-w-2xl w-full">
         {/* Анимированная иконка */}
         <div className="flex justify-center mb-8">
