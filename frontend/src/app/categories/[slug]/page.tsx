@@ -1,9 +1,10 @@
 import { getCategory, getCategoryPromocodes } from '@/lib/api'
-import { Tag, ArrowLeft, Calendar, Home, ChevronRight, Filter } from 'lucide-react'
+import { Tag, ArrowLeft, Calendar, Filter } from 'lucide-react'
 import { getCategoryIcon } from '@/lib/utils'
 import Link from 'next/link'
 import PromoCard from '@/components/PromoCard'
 import Pagination from '@/components/ui/Pagination'
+import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import CategorySearch from '@/components/CategorySearch'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
@@ -21,31 +22,6 @@ interface CategoryPageProps {
   }>
 }
 
-// Компонент хлебных крошек
-function Breadcrumbs({ category }: { category: { name: string; slug: string } }) {
-  return (
-    <nav className="flex items-center space-x-2 text-sm mb-8">
-      <Link 
-        href="/" 
-        className="text-gray-400 hover:text-white transition-colors flex items-center"
-      >
-        <Home className="w-4 h-4 mr-1" />
-        Главная
-      </Link>
-      <ChevronRight className="w-4 h-4 text-gray-500" />
-      <Link 
-        href="/categories" 
-        className="text-gray-400 hover:text-white transition-colors"
-      >
-        Категории
-      </Link>
-      <ChevronRight className="w-4 h-4 text-gray-500" />
-      <span className="text-white font-medium">
-        {category.name || category.slug}
-      </span>
-    </nav>
-  )
-}
 
 // ИСПРАВЛЕНО: Компонент блока фильтров с сохранением всех параметров
 function CategoryFilters({ 
@@ -336,7 +312,13 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             <span>Все категории</span>
           </Link>
           
-          <Breadcrumbs category={{ ...category, name: displayName }} />
+          <Breadcrumbs
+            items={[
+              { label: 'Главная', href: '/' },
+              { label: 'Категории', href: '/categories' },
+              { label: displayName }
+            ]}
+          />
         </div>
 
         {/* Герой-блок категории */}
