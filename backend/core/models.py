@@ -5,10 +5,64 @@ from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
+    # Популярные Lucide иконки для категорий
+    ICON_CHOICES = [
+        ('', '--- Без иконки ---'),
+        ('ShoppingBag', 'ShoppingBag - Покупки'),
+        ('Store', 'Store - Магазин'),
+        ('Shirt', 'Shirt - Одежда'),
+        ('Footprints', 'Footprints - Обувь'),
+        ('Smartphone', 'Smartphone - Телефон'),
+        ('Laptop', 'Laptop - Ноутбук'),
+        ('Monitor', 'Monitor - Монитор'),
+        ('Tv', 'Tv - ТВ/Техника'),
+        ('Home', 'Home - Дом'),
+        ('Sofa', 'Sofa - Мебель'),
+        ('Utensils', 'Utensils - Еда/Рестораны'),
+        ('Coffee', 'Coffee - Кафе'),
+        ('Pizza', 'Pizza - Пицца'),
+        ('Apple', 'Apple - Продукты'),
+        ('Heart', 'Heart - Здоровье/Красота'),
+        ('Sparkles', 'Sparkles - Косметика'),
+        ('Dumbbell', 'Dumbbell - Спорт/Фитнес'),
+        ('Bike', 'Bike - Велосипед'),
+        ('Car', 'Car - Авто'),
+        ('Plane', 'Plane - Авиа/Путешествия'),
+        ('Palmtree', 'Palmtree - Туризм'),
+        ('Hotel', 'Hotel - Отель'),
+        ('Briefcase', 'Briefcase - Бизнес/Офис'),
+        ('GraduationCap', 'GraduationCap - Образование'),
+        ('BookOpen', 'BookOpen - Книги'),
+        ('Music', 'Music - Музыка'),
+        ('Gamepad2', 'Gamepad2 - Игры'),
+        ('Film', 'Film - Кино'),
+        ('Camera', 'Camera - Фото'),
+        ('Baby', 'Baby - Детское'),
+        ('Gem', 'Gem - Украшения'),
+        ('Gift', 'Gift - Подарки'),
+        ('Flower', 'Flower - Цветы'),
+        ('PawPrint', 'PawPrint - Животные/Зоотовары'),
+        ('TreePine', 'TreePine - Сад/Растения'),
+        ('Hammer', 'Hammer - Инструменты/Ремонт'),
+        ('Zap', 'Zap - Электроника'),
+        ('Wifi', 'Wifi - Интернет/Связь'),
+        ('CreditCard', 'CreditCard - Финансы/Банки'),
+        ('Wallet', 'Wallet - Кошелек'),
+        ('Ticket', 'Ticket - Билеты/События'),
+        ('Package', 'Package - Посылки/Доставка'),
+        ('Tag', 'Tag - Общее'),
+    ]
+
     name = models.CharField(max_length=100, verbose_name='Название')
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL')
     description = models.TextField(blank=True, verbose_name='Описание')
-    icon = models.CharField(max_length=50, blank=True, verbose_name='Иконка (Lucide)')
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=ICON_CHOICES,
+        verbose_name='Иконка (Lucide)',
+        help_text='Выберите иконку из списка популярных Lucide Icons'
+    )
     is_active = models.BooleanField(default=True, verbose_name='Активна')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
