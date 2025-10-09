@@ -1,7 +1,15 @@
 import { getSiteAssets } from '@/lib/api'
 
+interface SiteSettings {
+  yandex_verification_code?: string | null
+  google_verification_code?: string | null
+  yandex_metrika_id?: string | null
+  ga_measurement_id?: string | null
+}
+
 export default async function DynamicMetaTags() {
   let assets
+  let settings: SiteSettings = {}
 
   try {
     assets = await getSiteAssets()
@@ -12,6 +20,19 @@ export default async function DynamicMetaTags() {
       theme_color: '#0b1020',
       background_color: '#0b1020'
     }
+  }
+
+  // Fetch site settings for SEO verification codes
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+    const response = await fetch(`${baseUrl}/api/v1/settings/`, {
+      next: { revalidate: 3600 } // Cache for 1 hour
+    })
+    if (response.ok) {
+      settings = await response.json()
+    }
+  } catch (error) {
+    console.error('[DynamicMetaTags] Failed to load site settings:', error)
   }
 
   const {
@@ -74,6 +95,14 @@ export default async function DynamicMetaTags() {
       {/* Theme Color */}
       <meta name="theme-color" content={theme_color} />
       <meta name="msapplication-TileColor" content={background_color} />
+
+      {/* Search Engine Verification Meta Tags */}
+      {settings.yandex_verification_code && (
+        <meta name="yandex-verification" content={settings.yandex_verification_code} />
+      )}
+      {settings.google_verification_code && (
+        <meta name="google-site-verification" content={settings.google_verification_code} />
+      )}
     </>
   )
 }

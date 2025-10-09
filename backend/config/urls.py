@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from core import views as core_views
 from core import admin_views
 from core import admin_import
@@ -9,6 +9,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('robots.txt', core_views.robots_txt, name='robots-txt'),
+
+    # SEO verification files (dynamic endpoints)
+    re_path(r'^yandex_[a-zA-Z0-9_]+\.html$', core_views.yandex_verification_file, name='yandex-verification'),
+    re_path(r'^google[a-zA-Z0-9]+\.html$', core_views.google_verification_file, name='google-verification'),
 
     # Admin actions
     path('admin/flush-cache/', admin_views.flush_cache_view, name='admin_flush_cache'),

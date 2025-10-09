@@ -459,6 +459,19 @@ class SiteSettings(models.Model):
     robots_txt = models.TextField(blank=True, default="", verbose_name="robots.txt (кастом)")
     noindex_expired_promos = models.BooleanField(default=True, verbose_name="noindex для просроченных промо")
 
+    # Верификация поисковиков
+    yandex_verification_code = models.CharField(max_length=255, blank=True, default="", verbose_name="Яндекс верификация (meta content)")
+    yandex_html_filename = models.CharField(max_length=255, blank=True, default="", verbose_name="Яндекс HTML файл (имя)", help_text="Например: yandex_1234567890abcdef.html")
+    yandex_html_body = models.TextField(blank=True, default="", verbose_name="Яндекс HTML файл (содержимое)")
+
+    google_verification_code = models.CharField(max_length=255, blank=True, default="", verbose_name="Google верификация (meta content)")
+    google_html_filename = models.CharField(max_length=255, blank=True, default="", verbose_name="Google HTML файл (имя)", help_text="Например: google1234567890abcdef.html")
+    google_html_body = models.TextField(blank=True, default="", verbose_name="Google HTML файл (содержимое)")
+
+    # Аналитика
+    yandex_metrika_id = models.CharField(max_length=50, blank=True, default="", verbose_name="Яндекс.Метрика ID", help_text="Например: 12345678")
+    ga_measurement_id = models.CharField(max_length=50, blank=True, default="", verbose_name="Google Analytics 4 ID", help_text="Например: G-XXXXXXXXXX")
+
     # Cache
     allow_admin_cache_flush = models.BooleanField(default=True, verbose_name="Разрешить сброс кэша из админки")
 

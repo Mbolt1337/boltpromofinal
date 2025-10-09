@@ -632,17 +632,63 @@ def robots_txt(request):
         if settings and settings.robots_txt:
             body = settings.robots_txt
         else:
-            # Default robots.txt
-            body = """User-Agent: *
-Allow: /
-Disallow: /admin/
+            # Оптимизированный robots.txt с Clean-param и Host
+            host = settings.canonical_host if settings and settings.canonical_host else request.get_host()
+            sitemap_url = f"https://{host}/sitemap.xml" if host else request.build_absolute_uri('/sitemap.xml')
 
-Sitemap: {}/sitemap.xml
-""".format(request.build_absolute_uri('/'))
+            body = f"""User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*?*session_id=
+Allow: /*?page=
+Allow: /*?sort=
+Allow: /*?q=
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid&fbclid /
+Host: {host}
+Sitemap: {sitemap_url}
+"""
     except Exception:
-        body = "User-Agent: *\nAllow: /"
+        body = "User-agent: *\nAllow: /"
 
     return HttpResponse(body, content_type='text/plain')
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def yandex_verification_file(request):
+    """
+    Динамический эндпоинт для файла верификации Яндекса
+    Путь: /yandex_<filename>.html
+    """
+    from .models import SiteSettings
+
+    try:
+        settings = SiteSettings.objects.first()
+        if settings and settings.yandex_html_filename and settings.yandex_html_body:
+            return HttpResponse(settings.yandex_html_body, content_type='text/html; charset=utf-8')
+        else:
+            return HttpResponse('<!-- Yandex verification file not configured -->', content_type='text/html', status=404)
+    except Exception as e:
+        return HttpResponse(f'<!-- Error: {str(e)} -->', content_type='text/html', status=500)
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def google_verification_file(request):
+    """
+    Динамический эндпоинт для файла верификации Google
+    Путь: /google<filename>.html
+    """
+    from .models import SiteSettings
+
+    try:
+        settings = SiteSettings.objects.first()
+        if settings and settings.google_html_filename and settings.google_html_body:
+            return HttpResponse(settings.google_html_body, content_type='text/html; charset=utf-8')
+        else:
+            return HttpResponse('<!-- Google verification file not configured -->', content_type='text/html', status=404)
+    except Exception as e:
+        return HttpResponse(f'<!-- Error: {str(e)} -->', content_type='text/html', status=500)
 
 
 # =============================================================================
@@ -768,7 +814,7 @@ def site_assets_view(request):
 @permission_classes([AllowAny])
 def site_settings_view(request):
     """
-    API для получения публичных настроек сайта (maintenance mode)
+    API для получения публичных настроек сайта (maintenance mode, SEO, analytics)
     GET /api/v1/settings/
     """
     from .models import SiteSettings
@@ -779,10 +825,20 @@ def site_settings_view(request):
         if not settings:
             return Response({
                 'maintenance_telegram_url': None,
+                'yandex_verification_code': None,
+                'google_verification_code': None,
+                'yandex_metrika_id': None,
+                'ga_measurement_id': None,
             }, status=200)
 
         data = {
             'maintenance_telegram_url': settings.maintenance_telegram_url,
+            # SEO verification codes for meta tags
+            'yandex_verification_code': settings.yandex_verification_code or None,
+            'google_verification_code': settings.google_verification_code or None,
+            # Analytics IDs
+            'yandex_metrika_id': settings.yandex_metrika_id or None,
+            'ga_measurement_id': settings.ga_measurement_id or None,
         }
 
         return Response(data, status=200)
