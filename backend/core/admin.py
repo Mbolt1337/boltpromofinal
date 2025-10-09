@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib import messages
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
@@ -165,24 +166,35 @@ class CategoryAdmin(ImportExportModelAdmin):
     list_editable = ['is_active']
     prepopulated_fields = {'slug': ('name',)}
 
-    # Только активные по умолчанию
+    # Только активные по умолчанию + оптимизация N+1 запросов
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+        # Аннотируем количество активных промокодов для избежания N+1
+        qs = qs.annotate(
+            active_promos_count=Count(
+                'promocode',
+                filter=Q(
+                    promocode__is_active=True,
+                    promocode__expires_at__gt=timezone.now()
+                )
+            )
+        )
         if not request.GET.get('is_active__exact'):
             return qs.filter(is_active=True)
         return qs
-    
+
     def icon_display(self, obj):
         if obj.icon:
             return format_html(
                 '<i class="fas fa-{}"></i> {}',
                 obj.icon, obj.icon
             )
-        return 'вЂ”'
+        return '—'
     icon_display.short_description = 'Иконка'
-    
+
     def promocodes_count(self, obj):
-        count = obj.promocodes_count
+        # Используем аннотированное поле вместо property
+        count = getattr(obj, 'active_promos_count', 0)
         if count > 0:
             url = reverse('admin:core_promocode_changelist')
             return format_html(
@@ -223,9 +235,19 @@ class StoreAdmin(ImportExportModelAdmin):
         }),
     )
     
-    # Только активные по умолчанию
+    # Только активные по умолчанию + оптимизация N+1 запросов
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+        # Аннотируем количество активных промокодов для избежания N+1
+        qs = qs.annotate(
+            active_promos_count=Count(
+                'promocodes',
+                filter=Q(
+                    promocodes__is_active=True,
+                    promocodes__expires_at__gt=timezone.now()
+                )
+            )
+        )
         if not request.GET.get('is_active__exact'):
             return qs.filter(is_active=True)
         return qs
@@ -238,7 +260,7 @@ class StoreAdmin(ImportExportModelAdmin):
             )
         return '—'
     logo_preview.short_description = 'Лого'
-    
+
     def site_link(self, obj):
         if obj.site_url:
             return format_html(
@@ -247,9 +269,10 @@ class StoreAdmin(ImportExportModelAdmin):
             )
         return '—'
     site_link.short_description = 'Сайт'
-    
+
     def promocodes_count(self, obj):
-        count = obj.promocodes_count
+        # Используем аннотированное поле вместо property
+        count = getattr(obj, 'active_promos_count', 0)
         if count > 0:
             url = reverse('admin:core_promocode_changelist')
             return format_html(
@@ -263,10 +286,26 @@ class StoreAdmin(ImportExportModelAdmin):
 
 
 class PromoCodeAdminForm(AntiMojibakeModelForm):
-    """Форма с защитой от кракозябр"""
+    """Форма с защитой от кракозябр и валидацией"""
     class Meta:
         model = PromoCode
         fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        offer_type = cleaned_data.get('offer_type')
+        code = cleaned_data.get('code')
+        affiliate_url = cleaned_data.get('affiliate_url')
+
+        # Валидация: для промокода (coupon) требуется код
+        if offer_type == 'coupon' and not code:
+            self.add_error('code', 'Для типа "Промокод" необходимо указать код')
+
+        # Валидация: для офферов (deal/cashback/financial) требуется URL
+        if offer_type in ['deal', 'cashback', 'financial'] and not affiliate_url:
+            self.add_error('affiliate_url', f'Для типа "{PromoCode.OFFER_TYPE_CHOICES_DICT.get(offer_type)}" необходимо указать партнёрскую ссылку')
+
+        return cleaned_data
 
 
 @admin.register(PromoCode)
@@ -317,9 +356,11 @@ class PromoCodeAdmin(ImportExportModelAdmin):
         }),
     )
     
-    # Только активные по умолчанию
+    # Только активные по умолчанию + оптимизация запросов
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+        # 🚀 Оптимизация: select_related для store, prefetch_related для categories
+        qs = qs.select_related('store').prefetch_related('categories')
         if not request.GET.get('is_active__exact'):
             return qs.filter(is_active=True)
         return qs
@@ -419,10 +460,10 @@ class BannerAdmin(ExportMixin, admin.ModelAdmin):
     def cta_link(self, obj):
         if obj.cta_url:
             return format_html(
-                '<a href="{}" target="_blank" rel="noopener">рџ”— {}</a>',
+                '<a href="{}" target="_blank" rel="noopener">🔗 {}</a>',
                 obj.cta_url, obj.cta_text
             )
-        return 'вЂ”'
+        return '—'
     cta_link.short_description = 'Ссылка'
     
     actions = [make_active, make_inactive]
@@ -684,6 +725,11 @@ class EventAdmin(ExportMixin, admin.ModelAdmin):
     list_max_show_all = 200
     actions = ['export_csv_events']
 
+    # 🚀 Оптимизация: select_related для ForeignKey полей
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('promo', 'store', 'showcase')
+
     class Media:
         css = {
             'all': ('admin/admin-tweaks.css',)
@@ -753,6 +799,11 @@ class DailyAggAdmin(ExportMixin, admin.ModelAdmin):
     list_per_page = 50
     list_max_show_all = 200
     actions = ['export_csv_dailyagg']
+
+    # 🚀 Оптимизация: select_related для ForeignKey полей
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('promo', 'store', 'showcase')
 
     class Media:
         css = {
