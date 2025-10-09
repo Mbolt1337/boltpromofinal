@@ -759,6 +759,33 @@ def site_assets_view(request):
         }
         
         return Response(data, status=200)
-        
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def site_settings_view(request):
+    """
+    API для получения публичных настроек сайта (maintenance mode)
+    GET /api/v1/settings/
+    """
+    from .models import SiteSettings
+
+    try:
+        settings = SiteSettings.objects.first()
+
+        if not settings:
+            return Response({
+                'maintenance_telegram_url': None,
+            }, status=200)
+
+        data = {
+            'maintenance_telegram_url': settings.maintenance_telegram_url,
+        }
+
+        return Response(data, status=200)
+
     except Exception as e:
         return Response({'error': str(e)}, status=500)

@@ -67,4 +67,7 @@ urlpatterns = [
 
     # Медиа-ресурсы сайта
     path('site/assets/', views.site_assets_view, name='site-assets'),
+
+    # Публичные настройки сайта
+    path('settings/', views.site_settings_view, name='site-settings'),
 ]
