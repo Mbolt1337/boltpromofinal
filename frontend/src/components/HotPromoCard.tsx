@@ -246,6 +246,15 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
         console.error('Ошибка инкремента счётчика:', err)
       )
 
+      // Показываем toast в зависимости от типа оффера
+      if (cardModel.offerType === 'deal') {
+        showToast.success('Переходим к скидке!', `Открываем ${cardModel.storeName}`)
+      } else if (cardModel.offerType === 'cashback') {
+        showToast.success('Активируем кэшбэк!', `Переход в ${cardModel.storeName}`)
+      } else if (cardModel.offerType === 'financial') {
+        showToast.success('Переходим к оформлению', `${cardModel.storeName}`)
+      }
+
       // Открываем ссылку с правильными rel атрибутами
       const link = document.createElement('a')
       link.href = cardModel.actionUrl
@@ -456,13 +465,6 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
 
           {/* Информация о типе оффера */}
           <div className="flex items-center gap-2">
-            {/* Индикатор кэшбэка */}
-            {cardModel.isCashback && (
-              <span className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-lg transition-all duration-300 ease-out hover:bg-amber-500/15 hover:scale-105">
-                Кэшбэк
-              </span>
-            )}
-
             {/* Тип оффера */}
             <span className={`text-xs font-medium px-2 py-0.5 rounded-lg transition-all duration-300 ease-out hover:scale-105 ${cardModel.offerTypeStyles.color} ${cardModel.offerTypeStyles.bgColor} border ${cardModel.offerTypeStyles.borderColor}`}>
               {cardModel.offerTypeStyles.label}
