@@ -160,21 +160,21 @@ export default function PromoCard({ promo }: PromoCardProps) {
           text: 'Получить скидку',
           icon: Percent,
           disabled: isLoading || !cardModel.actionUrl,
-          className: isLoading ? BUTTON_LOADING : BUTTON_DEAL
+          className: isLoading ? BUTTON_LOADING : BUTTON_PROMOCODE
         }
       case 'financial':
         return {
           text: 'Оформить',
           icon: CreditCard,
           disabled: isLoading || !cardModel.actionUrl,
-          className: isLoading ? BUTTON_LOADING : BUTTON_FINANCIAL
+          className: isLoading ? BUTTON_LOADING : BUTTON_PROMOCODE
         }
       case 'cashback':
         return {
           text: 'Получить кэшбэк',
           icon: Gift,
           disabled: isLoading || !cardModel.actionUrl,
-          className: isLoading ? BUTTON_LOADING : BUTTON_CASHBACK
+          className: isLoading ? BUTTON_LOADING : BUTTON_PROMOCODE
         }
       default:
         return {
