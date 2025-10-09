@@ -21,15 +21,25 @@ export default function CookieConsent() {
   }, [])
 
   const acceptCookies = () => {
+    localStorage.setItem('cookie-consent', 'accepted')
     localStorage.setItem('cookieConsent', 'accepted')
     localStorage.setItem('cookieConsentDate', new Date().toISOString())
+
+    // Отправляем событие для Analytics компонента
+    window.dispatchEvent(new CustomEvent('cookie-consent-change', { detail: 'accepted' }))
+
     setIsVisible(false)
     setTimeout(() => setShowBanner(false), 300)
   }
 
   const declineAnalytics = () => {
+    localStorage.setItem('cookie-consent', 'essential-only')
     localStorage.setItem('cookieConsent', 'essential-only')
     localStorage.setItem('cookieConsentDate', new Date().toISOString())
+
+    // Отправляем событие для Analytics компонента
+    window.dispatchEvent(new CustomEvent('cookie-consent-change', { detail: 'essential-only' }))
+
     setIsVisible(false)
     setTimeout(() => setShowBanner(false), 300)
   }

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import DynamicMetaTags from '@/components/DynamicMetaTags'
 import CookieConsent from '@/components/CookieConsent'
+import AnalyticsProvider from '@/components/AnalyticsProvider'
 import { SITE_CONFIG } from '@/lib/seo'
 import { Toaster } from 'sonner'
 import QueryProvider from '@/components/QueryProvider'
@@ -209,6 +210,7 @@ export default function RootLayout({
             </main>
             <Footer />
             <CookieConsent />
+            <AnalyticsProvider />
             <Toaster
               position="bottom-center"
               richColors
