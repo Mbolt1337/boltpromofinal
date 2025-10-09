@@ -1,14 +1,34 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.contrib.sitemaps.views import sitemap
 from core import views as core_views
 from core import admin_views
 from core import admin_import
+from core.sitemaps import (
+    StaticViewSitemap,
+    CategorySitemap,
+    StoreSitemap,
+    PromoCodeSitemap,
+    ShowcaseSitemap,
+    StaticPageSitemap,
+)
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+# Sitemaps dictionary
+sitemaps = {
+    'static': StaticViewSitemap,
+    'categories': CategorySitemap,
+    'stores': StoreSitemap,
+    'promocodes': PromoCodeSitemap,
+    'showcases': ShowcaseSitemap,
+    'pages': StaticPageSitemap,
+}
+
 urlpatterns = [
     path('robots.txt', core_views.robots_txt, name='robots-txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
     # SEO verification files (dynamic endpoints)
     re_path(r'^yandex_[a-zA-Z0-9_]+\.html$', core_views.yandex_verification_file, name='yandex-verification'),

@@ -121,21 +121,76 @@ def cleanup_old_events(self, days=30):
 def regenerate_sitemap(self):
     """
     Регенерация sitemap.xml и пинг поисковиков
+    Логирует результаты в logs/seo_audit.log
     """
+    import requests
+    from django.conf import settings
+    from .models import SiteSettings
+    import os
+    from datetime import datetime
+
+    # Создаём директорию logs если её нет
+    log_dir = os.path.join(settings.BASE_DIR.parent, 'logs')
+    os.makedirs(log_dir, exist_ok=True)
+    log_file = os.path.join(log_dir, 'seo_audit.log')
+
+    def log_to_file(message):
+        """Логирование в файл с timestamp"""
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(f"[{timestamp}] {message}\n")
+
     try:
-        # TODO: Реализовать генерацию sitemap.xml
-        # Можно использовать django.contrib.sitemaps или вручную
+        # Получаем canonical host из настроек
+        site_settings = SiteSettings.objects.first()
+        host = site_settings.canonical_host if site_settings and site_settings.canonical_host else 'boltpromo.ru'
+        sitemap_url = f"https://{host}/sitemap.xml"
 
-        logger.info("Sitemap regeneration triggered")
+        log_to_file(f"[SITEMAP] Regeneration started for {sitemap_url}")
+        logger.info(f"Sitemap regeneration started: {sitemap_url}")
 
-        # Пингуем Google
-        # import requests
-        # requests.get(f'http://www.google.com/ping?sitemap={sitemap_url}')
+        # Sitemap генерируется автоматически Django при обращении к /sitemap.xml
+        # Мы только пингуем поисковики
 
-        return {'status': 'success', 'message': 'Sitemap regenerated'}
+        results = []
+
+        # 1. Пингуем Google
+        try:
+            google_ping_url = f"https://www.google.com/ping?sitemap={sitemap_url}"
+            response = requests.get(google_ping_url, timeout=10)
+            if response.status_code == 200:
+                log_to_file(f"[GOOGLE PING] SUCCESS - Status: {response.status_code}")
+                results.append(f"Google ping: SUCCESS ({response.status_code})")
+            else:
+                log_to_file(f"[GOOGLE PING] WARNING - Status: {response.status_code}")
+                results.append(f"Google ping: WARNING ({response.status_code})")
+        except Exception as e:
+            log_to_file(f"[GOOGLE PING] ERROR - {str(e)}")
+            results.append(f"Google ping: ERROR ({str(e)})")
+
+        # 2. Пингуем Яндекс через IndexNow API
+        try:
+            yandex_ping_url = f"https://yandex.ru/indexnow?url={sitemap_url}"
+            response = requests.get(yandex_ping_url, timeout=10)
+            if response.status_code in [200, 202]:
+                log_to_file(f"[YANDEX PING] SUCCESS - Status: {response.status_code}")
+                results.append(f"Yandex ping: SUCCESS ({response.status_code})")
+            else:
+                log_to_file(f"[YANDEX PING] WARNING - Status: {response.status_code}")
+                results.append(f"Yandex ping: WARNING ({response.status_code})")
+        except Exception as e:
+            log_to_file(f"[YANDEX PING] ERROR - {str(e)}")
+            results.append(f"Yandex ping: ERROR ({str(e)})")
+
+        log_to_file(f"[SITEMAP] Regeneration completed - Results: {'; '.join(results)}")
+        logger.info(f"Sitemap regeneration completed: {results}")
+
+        return {'status': 'success', 'sitemap_url': sitemap_url, 'ping_results': results}
 
     except Exception as e:
-        logger.error(f"Sitemap regeneration error: {str(e)}")
+        error_msg = f"Sitemap regeneration error: {str(e)}"
+        log_to_file(f"[SITEMAP] FATAL ERROR - {error_msg}")
+        logger.error(error_msg)
         return {'status': 'error', 'message': str(e)}
 
 

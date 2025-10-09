@@ -192,7 +192,12 @@ export default function RootLayout({
                     '@type': 'Organization',
                     name: 'BoltPromo',
                     url: SITE_CONFIG.url,
-                    logo: `${SITE_CONFIG.url}/logo.png`
+                    logo: `${SITE_CONFIG.url}/logo.png`,
+                    sameAs: [
+                      'https://t.me/boltpromo',
+                      'https://boltpromo.ru',
+                      'https://www.boltpromo.ru'
+                    ]
                   }
                 })
               }}
