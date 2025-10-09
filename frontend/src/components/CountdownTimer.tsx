@@ -23,7 +23,7 @@ export default function CountdownTimer({ expiresAt, className = '' }: CountdownT
   if (now === null) {
     return (
       <div
-        className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-orange-500/30 bg-orange-500/10 text-orange-300 text-xs font-semibold ${className}`}
+        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-orange-500/30 bg-orange-500/10 text-orange-300 text-xs font-semibold ${className}`}
         suppressHydrationWarning
       >
         <Clock className="w-3.5 h-3.5" />
@@ -51,7 +51,7 @@ export default function CountdownTimer({ expiresAt, className = '' }: CountdownT
 
   return (
     <div
-      className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-orange-500/30 bg-orange-500/10 text-orange-300 text-xs font-semibold ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-orange-500/30 bg-orange-500/10 text-orange-300 text-xs font-semibold ${className}`}
       suppressHydrationWarning
     >
       <Clock className="w-3.5 h-3.5" />

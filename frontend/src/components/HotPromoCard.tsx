@@ -366,8 +366,8 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
           {/* Бейдж даты окончания - УНИФИЦИРОВАННЫЙ (absolute right-3 top-3) */}
           {cardModel.validUntil && (
             <div className="absolute right-3 top-3">
-              <div className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-2.5 py-1 text-sm text-white/70">
-                <Calendar className="w-3.5 h-3.5 text-white/60" />
+              <div className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-xs text-white/70">
+                <Calendar className="w-3 h-3 text-white/60" />
                 <span className="font-medium">до {cardModel.validUntil}</span>
               </div>
             </div>
