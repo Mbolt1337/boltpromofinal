@@ -256,7 +256,7 @@ export default async function PromoPage({ params }: PromoPageProps) {
                     <div className="relative z-10">
                       {/* Хедер карточки */}
                       <div className="flex items-start justify-between mb-6 min-h-[4rem]">
-                        <div className="flex items-center space-x-4 min-w-0 flex-1">
+                        <div className="flex items-center space-x-4 min-w-0 flex-1 pr-24 sm:pr-32 md:pr-0">
                           {/* Логотип магазина */}
                           <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-white/5 border border-white/10 transition-all duration-300 ease-out group-hover:scale-110 group-hover:bg-white/8">
                             {promo.store?.logo ? (
@@ -290,9 +290,9 @@ export default async function PromoPage({ params }: PromoPageProps) {
                         {/* БЕЙДЖ ДАТЫ - ABSOLUTE RIGHT-3 TOP-3 (как в PromoCard) */}
                         {formattedDate && (
                           <div className="absolute right-3 top-3 sm:right-6 sm:top-6 md:right-7 md:top-7 lg:right-8 lg:top-8">
-                            <div className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-2.5 py-1 text-sm text-white/70">
-                              <Calendar className="w-3.5 h-3.5 text-white/60" />
-                              <span className="font-medium">до {formattedDate}</span>
+                            <div className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-xs text-white/70">
+                              <Calendar className="w-3 h-3 text-white/60" />
+                              <span className="font-medium whitespace-nowrap">до {formattedDate}</span>
                             </div>
                           </div>
                         )}
