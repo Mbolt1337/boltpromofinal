@@ -332,7 +332,7 @@ export default function PromoCard({ promo }: PromoCardProps) {
         
         {/* ХЕДЕР КАРТОЧКИ - ФИКСИРОВАННАЯ ВЫСОТА */}
         <div className="flex items-start justify-between mb-4 min-h-[3rem]">
-          <div className="flex items-center space-x-3 min-w-0 flex-1">
+          <div className="flex items-center space-x-3 min-w-0 flex-1 pr-20 sm:pr-24">
             {/* Логотип магазина */}
             <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-white/5 border border-white/10 transition-all duration-300 ease-out group-hover:scale-110 group-hover:bg-white/8">
               {cardModel.storeLogo ? (
