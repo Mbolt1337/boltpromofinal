@@ -34,12 +34,8 @@ const SIDEBAR_CARD = "rounded-2xl border border-white/10 bg-white/5 backdrop-blu
 // Hover эффект как в карточке
 const CARD_HOVER_EFFECT = "absolute inset-0 opacity-0 transition-opacity duration-300 ease-out pointer-events-none bg-gradient-to-br from-blue-500/3 to-purple-500/3 rounded-2xl group-hover:opacity-100"
 
-// Цветные кнопки CTA по типам офферов (как в PromoCard)
-const CTA_BUTTON_COUPON = "inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-base transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none"
-
-const CTA_BUTTON_FINANCIAL = "inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border border-indigo-500/30 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-base transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:outline-none"
-
-const CTA_BUTTON_DEAL = "inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border border-amber-500/30 bg-amber-600 hover:bg-amber-500 text-white font-semibold text-base transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-500/20 focus-visible:outline-none"
+// Унифицированная кнопка CTA для всех типов офферов (emerald-600 как в PromoCard)
+const CTA_BUTTON_UNIFIED = "inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-base transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none"
 
 // Вспомогательные функции
 const normalizeUrl = (url?: string): string => {
@@ -76,15 +72,6 @@ const getOfferTypeIcon = (offerType?: string) => {
   }
 }
 
-const getCTAButtonClass = (offerType?: string): string => {
-  switch (offerType) {
-    case 'coupon': return CTA_BUTTON_COUPON
-    case 'financial': return CTA_BUTTON_FINANCIAL
-    case 'deal':
-    case 'cashback':
-    default: return CTA_BUTTON_DEAL
-  }
-}
 
 // SEO Metadata
 export async function generateMetadata({ params }: PromoPageProps): Promise<Metadata> {
@@ -474,12 +461,12 @@ export default async function PromoPage({ params }: PromoPageProps) {
                         <p className="text-gray-400 transition-colors duration-300 ease-out group-hover:text-gray-300 text-base">{categoryName}</p>
                       </div>
 
-                      {/* ЦВЕТНАЯ CTA по типу оффера (как в PromoCard) */}
+                      {/* Унифицированная CTA кнопка (emerald-600 как в PromoCard) */}
                       <a
                         href={safeExternalUrl(storeUrl)}
                         target="_blank"
                         rel="nofollow sponsored noopener noreferrer"
-                        className={getCTAButtonClass(promo.offer_type)}
+                        className={CTA_BUTTON_UNIFIED}
                       >
                         <span>Перейти в магазин</span>
                         <ExternalLink className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1" />

@@ -20,17 +20,17 @@ interface PromoActionsProps {
 
 // ===== PRESET-КЛАССЫ ДЛЯ КОНСИСТЕНТНОСТИ =====
 
-// Кнопка с промокодом (emerald - как в PromoCard)
+// Все основные кнопки используют унифицированный emerald-600 (как в PromoCard)
 const BUTTON_PROMOCODE = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
 
 // Кнопка в состоянии "скопировано/открываем"
 const BUTTON_LOADING = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-200 font-semibold text-lg transition-all duration-300 ease-out"
 
-// Основная кнопка действия для других типов (deal, financial)
-const PRIMARY_ACTION_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 py-4 glass-card border-white/20 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 hover:bg-white/10 hover:border-white/30 focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none disabled:opacity-70 disabled:cursor-not-allowed"
+// Основная кнопка действия для других типов (deal, financial, cashback) - унифицированная emerald-600
+const PRIMARY_ACTION_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
 
 // Вторичная кнопка (переход в магазин)
-const SECONDARY_ACTION_BUTTON = "group flex items-center justify-center gap-2 w-full px-6 py-3 glass-card border-white/15 text-white/80 font-medium text-base transition-all duration-300 ease-out hover:scale-105 hover:bg-white/8 hover:border-white/25 hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none"
+const SECONDARY_ACTION_BUTTON = "group flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border border-white/15 bg-transparent hover:bg-white/10 text-white/90 font-medium text-base transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none"
 
 export default function PromoActions({
   promoId,
