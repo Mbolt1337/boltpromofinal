@@ -24,7 +24,9 @@ const BUTTON_PROMOCODE = "flex items-center justify-center gap-2.5 px-5 rounded-
 
 const BUTTON_FINANCIAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-indigo-500/30 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-const BUTTON_DEAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-amber-500/30 bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-amber-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
+const BUTTON_DEAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-teal-500/30 bg-teal-600 hover:bg-teal-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-teal-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
+
+const BUTTON_CASHBACK = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-rose-500/30 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-rose-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
 // Кнопка в состоянии "скопировано/открываем"
 const BUTTON_LOADING = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-200 font-semibold text-sm transition-all duration-300 ease-out w-full h-11"
@@ -172,7 +174,7 @@ export default function PromoCard({ promo }: PromoCardProps) {
           text: 'Получить кэшбэк',
           icon: Gift,
           disabled: isLoading || !cardModel.actionUrl,
-          className: isLoading ? BUTTON_LOADING : BUTTON_DEAL
+          className: isLoading ? BUTTON_LOADING : BUTTON_CASHBACK
         }
       default:
         return {
