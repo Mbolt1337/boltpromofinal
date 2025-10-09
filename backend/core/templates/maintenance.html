@@ -21,8 +21,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -31,157 +31,314 @@
         }
 
         .maintenance-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            max-width: 800px;
             width: 100%;
-            padding: 50px 40px;
-            text-align: center;
         }
 
-        .logo {
-            font-size: 48px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
+        /* Анимированная иконка */
+        .icon-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .icon-glow {
+            position: absolute;
+            inset: 0;
+            background: rgba(59, 130, 246, 0.2);
+            filter: blur(60px);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .icon-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 64px;
+            animation: bounce 1s ease-in-out infinite;
         }
 
         @keyframes pulse {
             0%, 100% {
-                transform: scale(1);
+                opacity: 1;
             }
             50% {
-                transform: scale(1.05);
+                opacity: 0.5;
             }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Заголовок */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
         }
 
         h1 {
-            font-size: 32px;
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 40px;
+            color: #fff;
+            margin-bottom: 16px;
             font-weight: 700;
         }
 
-        .message {
-            font-size: 18px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
+        .subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
         }
 
+        /* Карточка с информацией */
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .info-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .info-content p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        .message-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        /* Ожидаемое время */
         .expected-end {
-            background: #f7f7f7;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 32px;
         }
 
         .expected-end-label {
             font-size: 14px;
-            color: #999;
+            color: rgba(255, 255, 255, 0.6);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .expected-end-time {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            color: #667eea;
+            color: #10b981;
         }
 
-        .telegram-btn {
-            display: inline-block;
-            background: #0088cc;
-            color: white;
-            text-decoration: none;
-            padding: 15px 40px;
-            border-radius: 50px;
+        /* Кнопки */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
+            text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
         }
 
-        .telegram-btn:hover {
-            background: #006ba1;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+        .btn-primary {
+            background: #10b981;
+            color: white;
         }
 
-        .telegram-icon {
-            margin-right: 8px;
+        .btn-primary:hover {
+            background: #059669;
+            transform: scale(1.05);
         }
 
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        /* Футер */
         .footer {
-            margin-top: 40px;
+            margin-top: 48px;
+            text-align: center;
             font-size: 14px;
-            color: #999;
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        @media (max-width: 600px) {
-            .maintenance-container {
-                padding: 30px 20px;
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
             }
 
-            .logo {
-                font-size: 36px;
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .info-card {
+                padding: 24px;
             }
 
             .icon {
-                font-size: 60px;
+                font-size: 48px;
             }
 
-            h1 {
-                font-size: 24px;
-            }
-
-            .message {
-                font-size: 16px;
+            .icon-container {
+                padding: 24px;
             }
 
             .expected-end-time {
-                font-size: 20px;
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="maintenance-container">
-        <div class="logo">BoltPromo</div>
+        <!-- Анимированная иконка -->
+        <div class="icon-wrapper">
+            <div class="icon-glow"></div>
+            <div class="icon-container">
+                <div class="icon">🔧</div>
+            </div>
+        </div>
 
-        <div class="icon">🔧</div>
+        <!-- Заголовок -->
+        <div class="header">
+            <div class="logo">BoltPromo</div>
+            <h1>Технические работы</h1>
+            <p class="subtitle">Мы обновляем наш сервис для вас</p>
+        </div>
 
-        <h1>Ведутся технические работы</h1>
+        <!-- Информационная карточка -->
+        <div class="info-card">
+            <div class="info-item">
+                <div class="info-icon">⏱️</div>
+                <div class="info-content">
+                    <h3>Временная недоступность</h3>
+                    <p class="message-text">{{ message }}</p>
+                </div>
+            </div>
 
-        <p class="message">{{ message }}</p>
+            <div class="info-item">
+                <div class="info-icon">🔄</div>
+                <div class="info-content">
+                    <h3>Скоро вернемся</h3>
+                    <p>Пожалуйста, попробуйте обновить страницу через несколько минут.</p>
+                </div>
+            </div>
+        </div>
 
+        <!-- Ожидаемое время завершения -->
         {% if expected_end %}
         <div class="expected-end">
             <div class="expected-end-label">Ожидаемое завершение работ</div>
             <div class="expected-end-time">
-                {{ expected_end|date:"d.m.Y H:i" }}
+                {{ expected_end|date:"d.m.Y в H:i" }}
             </div>
         </div>
         {% endif %}
 
-        {% if telegram_url %}
-        <a href="{{ telegram_url }}" target="_blank" rel="noopener noreferrer" class="telegram-btn">
-            <span class="telegram-icon">📱</span>
-            Следите за новостями в Telegram
-        </a>
-        {% endif %}
+        <!-- Кнопки -->
+        <div class="button-group">
+            <button onclick="window.location.reload()" class="btn btn-primary">
+                <span>🔄</span>
+                Обновить страницу
+            </button>
 
+            {% if telegram_url %}
+            <a href="{{ telegram_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                <span>📱</span>
+                Telegram-канал
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Футер -->
         <div class="footer">
             <p>Приносим извинения за временные неудобства</p>
         </div>
