@@ -435,9 +435,6 @@ export default function HotPromoCard({ promo }: HotPromoCardProps) {
             <span className="truncate">
               {getButtonText}
             </span>
-            {!cardModel.isCoupon && !isLoading && (
-              <ExternalLink className="w-4 h-4 flex-shrink-0 transition-transform duration-300 ease-out" />
-            )}
           </button>
 
           {/* Вторичная кнопка "Подробнее" */}
