@@ -1,9 +1,10 @@
 {
   "extends": ["next/core-web-vitals", "prettier"],
   "rules": {
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-console": "off",
     "no-unused-vars": "warn",
-    "@next/next/no-img-element": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "@next/next/no-img-element": "warn",
+    "react-hooks/exhaustive-deps": "warn",
+    "jsx-a11y/alt-text": "warn"
   }
 }

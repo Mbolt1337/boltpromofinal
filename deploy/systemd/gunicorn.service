@@ -1,0 +1,52 @@
+[Unit]
+Description=BoltPromo Gunicorn WSGI Server
+Documentation=https://docs.gunicorn.org/
+After=network.target postgresql.service redis.service
+Wants=postgresql.service redis.service
+
+[Service]
+Type=notify
+# User and group to run as
+User=www-data
+Group=www-data
+
+# Working directory
+WorkingDirectory=/var/www/boltpromo/backend
+
+# Environment
+Environment="PATH=/var/www/boltpromo/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=config.settings"
+EnvironmentFile=/var/www/boltpromo/backend/.env
+
+# Gunicorn command
+ExecStart=/var/www/boltpromo/venv/bin/gunicorn \
+    --workers 4 \
+    --worker-class sync \
+    --bind unix:/run/gunicorn.sock \
+    --timeout 60 \
+    --max-requests 1000 \
+    --max-requests-jitter 50 \
+    --access-logfile /var/log/boltpromo/gunicorn-access.log \
+    --error-logfile /var/log/boltpromo/gunicorn-error.log \
+    --log-level info \
+    --capture-output \
+    config.wsgi:application
+
+# Restart policy
+Restart=on-failure
+RestartSec=5s
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Process limits
+LimitNOFILE=65535
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gunicorn
+
+[Install]
+WantedBy=multi-user.target

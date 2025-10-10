@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { ExternalLink, Copy, Check } from 'lucide-react'
 import { safeExternalUrl } from '@/lib/utils'
 import { trackPromoCopy, trackPromoOpen, trackFinanceOpen, trackDealOpen } from '@/lib/analytics'
@@ -20,14 +19,14 @@ interface PromoActionsProps {
 
 // ===== PRESET-КЛАССЫ ДЛЯ КОНСИСТЕНТНОСТИ =====
 
-// Все основные кнопки используют унифицированный emerald-600 (как в PromoCard)
-const BUTTON_PROMOCODE = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+// Все основные кнопки используют glassmorphism эффект (как в PromoCard)
+const BUTTON_PROMOCODE = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-sm hover:bg-emerald-500/20 text-emerald-200 hover:text-emerald-100 font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
 
 // Кнопка в состоянии "скопировано/открываем"
-const BUTTON_LOADING = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-200 font-semibold text-lg transition-all duration-300 ease-out"
+const BUTTON_LOADING = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-500/15 backdrop-blur-sm text-emerald-100 font-semibold text-lg transition-all duration-300 ease-out"
 
-// Основная кнопка действия для других типов (deal, financial, cashback) - унифицированная emerald-600
-const PRIMARY_ACTION_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+// Основная кнопка действия для других типов (deal, financial, cashback) - glassmorphism эффект
+const PRIMARY_ACTION_BUTTON = "group flex items-center justify-center gap-3 w-full px-8 py-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-sm hover:bg-emerald-500/20 text-emerald-200 hover:text-emerald-100 font-semibold text-lg transition-all duration-300 ease-out hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
 
 // Вторичная кнопка (переход в магазин)
 const SECONDARY_ACTION_BUTTON = "group flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border border-white/15 bg-transparent hover:bg-white/10 text-white/90 font-medium text-base transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none"
@@ -110,7 +109,9 @@ export default function PromoActions({
   }
 
   // Функция трекинга клика по ссылке + toast уведомления
-  const handleLinkClick = (linkType: 'promo' | 'finance' | 'deal' | 'cashback') => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, linkType: 'promo' | 'finance' | 'deal' | 'cashback', url: string) => {
+    e.preventDefault() // Предотвращаем мгновенный переход
+
     // Показываем toast в зависимости от типа
     switch (linkType) {
       case 'promo':
@@ -129,6 +130,11 @@ export default function PromoActions({
         showToast.success('Активируем кэшбэк!', `Переход в ${storeName || 'магазин'}`)
         break
     }
+
+    // Открываем ссылку с небольшой задержкой (0.5 сек)
+    setTimeout(() => {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }, 500)
   }
 
   // ЛОГИКА КНОПОК
@@ -149,7 +155,7 @@ export default function PromoActions({
           return {
             primaryAction: 'link',
             primaryText: 'Получить код',
-            primaryIcon: <ExternalLink className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />,
+            primaryIcon: null,
             primaryUrl: promoAffiliateUrl,
             secondaryText: 'Перейти в магазин',
             secondaryUrl: storeUrl
@@ -160,37 +166,37 @@ export default function PromoActions({
         return {
           primaryAction: 'link',
           primaryText: 'Перейти к предложению',
-          primaryIcon: <ExternalLink className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />,
+          primaryIcon: null,
           primaryUrl: promoAffiliateUrl,
           secondaryText: 'Перейти в магазин',
           secondaryUrl: storeUrl
         }
-      
+
       case 'financial':
         return {
           primaryAction: 'link',
           primaryText: title.includes('Карта') ? 'Оформить карту' : 'Подробнее',
-          primaryIcon: <ExternalLink className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />,
+          primaryIcon: null,
           primaryUrl: promoAffiliateUrl,
           secondaryText: 'Перейти в магазин',
           secondaryUrl: storeUrl
         }
-      
+
       case 'cashback':
         return {
           primaryAction: 'link',
           primaryText: 'Активировать кэшбэк',
-          primaryIcon: <ExternalLink className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />,
+          primaryIcon: null,
           primaryUrl: promoAffiliateUrl,
           secondaryText: 'Перейти в магазин',
           secondaryUrl: storeUrl
         }
-      
+
       default:
         return {
           primaryAction: 'link',
           primaryText: 'Перейти к предложению',
-          primaryIcon: <ExternalLink className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />,
+          primaryIcon: null,
           primaryUrl: promoAffiliateUrl,
           secondaryText: 'Перейти в магазин',
           secondaryUrl: storeUrl
@@ -217,26 +223,26 @@ export default function PromoActions({
             {actions.primaryIcon}
           </button>
         ) : (
-          <Link
+          <a
             href={actions.primaryUrl!}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
             className={PRIMARY_ACTION_BUTTON}
-            onClick={() => {
+            onClick={(e) => {
               if (offerType === 'financial') {
-                handleLinkClick('finance')
+                handleLinkClick(e, 'finance', actions.primaryUrl!)
               } else if (offerType === 'deal') {
-                handleLinkClick('deal')
+                handleLinkClick(e, 'deal', actions.primaryUrl!)
               } else if (offerType === 'cashback') {
-                handleLinkClick('cashback')
+                handleLinkClick(e, 'cashback', actions.primaryUrl!)
               } else {
-                handleLinkClick('promo')
+                handleLinkClick(e, 'promo', actions.primaryUrl!)
               }
             }}
           >
             <span className="truncate">{actions.primaryText}</span>
             {actions.primaryIcon}
-          </Link>
+          </a>
         )}
 
         {/* Дополнительная кнопка "Перейти в магазин" */}

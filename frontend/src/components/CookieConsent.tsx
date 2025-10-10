@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Cookie, X } from 'lucide-react'
+import { Cookie, Check, X } from 'lucide-react'
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
@@ -48,66 +48,66 @@ export default function CookieConsent() {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 transform ${
+      className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
       }`}
     >
-      {/* Фон с размытием */}
-      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/95 to-transparent backdrop-blur-md" />
+      {/* Градиентный фон с размытием */}
+      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/98 via-gray-900/95 to-transparent backdrop-blur-2xl" />
 
-      <div className="relative container-main py-6">
-        <div className="glass-card p-6 max-w-5xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+      <div className="relative container-main py-4 sm:py-5">
+        <div className="rounded-xl sm:rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 sm:p-5 shadow-2xl shadow-black/40 transition-all duration-300 hover:bg-white/[0.07] group">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
 
             {/* Иконка и текст */}
-            <div className="flex items-start gap-4 flex-1">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
-                <Cookie className="w-6 h-6 text-amber-400" />
+            <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-amber-500/15 to-orange-500/15 border border-amber-500/25 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <Cookie className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-amber-400" />
               </div>
 
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  Мы используем cookies
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm sm:text-base font-bold text-white mb-1.5">
+                  Использование cookies
                 </h3>
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  Мы используем необходимые cookies для работы сайта и аналитические cookies для улучшения вашего опыта.
-                  Подробнее о том, как мы обрабатываем ваши данные, читайте в{' '}
+                <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                  Мы используем необходимые cookies для работы сайта и аналитические для улучшения сервиса.{' '}
                   <Link
                     href="/privacy"
-                    className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors"
+                    className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors inline-flex items-center gap-1"
                   >
-                    Политике конфиденциальности
-                  </Link>.
+                    Подробнее
+                  </Link>
                 </p>
               </div>
             </div>
 
             {/* Кнопки */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
               <button
                 onClick={declineAnalytics}
-                className="px-6 py-3 rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white font-medium text-sm transition-all duration-300 hover:border-white/30 whitespace-nowrap"
+                className="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white font-medium text-xs sm:text-sm transition-all duration-300 hover:border-white/25 hover:scale-105 whitespace-nowrap"
               >
-                Только необходимые
+                Отклонить
               </button>
 
               <button
                 onClick={acceptCookies}
-                className="px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/20 whitespace-nowrap"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-sm hover:bg-emerald-500/20 text-emerald-200 hover:text-emerald-100 font-semibold text-xs sm:text-sm transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none whitespace-nowrap"
               >
+                <Check className="w-4 h-4" />
                 Принять все
+              </button>
+
+              {/* Кнопка закрытия */}
+              <button
+                onClick={declineAnalytics}
+                className="hidden sm:flex p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all duration-300 hover:rotate-90 flex-shrink-0"
+                aria-label="Закрыть"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
           </div>
-
-          {/* Кнопка закрытия */}
-          <button
-            onClick={declineAnalytics}
-            className="absolute top-4 right-4 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all duration-300"
-            aria-label="Закрыть"
-          >
-            <X className="w-4 h-4" />
-          </button>
         </div>
       </div>
     </div>

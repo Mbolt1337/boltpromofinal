@@ -1,0 +1,55 @@
+[Unit]
+Description=BoltPromo Celery Beat Scheduler
+Documentation=https://docs.celeryproject.org/
+After=network.target redis.service postgresql.service celery.service
+Wants=redis.service postgresql.service
+Requires=celery.service
+
+[Service]
+Type=simple
+
+# User and group
+User=www-data
+Group=www-data
+
+# Working directory
+WorkingDirectory=/var/www/boltpromo/backend
+
+# Environment
+Environment="PATH=/var/www/boltpromo/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=config.settings"
+EnvironmentFile=/var/www/boltpromo/backend/.env
+
+# Celery beat command
+ExecStart=/var/www/boltpromo/venv/bin/celery -A config beat \
+    --loglevel=info \
+    --scheduler django_celery_beat.schedulers:DatabaseScheduler \
+    --logfile=/var/log/boltpromo/celerybeat.log \
+    --pidfile=/var/run/celery/celerybeat.pid
+
+# Graceful shutdown
+ExecStop=/bin/kill -s TERM $MAINPID
+TimeoutStopSec=30
+
+# Restart policy
+Restart=on-failure
+RestartSec=10s
+
+# Create runtime directory
+RuntimeDirectory=celery
+RuntimeDirectoryMode=0755
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Process limits
+LimitNOFILE=65535
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=celerybeat
+
+[Install]
+WantedBy=multi-user.target

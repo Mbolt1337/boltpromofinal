@@ -1,0 +1,57 @@
+[Unit]
+Description=BoltPromo Celery Worker
+Documentation=https://docs.celeryproject.org/
+After=network.target redis.service postgresql.service
+Wants=redis.service postgresql.service
+
+[Service]
+Type=forking
+
+# User and group
+User=www-data
+Group=www-data
+
+# Working directory
+WorkingDirectory=/var/www/boltpromo/backend
+
+# Environment
+Environment="PATH=/var/www/boltpromo/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=config.settings"
+EnvironmentFile=/var/www/boltpromo/backend/.env
+
+# Celery worker command
+ExecStart=/var/www/boltpromo/venv/bin/celery -A config worker \
+    --loglevel=info \
+    --concurrency=4 \
+    --max-tasks-per-child=1000 \
+    --time-limit=3600 \
+    --soft-time-limit=3000 \
+    --logfile=/var/log/boltpromo/celery.log \
+    --pidfile=/var/run/celery/celery.pid
+
+# Graceful shutdown
+ExecStop=/bin/kill -s TERM $MAINPID
+TimeoutStopSec=60
+
+# Restart policy
+Restart=on-failure
+RestartSec=10s
+
+# Create runtime directory
+RuntimeDirectory=celery
+RuntimeDirectoryMode=0755
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Process limits
+LimitNOFILE=65535
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=celery
+
+[Install]
+WantedBy=multi-user.target
