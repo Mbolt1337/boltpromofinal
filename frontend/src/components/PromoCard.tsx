@@ -19,17 +19,17 @@ const BADGE_RECOMMENDED = "flex items-center gap-1.5 px-2.5 py-1 rounded-md bord
 // Горячий бейдж - строгая геометрия
 const BADGE_HOT = "flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-orange-500/30 bg-orange-500/10 text-orange-200 text-xs font-semibold transition-all duration-300 ease-out hover:bg-orange-500/15"
 
-// Основные кнопки по типам офферов - спокойные цвета
-const BUTTON_PROMOCODE = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/30 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
+// Основные кнопки по типам офферов - glassmorphism стиль как у кнопки "Подробнее"
+const BUTTON_PROMOCODE = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-sm hover:bg-emerald-500/20 text-emerald-200 hover:text-emerald-100 font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-const BUTTON_FINANCIAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-indigo-500/30 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
+const BUTTON_FINANCIAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm hover:bg-indigo-500/20 text-indigo-200 hover:text-indigo-100 font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-const BUTTON_DEAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-teal-500/30 bg-teal-600 hover:bg-teal-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-teal-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
+const BUTTON_DEAL = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-teal-500/30 bg-teal-500/10 backdrop-blur-sm hover:bg-teal-500/20 text-teal-200 hover:text-teal-100 font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-teal-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
-const BUTTON_CASHBACK = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-rose-500/30 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-rose-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
+const BUTTON_CASHBACK = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-rose-500/30 bg-rose-500/10 backdrop-blur-sm hover:bg-rose-500/20 text-rose-200 hover:text-rose-100 font-semibold text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-rose-500/20 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed w-full h-11"
 
 // Кнопка в состоянии "скопировано/открываем"
-const BUTTON_LOADING = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-200 font-semibold text-sm transition-all duration-300 ease-out w-full h-11"
+const BUTTON_LOADING = "flex items-center justify-center gap-2.5 px-5 rounded-lg border border-emerald-500/40 bg-emerald-500/15 backdrop-blur-sm text-emerald-100 font-semibold text-sm transition-all duration-300 ease-out w-full h-11"
 
 // Вторичная кнопка "Подробнее"
 const SECONDARY_BUTTON = "flex items-center justify-center gap-2 px-4 rounded-lg border border-white/15 bg-transparent hover:bg-white/10 text-white/90 font-medium text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none w-full h-11"
