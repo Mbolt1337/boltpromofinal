@@ -291,9 +291,10 @@ def stats_showcases_ctr(request):
             )
         else:
             # Fallback: используем сырые события
+            # ВАЖНО: используем 'view' вместо 'showcase_view' т.к. в Event хранится 'view' для витрин
             views = Event.objects.filter(
                 created_at__date__gte=start_date,
-                event_type='showcase_view',
+                event_type='view',
                 showcase__isnull=False
             ).values('showcase_id', 'showcase__title').annotate(
                 views_count=Count('id')
