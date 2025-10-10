@@ -666,6 +666,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ('🔍 SEO настройки', {
             'fields': ('canonical_host', 'robots_txt', 'noindex_expired_promos')
         }),
+        ('🔎 Верификация поисковиков', {
+            'fields': (
+                'yandex_verification_code', 'yandex_html_filename', 'yandex_html_body',
+                'google_verification_code', 'google_html_filename', 'google_html_body'
+            ),
+            'description': 'Поля для подтверждения прав владения сайтом в Яндекс.Вебмастер и Google Search Console'
+        }),
+        ('📊 Аналитика', {
+            'fields': ('yandex_metrika_id', 'ga_measurement_id'),
+            'description': 'ID счётчиков для Яндекс.Метрики и Google Analytics 4'
+        }),
         ('💾 Кэш', {
             'fields': ('allow_admin_cache_flush',)
         }),
