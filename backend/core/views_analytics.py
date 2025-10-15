@@ -24,14 +24,22 @@ def track_events(request):
     """
     POST /api/v1/track/
     Принимает батч событий для трекинга
-    Body: {"events": [{event_type, promo_id?, store_id?, showcase_id?, session_id?, ref?, utm_*?}]}
+    Body: {"events": [{...}]} OR одиночный объект {...}
     """
     try:
         from django.core.cache import cache
         from .models import Event
 
         data = json.loads(request.body)
-        events_data = data.get('events', [])
+
+        # Поддерживаем как массив в поле 'events', так и одиночный объект
+        if 'events' in data:
+            events_data = data['events']
+        elif 'event_type' in data:
+            # Одиночное событие - оборачиваем в массив
+            events_data = [data]
+        else:
+            events_data = []
 
         if not events_data:
             return JsonResponse({'error': 'No events provided'}, status=400)

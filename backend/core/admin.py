@@ -303,7 +303,9 @@ class PromoCodeAdminForm(AntiMojibakeModelForm):
 
         # Валидация: для офферов (deal/cashback/financial) требуется URL
         if offer_type in ['deal', 'cashback', 'financial'] and not affiliate_url:
-            self.add_error('affiliate_url', f'Для типа "{PromoCode.OFFER_TYPE_CHOICES_DICT.get(offer_type)}" необходимо указать партнёрскую ссылку')
+            # Получаем человекочитаемое название типа из OFFER_TYPE_CHOICES
+            offer_type_display = dict(PromoCode.OFFER_TYPE_CHOICES).get(offer_type, offer_type)
+            self.add_error('affiliate_url', f'Для типа "{offer_type_display}" необходимо указать партнёрскую ссылку')
 
         return cleaned_data
 

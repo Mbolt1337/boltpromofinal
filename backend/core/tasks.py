@@ -68,7 +68,10 @@ def aggregate_events_hourly(self):
             unique=Count('id', filter=Q(is_unique=True))
         )
 
+        from django.db.models import F
+
         for group in groups:
+            # Используем get_or_create для определения существования записи
             obj, created = DailyAgg.objects.get_or_create(
                 date=today,
                 event_type=group['event_type'],
@@ -81,10 +84,12 @@ def aggregate_events_hourly(self):
                 }
             )
 
+            # Если запись уже существовала, обновляем атомарно через F()
             if not created:
-                obj.count += group['total']
-                obj.unique_count += group['unique']
-                obj.save()
+                DailyAgg.objects.filter(pk=obj.pk).update(
+                    count=F('count') + group['total'],
+                    unique_count=F('unique_count') + group['unique']
+                )
 
             aggregated += 1
 

@@ -45,6 +45,7 @@ export default async function DynamicMetaTags() {
     background_color = '#0b1020'
   } = assets
 
+  // Базовый URL для проксирования медиа через Next.js (если нужно)
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
 
   return (
@@ -53,7 +54,7 @@ export default async function DynamicMetaTags() {
       {favicon_ico && (
         <link
           rel="shortcut icon"
-          href={`${baseUrl}${favicon_ico}`}
+          href={favicon_ico.startsWith('/') ? `${baseUrl}${favicon_ico}` : favicon_ico}
           type="image/x-icon"
         />
       )}
@@ -62,7 +63,7 @@ export default async function DynamicMetaTags() {
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${baseUrl}${favicon_32}`}
+          href={favicon_32.startsWith('/') ? `${baseUrl}${favicon_32}` : favicon_32}
         />
       )}
       {favicon_16 && (
@@ -70,7 +71,7 @@ export default async function DynamicMetaTags() {
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${baseUrl}${favicon_16}`}
+          href={favicon_16.startsWith('/') ? `${baseUrl}${favicon_16}` : favicon_16}
         />
       )}
 
@@ -79,7 +80,7 @@ export default async function DynamicMetaTags() {
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${baseUrl}${apple_touch_icon}`}
+          href={apple_touch_icon.startsWith('/') ? `${baseUrl}${apple_touch_icon}` : apple_touch_icon}
         />
       )}
 
@@ -87,7 +88,7 @@ export default async function DynamicMetaTags() {
       {safari_pinned_svg && (
         <link
           rel="mask-icon"
-          href={`${baseUrl}${safari_pinned_svg}`}
+          href={safari_pinned_svg.startsWith('/') ? `${baseUrl}${safari_pinned_svg}` : safari_pinned_svg}
           color={theme_color}
         />
       )}

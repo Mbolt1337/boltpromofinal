@@ -88,24 +88,22 @@ INSTALLED_APPS = [
     'core',
 ]
 
-# Silk для профилинга запросов (только в DEBUG или для staff)
-if DEBUG or _env_bool('ENABLE_SILK'):
+# Silk для профилинга запросов (синхронизировано с urls.py)
+ENABLE_SILK = _env_bool('ENABLE_SILK', default=False)
+if DEBUG or ENABLE_SILK:
     INSTALLED_APPS.insert(0, 'silk')
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # НОВОЕ: Canonical redirect (должен быть раньше остальных, после security)
+    # Canonical redirect (должен быть раньше остальных, после security)
     'core.middleware.CanonicalHostMiddleware',
-    # НОВОЕ: Maintenance mode middleware (проверяется до всех остальных)
+    # Maintenance mode middleware (проверяется до всех остальных)
     'core.middleware.MaintenanceModeMiddleware',
     # Rate limiting error handler
     'core.middleware.RateLimitMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # ✅ ДОБАВЛЕНО: Кэш middleware для оптимизации
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -114,8 +112,8 @@ MIDDLEWARE = [
     'core.middleware.SecurityHeadersMiddleware',
 ]
 
-# Silk middleware (только если включен)
-if DEBUG or _env_bool('ENABLE_SILK'):
+# Silk middleware (только если включен, синхронизировано с urls.py)
+if DEBUG or ENABLE_SILK:
     MIDDLEWARE.insert(1, 'silk.middleware.SilkyMiddleware')
 
 ROOT_URLCONF = 'config.urls'
@@ -211,7 +209,6 @@ else:
             'KEY_PREFIX': 'boltpromo',
             'OPTIONS': {
                 'CLIENT_CLASS': 'django.core.cache.backends.redis.DefaultClient',
-                'PARSER_CLASS': 'redis.connection.HiredisParser',
                 'CONNECTION_POOL_CLASS_KWARGS': {
                     'max_connections': 50,
                     'retry_on_timeout': True,
@@ -533,56 +530,6 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'support@boltpromo.ru')
 
-# ✅ НОВОЕ: Настройки безопасности для продакшена
-if not DEBUG:
-    # SSL/HTTPS настройки
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    
-    # Настройки cookies
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
-    
-    # Настройки безопасности браузера
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
-    
-    # HSTS (HTTP Strict Transport Security)
-    SECURE_HSTS_SECONDS = 31536000  # 1 год
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    
-    # X-Frame-Options
-    X_FRAME_OPTIONS = 'DENY'
-    
-    # ✅ ДОБАВЛЕНО: Content Security Policy
-    SECURE_CONTENT_SECURITY_POLICY = (
-        "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; "
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-        "font-src 'self' https://fonts.gstatic.com; "
-        "img-src 'self' data: https:; "
-        "connect-src 'self'; "
-        "frame-ancestors 'none'"
-    )
-    
-    # ✅ ДОБАВЛЕНО: Дополнительные заголовки безопасности
-    SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
-    
-    # ✅ ДОБАВЛЕНО: Permissions Policy
-    SECURE_PERMISSIONS_POLICY = {
-        "accelerometer": [],
-        "camera": [],
-        "geolocation": [],
-        "gyroscope": [],
-        "magnetometer": [],
-        "microphone": [],
-        "payment": [],
-        "usb": [],
-    }
 
 # ✅ ИСПРАВЛЕНО: Упрощенное логирование
 LOGGING = {

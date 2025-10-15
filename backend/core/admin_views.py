@@ -18,9 +18,13 @@ def flush_cache_view(request, scope='all'):
     """Сброс кэша (вызывается из админки)"""
     settings = SiteSettings.objects.first()
 
-    if not settings or not settings.allow_admin_cache_flush:
+    if not settings:
+        messages.error(request, 'Настройки сайта не найдены.')
+        return redirect('admin:index')
+
+    if not settings.allow_admin_cache_flush:
         messages.error(request, 'Сброс кэша запрещен в настройках.')
-        return redirect('admin:core_sitesettings_change', 1)
+        return redirect('admin:core_sitesettings_change', settings.pk)
 
     try:
         # Запускаем Celery задачу
@@ -39,7 +43,7 @@ def flush_cache_view(request, scope='all'):
     except Exception as e:
         messages.error(request, f'Ошибка при запуске задачи: {str(e)}')
 
-    return redirect('admin:core_sitesettings_change', 1)
+    return redirect('admin:core_sitesettings_change', settings.pk)
 
 
 @staff_member_required
@@ -63,12 +67,18 @@ def toggle_maintenance_view(request):
     )
 
     messages.success(request, f'Режим техработ {status}.')
-    return redirect('admin:core_sitesettings_change', 1)
+    return redirect('admin:core_sitesettings_change', settings.pk)
 
 
 @staff_member_required
 def regenerate_sitemap_view(request):
     """Регенерация sitemap через Celery"""
+    settings = SiteSettings.objects.first()
+
+    if not settings:
+        messages.error(request, 'Настройки сайта не найдены.')
+        return redirect('admin:index')
+
     try:
         from .tasks import regenerate_sitemap
         task = regenerate_sitemap.delay()
@@ -83,7 +93,7 @@ def regenerate_sitemap_view(request):
     except Exception as e:
         messages.error(request, f'Ошибка: {str(e)}')
 
-    return redirect('admin:core_sitesettings_change', 1)
+    return redirect('admin:core_sitesettings_change', settings.pk)
 
 
 @staff_member_required

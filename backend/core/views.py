@@ -300,7 +300,7 @@ def store_stats(request, slug):
         store = Store.objects.get(slug=slug, is_active=True)
         promocodes = store.promocodes.filter(is_active=True)
         hot_promocodes = promocodes.filter(is_hot=True)
-        total_views = sum(promo.views for promo in promocodes)
+        total_views = sum(promo.views_count for promo in promocodes)
         
         return Response({
             'promocodes_count': promocodes.count(),
@@ -409,7 +409,7 @@ def increment_promo_views(request, promo_id):
     try:
         promo = PromoCode.objects.get(id=promo_id, is_active=True)
         promo.increment_views()
-        return Response({'success': True, 'views': promo.views})
+        return Response({'success': True, 'views': promo.views_count})
     except PromoCode.DoesNotExist:
         return Response({'error': 'API endpoint'}, status=404)
 
@@ -781,25 +781,24 @@ def site_assets_view(request):
                 'background_color': '#0b1020',
             }, status=200)
         
-        # Формируем полные URLs
-        request_host = request.build_absolute_uri('/')[:-1]
-        
+        # Формируем полные URLs (относительные пути, без дублирования BASE_URL)
         def make_url(field):
+            """Возвращает относительный путь без хоста"""
             if field:
-                return request_host + settings.MEDIA_URL + field
+                return settings.MEDIA_URL + field
             return None
-        
+
         data = {
             'favicon_ico': make_url(assets.favicon_ico_path),
             'favicon_16': make_url(assets.favicon_16_path),
             'favicon_32': make_url(assets.favicon_32_path),
-            'og_default': request_host + assets.og_default.url if assets.og_default else None,
-            'twitter_default': request_host + assets.twitter_default.url if assets.twitter_default else None,
+            'og_default': assets.og_default.url if assets.og_default else None,
+            'twitter_default': assets.twitter_default.url if assets.twitter_default else None,
             'apple_touch_icon': make_url(assets.apple_touch_icon_path),
             'pwa_192': make_url(assets.pwa_192_path),
             'pwa_512': make_url(assets.pwa_512_path),
             'pwa_maskable': make_url(assets.pwa_maskable_path),
-            'safari_pinned_svg': request_host + assets.safari_pinned_svg.url if assets.safari_pinned_svg else None,
+            'safari_pinned_svg': assets.safari_pinned_svg.url if assets.safari_pinned_svg else None,
             'theme_color': assets.theme_color,
             'background_color': assets.background_color,
         }
