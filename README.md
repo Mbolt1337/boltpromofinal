@@ -477,8 +477,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions:
 
 - **Documentation:** `/docs` directory
-- **Issues:** [GitHub Issues](https://github.com/yourusername/boltpromo/issues)
-- **Email:** support@yourdomain.ru
+- **Issues:** [GitHub Issues](https://github.com/Mbolt1337/boltpromofinal/issues)
+- **Email:** support@boltpromo.ru
 
 ---
 
